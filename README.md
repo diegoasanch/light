@@ -2,6 +2,10 @@
 
 A WiFi-enabled LED light controller, based on the [RP2350](https://www.raspberrypi.com/products/rp2350/).
 
+<div align="center">
+  <img src="./assets/light.png" width="50%">
+</div>
+
 > [!WARNING]
 > This project is still under development.
 
