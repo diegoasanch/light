@@ -2,11 +2,12 @@
 
 A WiFi-enabled LED light controller, based on the [RP2350](https://www.raspberrypi.com/products/rp2350/).
 
+You can view the [schematics online here](https://kicanvas.org/?github=https://github.com/diegoasanch/light/blob/main/kicad/light.kicad_sch).
+
 <div align="center">
   <img src="./assets/light.png" width="75%">
 </div>
 
-You can view the [schematics online here](https://kicanvas.org/?github=https://github.com/diegoasanch/light/blob/main/kicad/light.kicad_sch).
 
 > [!WARNING]
 > This project is still under development.
