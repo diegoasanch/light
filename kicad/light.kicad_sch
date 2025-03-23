@@ -7337,13 +7337,12 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "2.8-5.5-V, 84-m?, 1.25-A, power mux with manual, automatic switchover and status output 8-SON -40 to 85"
+			(property "Description" ""
 				(at 0 0 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(justify bottom)
 					(hide yes)
 				)
 			)
@@ -7358,6 +7357,16 @@
 				)
 			)
 			(property "MOUSER-PURCHASE-URL" "https://snapeda.com/shop?store=Mouser&id=391793"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "DESCRIPTION" "2.8-5.5-V, 84-m?, 1.25-A, power mux with manual, automatic switchover and status output 8-SON -40 to 85"
 				(at 0 0 0)
 				(effects
 					(font
@@ -29357,7 +29366,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://abracon.com/datasheets/AOTA-B201610S3R3-101-T.pdf"
+		(property "Datasheet" "~"
 			(at 205.74 251.46 0)
 			(effects
 				(font
@@ -34329,7 +34338,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Electrolytic - Polarized capacitor, US symbol"
+		(property "Description" "Polarized capacitor, US symbol"
 			(at 530.86 41.91 0)
 			(effects
 				(font
