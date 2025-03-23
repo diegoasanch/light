@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "PIR223D-S0")(type "KiCad")(uri "${KIPRJMOD}/libs/PIR223D-S0/PIR223D-S0.pretty")(options "")(descr ""))
+)
