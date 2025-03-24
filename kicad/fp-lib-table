@@ -10,4 +10,6 @@
   (lib (name "1054500101")(type "KiCad")(uri "${KIPRJMOD}/libs/1054500101")(options "")(descr ""))
   (lib (name "PEC11R-4215F-S0024")(type "KiCad")(uri "${KIPRJMOD}/libs/PEC11R-4215F-S0024")(options "")(descr ""))
   (lib (name "MAX6818EAP_T")(type "KiCad")(uri "${KIPRJMOD}/libs/MAX6818EAP_T")(options "")(descr ""))
+  (lib (name "WS2812B_1010")(type "KiCad")(uri "${LIGHT_PROJECT_LIB_DIR}/WS2812B_1010.pretty")(options "")(descr ""))
+  (lib (name "ESDAXLC6-1BU2")(type "KiCad")(uri "${LIGHT_PROJECT_LIB_DIR}/ESDAXLC6-1BU2.pretty")(options "")(descr ""))
 )
