@@ -12,4 +12,5 @@
   (lib (name "MAX6818EAP_T")(type "KiCad")(uri "${KIPRJMOD}/libs/MAX6818EAP_T")(options "")(descr ""))
   (lib (name "WS2812B_1010")(type "KiCad")(uri "${LIGHT_PROJECT_LIB_DIR}/WS2812B_1010.pretty")(options "")(descr ""))
   (lib (name "ESDAXLC6-1BU2")(type "KiCad")(uri "${LIGHT_PROJECT_LIB_DIR}/ESDAXLC6-1BU2.pretty")(options "")(descr ""))
+  (lib (name "HDC1080DMBT")(type "KiCad")(uri "${LIGHT_PROJECT_LIB_DIR}/HDC1080DMBT.pretty")(options "")(descr ""))
 )
