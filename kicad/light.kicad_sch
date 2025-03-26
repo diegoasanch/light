@@ -29042,7 +29042,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "LED"
+		(property "Value" "LED Green"
 			(at 579.12 241.6174 90)
 			(effects
 				(font
@@ -29051,7 +29051,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "LED_SMD:LED_0603_1608Metric"
 			(at 575.31 238.76 0)
 			(effects
 				(font
@@ -55410,7 +55410,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "SS24:SS24"
 			(at 311.15 156.21 0)
 			(effects
 				(font
