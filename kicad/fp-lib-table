@@ -14,4 +14,6 @@
   (lib (name "ESDAXLC6-1BU2")(type "KiCad")(uri "${LIGHT_PROJECT_LIB_DIR}/ESDAXLC6-1BU2.pretty")(options "")(descr ""))
   (lib (name "HDC1080DMBT")(type "KiCad")(uri "${LIGHT_PROJECT_LIB_DIR}/HDC1080DMBT.pretty")(options "")(descr ""))
   (lib (name "SS24")(type "KiCad")(uri "${LIGHT_PROJECT_LIB_DIR}/SS24.pretty")(options "")(descr ""))
+  (lib (name "PRO-OB-607")(type "KiCad")(uri "${LIGHT_PROJECT_LIB_DIR}/PRO-OB-607.pretty")(options "")(descr ""))
+  (lib (name "NRS5024")(type "KiCad")(uri "${LIGHT_PROJECT_LIB_DIR}/NRS5024.pretty")(options "")(descr ""))
 )

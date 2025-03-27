@@ -1,0 +1,128 @@
+(footprint "NRS5024T2R2NMGJ"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at -1 -3 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "91366539-0ebe-402d-9ab4-736ab3518969")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.1)
+			)
+		)
+	)
+	(property "Value" "NRS5024T2R2NMGJ"
+		(at 0 3.5 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "229112c9-7926-4084-9d1e-8260ff50a056")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "0848bf35-0565-4da5-8dd8-89261ef43bae")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "e24a9798-c569-440f-954b-9a7cba1a3607")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start -0.9 1.95)
+		(end 0.85 1.95)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "d0b84899-49b3-45d5-b748-c81eea2d357a")
+	)
+	(fp_line
+		(start -0.875 -1.95)
+		(end 0.875 -1.95)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "1937f462-7d71-4dbb-b2c8-d5c54b2eb88c")
+	)
+	(fp_rect
+		(start -2.7 -2.15)
+		(end 2.7 2.15)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "bdd716ca-323e-4e11-902c-32ffb0c7e757")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 5 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "c25b070b-1aee-4b3d-aa8e-54de8a3bd00c")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" smd rect
+		(at -1.8 0)
+		(size 1.5 4)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(clearance 0.1)
+		(thermal_bridge_angle 45)
+		(uuid "80f3a9dd-d883-4214-9876-cc1c7c115ab8")
+	)
+	(pad "2" smd rect
+		(at 1.8 0)
+		(size 1.5 4)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(clearance 0.1)
+		(thermal_bridge_angle 45)
+		(uuid "60afd7c6-dfb9-4a15-9321-804c386be9ed")
+	)
+	(embedded_fonts no)
+	(model "${LIGHT_PROJECT_LIB_DIR}/NRS5024.pretty/NRS5024T2R2NMGJ--3DModel-STEP-269445.STEP"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -90 -0 -0)
+		)
+	)
+)
