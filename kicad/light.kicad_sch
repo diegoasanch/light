@@ -3223,6 +3223,179 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Device:L_Polarized"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "L"
+				(at -1.27 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "L"
+				(at 1.905 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Inductor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "inductor choke coil reactor magnetic"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Choke_* *Coil* Inductor_* L_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "L_Polarized_0_1"
+				(arc
+					(start 0 2.54)
+					(mid 0.6323 1.905)
+					(end 0 1.27)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 1.27)
+					(mid 0.6323 0.635)
+					(end 0 0)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 0)
+					(mid 0.6323 -0.635)
+					(end 0 -1.27)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -1.27)
+					(mid 0.6323 -1.905)
+					(end 0 -2.54)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 1.27 -2.54)
+					(radius 0.254)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+			)
+			(symbol "L_Polarized_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Device:R"
 			(pin_numbers
 				(hide yes)
@@ -13052,7 +13225,7 @@
 	)
 	(wire
 		(pts
-			(xy 189.23 388.62) (xy 223.52 388.62)
+			(xy 189.23 388.62) (xy 219.71 388.62)
 		)
 		(stroke
 			(width 0)
@@ -18322,7 +18495,7 @@
 	)
 	(wire
 		(pts
-			(xy 212.09 391.16) (xy 223.52 391.16)
+			(xy 212.09 391.16) (xy 219.71 391.16)
 		)
 		(stroke
 			(width 0)
@@ -21732,7 +21905,7 @@
 	)
 	(wire
 		(pts
-			(xy 171.45 401.32) (xy 223.52 401.32)
+			(xy 171.45 401.32) (xy 219.71 401.32)
 		)
 		(stroke
 			(width 0)
@@ -23711,7 +23884,7 @@
 		(uuid "5028a86b-1cc1-4bd4-b730-a9e19bc8158a")
 	)
 	(label "WL_D"
-		(at 223.52 391.16 180)
+		(at 219.71 391.16 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -23831,7 +24004,7 @@
 		(uuid "6f5ef6a5-3cba-4cfc-accd-84dd7b3cedb5")
 	)
 	(label "WL_CS"
-		(at 223.52 401.32 180)
+		(at 219.71 401.32 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -24361,7 +24534,7 @@
 		(uuid "de2ad7a2-27e4-44d8-b3e9-2b60c757ed2f")
 	)
 	(label "WL_CLK"
-		(at 223.52 388.62 180)
+		(at 219.71 388.62 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -24517,7 +24690,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 466.09 388.62 0)
 			(effects
 				(font
@@ -24845,7 +25018,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 485.14 439.42 0)
 			(effects
 				(font
@@ -25041,7 +25214,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 485.14 464.82 0)
 			(effects
 				(font
@@ -25607,7 +25780,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 447.04 337.82 0)
 			(effects
 				(font
@@ -25868,7 +26041,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 504.19 414.02 0)
 			(effects
 				(font
@@ -26334,7 +26507,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 561.34 388.62 0)
 			(effects
 				(font
@@ -27371,7 +27544,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D2.0mm"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 529.59 172.72 0)
 			(effects
 				(font
@@ -27437,7 +27610,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 561.34 363.22 0)
 			(effects
 				(font
@@ -27633,7 +27806,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 580.39 287.02 0)
 			(effects
 				(font
@@ -27899,7 +28072,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 542.29 414.02 0)
 			(effects
 				(font
@@ -28095,7 +28268,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 523.24 414.02 0)
 			(effects
 				(font
@@ -28818,17 +28991,16 @@
 				(justify right)
 			)
 		)
-		(property "Value" "TestPoint"
-			(at 153.67 226.8219 0)
+		(property "Value" "GND"
+			(at 149.606 229.362 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify right)
-				(hide yes)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D2.0mm"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 146.05 222.25 0)
 			(effects
 				(font
@@ -29472,7 +29644,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 580.39 388.62 0)
 			(effects
 				(font
@@ -29827,7 +29999,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 447.04 464.82 0)
 			(effects
 				(font
@@ -30715,7 +30887,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 504.19 312.42 0)
 			(effects
 				(font
@@ -31448,7 +31620,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 523.24 439.42 0)
 			(effects
 				(font
@@ -32061,7 +32233,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 580.39 439.42 0)
 			(effects
 				(font
@@ -32462,7 +32634,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 542.29 464.82 0)
 			(effects
 				(font
@@ -32724,7 +32896,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 504.19 363.22 0)
 			(effects
 				(font
@@ -32986,7 +33158,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 447.04 363.22 0)
 			(effects
 				(font
@@ -33381,7 +33553,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 580.39 464.82 0)
 			(effects
 				(font
@@ -33714,7 +33886,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 523.24 363.22 0)
 			(effects
 				(font
@@ -34396,7 +34568,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 485.14 414.02 0)
 			(effects
 				(font
@@ -34936,7 +35108,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 580.39 414.02 0)
 			(effects
 				(font
@@ -35198,7 +35370,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 504.19 439.42 0)
 			(effects
 				(font
@@ -35461,7 +35633,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 523.24 464.82 0)
 			(effects
 				(font
@@ -35657,7 +35829,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 542.29 388.62 0)
 			(effects
 				(font
@@ -35853,7 +36025,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 447.04 312.42 0)
 			(effects
 				(font
@@ -36977,17 +37149,16 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TestPoint"
-			(at 181.61 165.6079 0)
+		(property "Value" "D-"
+			(at 180.086 166.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify left)
-				(hide yes)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D2.0mm"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 184.15 167.64 0)
 			(effects
 				(font
@@ -37053,7 +37224,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 447.04 414.02 0)
 			(effects
 				(font
@@ -37249,7 +37420,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 561.34 312.42 0)
 			(effects
 				(font
@@ -37919,7 +38090,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 542.29 312.42 0)
 			(effects
 				(font
@@ -38115,7 +38286,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 542.29 363.22 0)
 			(effects
 				(font
@@ -38548,7 +38719,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 580.39 363.22 0)
 			(effects
 				(font
@@ -38814,7 +38985,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_2.0x2.0mm"
+		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
 			(at 532.13 146.05 0)
 			(effects
 				(font
@@ -40076,7 +40247,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 561.34 439.42 0)
 			(effects
 				(font
@@ -41528,7 +41699,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D2.0mm"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 529.59 162.56 0)
 			(effects
 				(font
@@ -41664,7 +41835,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 504.19 388.62 0)
 			(effects
 				(font
@@ -42863,34 +43034,33 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:L")
-		(at 267.97 327.66 0)
+		(lib_id "Device:L_Polarized")
+		(at 267.97 327.66 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "9be1ed2a-e251-49ba-bc49-988c4ffe3764")
 		(property "Reference" "L1"
-			(at 269.24 326.3899 0)
+			(at 268.478 328.93 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(justify right)
 			)
 		)
 		(property "Value" "3.3u"
-			(at 269.24 328.9299 0)
+			(at 268.478 326.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "AOTA-B201610S3R3-101-T:AOTA-B201610S3R3-101-T"
 			(at 267.97 327.66 0)
 			(effects
 				(font
@@ -42959,7 +43129,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 447.04 439.42 0)
 			(effects
 				(font
@@ -43222,7 +43392,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 504.19 464.82 0)
 			(effects
 				(font
@@ -43418,7 +43588,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 561.34 287.02 0)
 			(effects
 				(font
@@ -43883,7 +44053,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 523.24 337.82 0)
 			(effects
 				(font
@@ -44149,7 +44319,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 466.09 464.82 0)
 			(effects
 				(font
@@ -44345,7 +44515,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D2.0mm"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 529.59 152.4 0)
 			(effects
 				(font
@@ -45164,7 +45334,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 542.29 439.42 0)
 			(effects
 				(font
@@ -45553,17 +45723,16 @@
 				(justify right)
 			)
 		)
-		(property "Value" "TestPoint"
-			(at 176.53 168.1481 0)
+		(property "Value" "D+"
+			(at 183.388 171.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify right)
-				(hide yes)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D2.0mm"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 184.15 172.72 0)
 			(effects
 				(font
@@ -46039,7 +46208,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D2.0mm"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 546.1 223.52 0)
 			(effects
 				(font
@@ -46448,7 +46617,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 504.19 287.02 0)
 			(effects
 				(font
@@ -46714,7 +46883,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 485.14 388.62 0)
 			(effects
 				(font
@@ -47729,7 +47898,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 485.14 312.42 0)
 			(effects
 				(font
@@ -48196,7 +48365,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 561.34 337.82 0)
 			(effects
 				(font
@@ -48462,7 +48631,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 580.39 337.82 0)
 			(effects
 				(font
@@ -48746,7 +48915,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D2.0mm"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 491.49 158.75 0)
 			(effects
 				(font
@@ -48812,7 +48981,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 466.09 312.42 0)
 			(effects
 				(font
@@ -49076,7 +49245,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 561.34 464.82 0)
 			(effects
 				(font
@@ -49272,7 +49441,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 504.19 337.82 0)
 			(effects
 				(font
@@ -49604,7 +49773,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 523.24 388.62 0)
 			(effects
 				(font
@@ -50067,7 +50236,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 542.29 337.82 0)
 			(effects
 				(font
@@ -50466,7 +50635,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 466.09 414.02 0)
 			(effects
 				(font
@@ -50861,7 +51030,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 523.24 287.02 0)
 			(effects
 				(font
@@ -51123,7 +51292,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 485.14 363.22 0)
 			(effects
 				(font
@@ -51720,7 +51889,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 523.24 312.42 0)
 			(effects
 				(font
@@ -52469,7 +52638,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 466.09 363.22 0)
 			(effects
 				(font
@@ -52665,7 +52834,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D2.0mm"
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 552.45 130.81 0)
 			(effects
 				(font
@@ -52867,7 +53036,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 447.04 388.62 0)
 			(effects
 				(font
@@ -53195,7 +53364,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 580.39 312.42 0)
 			(effects
 				(font
@@ -53589,7 +53758,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 466.09 287.02 0)
 			(effects
 				(font
@@ -53785,7 +53954,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 466.09 337.82 0)
 			(effects
 				(font
@@ -54200,7 +54369,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 485.14 287.02 0)
 			(effects
 				(font
@@ -54462,7 +54631,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 561.34 414.02 0)
 			(effects
 				(font
@@ -54728,7 +54897,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 485.14 337.82 0)
 			(effects
 				(font
@@ -55266,7 +55435,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 466.09 439.42 0)
 			(effects
 				(font
@@ -55462,7 +55631,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 447.04 287.02 0)
 			(effects
 				(font
@@ -55658,7 +55827,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Footprint" "WS2812B_1010:WS2812C-2020"
+		(property "Footprint" "WS2812B_1010:WS2812B_1010"
 			(at 542.29 287.02 0)
 			(effects
 				(font

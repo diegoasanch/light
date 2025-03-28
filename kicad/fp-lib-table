@@ -16,4 +16,5 @@
   (lib (name "SS24")(type "KiCad")(uri "${LIGHT_PROJECT_LIB_DIR}/SS24.pretty")(options "")(descr ""))
   (lib (name "PRO-OB-607")(type "KiCad")(uri "${LIGHT_PROJECT_LIB_DIR}/PRO-OB-607.pretty")(options "")(descr ""))
   (lib (name "NRS5024")(type "KiCad")(uri "${LIGHT_PROJECT_LIB_DIR}/NRS5024.pretty")(options "")(descr ""))
+  (lib (name "AOTA-B201610S3R3-101-T")(type "KiCad")(uri "${LIGHT_PROJECT_LIB_DIR}/AOTA-B201610S3R3-101-T.pretty")(options "")(descr ""))
 )
