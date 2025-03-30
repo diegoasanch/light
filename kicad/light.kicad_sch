@@ -2188,390 +2188,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Connector_Generic_MountingPin:Conn_01x09_MountingPin"
-			(pin_names
-				(offset 1.016)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "J"
-				(at 0 12.7 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "Conn_01x09_MountingPin"
-				(at 1.27 -12.7 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Generic connectable mounting pin connector, single row, 01x09, script generated (kicad-library-utils/schlib/autogen/connector/)"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "connector"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "Connector*:*_1x??-1MP*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "Conn_01x09_MountingPin_1_1"
-				(rectangle
-					(start -1.27 11.43)
-					(end 1.27 -11.43)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(rectangle
-					(start -1.27 10.287)
-					(end 0 10.033)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.27 7.747)
-					(end 0 7.493)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.27 5.207)
-					(end 0 4.953)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.27 2.667)
-					(end 0 2.413)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.27 0.127)
-					(end 0 -0.127)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.27 -2.413)
-					(end 0 -2.667)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.27 -4.953)
-					(end 0 -5.207)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.27 -7.493)
-					(end 0 -7.747)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.27 -10.033)
-					(end 0 -10.287)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.016 -12.192) (xy 1.016 -12.192)
-					)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(text "Mounting"
-					(at 0 -11.811 0)
-					(effects
-						(font
-							(size 0.381 0.381)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 10.16 0)
-					(length 3.81)
-					(name "Pin_1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 7.62 0)
-					(length 3.81)
-					(name "Pin_2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 5.08 0)
-					(length 3.81)
-					(name "Pin_3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 2.54 0)
-					(length 3.81)
-					(name "Pin_4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 0 0)
-					(length 3.81)
-					(name "Pin_5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 -2.54 0)
-					(length 3.81)
-					(name "Pin_6"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "6"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 -5.08 0)
-					(length 3.81)
-					(name "Pin_7"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "7"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 -7.62 0)
-					(length 3.81)
-					(name "Pin_8"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "8"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 -10.16 0)
-					(length 3.81)
-					(name "Pin_9"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "9"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -15.24 90)
-					(length 3.048)
-					(name "MountPin"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "MP"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Device:Antenna"
 			(pin_numbers
 				(hide yes)
@@ -11292,7 +10908,7 @@
 	)
 	(rectangle
 		(start 129.54 439.42)
-		(end 224.79 491.49)
+		(end 224.79 483.87)
 		(stroke
 			(width 0)
 			(type dash)
@@ -12338,12 +11954,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "726e43e9-fa0d-4f76-8bff-e66be0439764")
-	)
-	(junction
-		(at 204.47 478.79)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "7498e478-521f-4d18-9feb-073885b77d1b")
 	)
 	(junction
 		(at 283.21 454.66)
@@ -13865,7 +13475,7 @@
 	)
 	(wire
 		(pts
-			(xy 204.47 478.79) (xy 204.47 481.33)
+			(xy 204.47 467.36) (xy 204.47 474.98)
 		)
 		(stroke
 			(width 0)
@@ -14885,16 +14495,6 @@
 	)
 	(wire
 		(pts
-			(xy 212.09 477.52) (xy 212.09 478.79)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "24d890c7-5ae3-4c38-ac90-7ab9d37a6177")
-	)
-	(wire
-		(pts
 			(xy 323.85 293.37) (xy 335.28 293.37)
 		)
 		(stroke
@@ -15832,16 +15432,6 @@
 			(type default)
 		)
 		(uuid "3c5d7f48-cfe2-48e1-b19c-7f50437576ff")
-	)
-	(wire
-		(pts
-			(xy 212.09 478.79) (xy 204.47 478.79)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3c965f53-125c-434a-8ebd-9a65ab6c96b5")
 	)
 	(wire
 		(pts
@@ -19342,16 +18932,6 @@
 			(type default)
 		)
 		(uuid "8ecdc3e9-6387-4bee-9ca5-ed7fcecc267b")
-	)
-	(wire
-		(pts
-			(xy 204.47 467.36) (xy 204.47 478.79)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8ef89245-044c-4640-aba8-e8badc81621a")
 	)
 	(wire
 		(pts
@@ -30567,7 +30147,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic_MountingPin:Conn_01x09_MountingPin")
+		(lib_id "Connector_Generic:Conn_01x09")
 		(at 212.09 462.28 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -30577,7 +30157,7 @@
 		(fields_autoplaced yes)
 		(uuid "2bb9a63d-e038-42df-869a-f983b3092053")
 		(property "Reference" "J5"
-			(at 214.63 461.3655 0)
+			(at 214.63 462.2799 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -30595,7 +30175,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x08_P2.54mm_Horizontal"
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x09_P2.54mm_Horizontal"
 			(at 212.09 462.28 0)
 			(effects
 				(font
@@ -30613,7 +30193,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Generic connectable mounting pin connector, single row, 01x09, script generated (kicad-library-utils/schlib/autogen/connector/)"
+		(property "Description" "Generic connector, single row, 01x09, script generated (kicad-library-utils/schlib/autogen/connector/)"
 			(at 212.09 462.28 0)
 			(effects
 				(font
@@ -30639,9 +30219,6 @@
 		)
 		(pin "5"
 			(uuid "ca807765-2a20-4319-9453-804fe3b305cd")
-		)
-		(pin "MP"
-			(uuid "c3bdd55a-c199-4496-a684-ac46f0564fbc")
 		)
 		(pin "8"
 			(uuid "5e91b20f-b506-4d12-aa2b-9dbdcfaf9ce4")
@@ -32618,7 +32195,7 @@
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
-		(on_board no)
+		(on_board yes)
 		(dnp yes)
 		(fields_autoplaced yes)
 		(uuid "3b8a2748-99e8-4010-8ecf-97ae9956cd60")
@@ -33364,7 +32941,7 @@
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
-		(on_board no)
+		(on_board yes)
 		(dnp yes)
 		(fields_autoplaced yes)
 		(uuid "4579d5f4-460e-4bc2-88c0-f4a1325899c4")
@@ -40253,9 +39830,8 @@
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
-		(on_board no)
+		(on_board yes)
 		(dnp yes)
-		(fields_autoplaced yes)
 		(uuid "7c867b46-4542-409d-b471-f317eb7e8ecb")
 		(property "Reference" "R39"
 			(at 453.39 218.4399 0)
@@ -51158,7 +50734,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 204.47 481.33 0)
+		(at 204.47 474.98 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -51167,7 +50743,7 @@
 		(fields_autoplaced yes)
 		(uuid "d7063bc5-1867-4524-aec7-e9c01e2ce58a")
 		(property "Reference" "#PWR075"
-			(at 204.47 487.68 0)
+			(at 204.47 481.33 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -51176,7 +50752,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 204.47 486.41 0)
+			(at 204.47 480.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -51184,7 +50760,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 204.47 481.33 0)
+			(at 204.47 474.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -51193,7 +50769,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 204.47 481.33 0)
+			(at 204.47 474.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -51202,7 +50778,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 204.47 481.33 0)
+			(at 204.47 474.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)

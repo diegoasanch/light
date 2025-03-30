@@ -212,19 +212,19 @@
 		(layer "F.Fab")
 		(uuid "99f89f6b-c87a-43cc-80d2-477deb20f40c")
 	)
-	(pad "A" smd rect
-		(at 2.165 0)
-		(size 2.28 2.12)
-		(layers "F.Cu" "F.Mask" "F.Paste")
-		(solder_mask_margin 0.102)
-		(uuid "feff3935-b69d-41e0-86ea-7c431daef2fe")
-	)
-	(pad "C" smd rect
+	(pad "1" smd rect
 		(at -2.165 0)
 		(size 2.28 2.12)
 		(layers "F.Cu" "F.Mask" "F.Paste")
 		(solder_mask_margin 0.102)
 		(uuid "09a9e1f9-c96c-4884-887e-ef234fbd7ad3")
+	)
+	(pad "2" smd rect
+		(at 2.165 0)
+		(size 2.28 2.12)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(solder_mask_margin 0.102)
+		(uuid "feff3935-b69d-41e0-86ea-7c431daef2fe")
 	)
 	(embedded_fonts no)
 	(model "${LIGHT_PROJECT_LIB_DIR}/SS24/SS24.step"
