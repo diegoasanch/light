@@ -12418,12 +12418,6 @@
 		(uuid "a6d9c567-3cdd-4fdd-ada2-fbe79b030674")
 	)
 	(junction
-		(at 486.41 161.29)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "a96203da-e053-47ec-8148-63c5701f8918")
-	)
-	(junction
 		(at 179.07 167.64)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -13445,7 +13439,7 @@
 	)
 	(wire
 		(pts
-			(xy 486.41 161.29) (xy 495.3 161.29)
+			(xy 480.06 161.29) (xy 495.3 161.29)
 		)
 		(stroke
 			(width 0)
@@ -14402,16 +14396,6 @@
 			(type default)
 		)
 		(uuid "200c028d-cf84-422b-89b3-493cc069de6a")
-	)
-	(wire
-		(pts
-			(xy 486.41 158.75) (xy 486.41 161.29)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2034d72b-dcd3-448f-8720-774146ac7190")
 	)
 	(wire
 		(pts
@@ -22752,16 +22736,6 @@
 			(type default)
 		)
 		(uuid "e70135bb-f5e9-4967-abf1-e76008bdd051")
-	)
-	(wire
-		(pts
-			(xy 480.06 161.29) (xy 486.41 161.29)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e70325c0-15df-4f51-a977-b2039949bbf7")
 	)
 	(wire
 		(pts
@@ -42548,7 +42522,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 192.7352 349.25 0)
 			(effects
 				(font
@@ -46862,7 +46836,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 187.6552 373.38 0)
 			(effects
 				(font
@@ -48668,72 +48642,6 @@
 			(project ""
 				(path "/fbb17af3-099c-429d-b186-ab4e8e0fdddf"
 					(reference "U3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 486.41 158.75 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "cf864cf6-5e08-4237-93f5-b290c7fd352a")
-		(property "Reference" "TP8"
-			(at 487.426 153.924 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "V_RGB"
-			(at 487.426 156.21 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 491.49 158.75 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 491.49 158.75 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 486.41 158.75 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "cf935172-8ed4-4c22-aec2-8301ce94a6d3")
-		)
-		(instances
-			(project "light"
-				(path "/fbb17af3-099c-429d-b186-ab4e8e0fdddf"
-					(reference "TP8")
 					(unit 1)
 				)
 			)
