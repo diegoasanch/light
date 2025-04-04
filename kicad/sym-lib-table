@@ -10,4 +10,5 @@
   (lib (name "1054500101")(type "KiCad")(uri "${KIPRJMOD}/libs/1054500101/1054500101.kicad_sym")(options "")(descr ""))
   (lib (name "MAX6818EAP_T")(type "KiCad")(uri "${KIPRJMOD}/libs/MAX6818EAP_T/MAX6818EAP_T.kicad_sym")(options "")(descr ""))
   (lib (name "WS2812C-2020")(type "KiCad")(uri "${LIGHT_PROJECT_LIB_DIR}/WS2812C-2020/WS2812C-2020.kicad_sym")(options "")(descr ""))
+  (lib (name "GT-EVA01AA-L1")(type "KiCad")(uri "${LIGHT_PROJECT_LIB_DIR}/GT-EVA01AA-L1.kicad_sym")(options "")(descr ""))
 )

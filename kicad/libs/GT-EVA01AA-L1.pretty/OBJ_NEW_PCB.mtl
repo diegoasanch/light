@@ -1,0 +1,20 @@
+newmtl mtl1
+Ka 0.62 0.62 0.36
+Kd 0.62 0.62 0.36
+Ks 0.00 0.00 0.00
+endmtl
+newmtl mtl2
+Ka 0.67 0.67 0.67
+Kd 0.67 0.67 0.67
+Ks 0.47 0.47 0.47
+endmtl
+newmtl mtl3
+Ka 0.21 0.21 0.21
+Kd 0.21 0.21 0.21
+Ks 0.02 0.02 0.02
+endmtl
+newmtl mtl4
+Ka 0.00 0.00 0.00
+Kd 0.00 0.00 0.00
+Ks 0.00 0.00 0.00
+endmtl
