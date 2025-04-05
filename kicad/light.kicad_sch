@@ -11229,10 +11229,6 @@
 		(uuid "02a55d4b-e1b9-4402-b5d6-6b2785a3ab22")
 	)
 	(no_connect
-		(at 524.51 387.35)
-		(uuid "0865d625-5fb0-4505-b9d9-cfda81dcf8ec")
-	)
-	(no_connect
 		(at 237.49 172.72)
 		(uuid "0bd53bf7-c3c3-4017-a9b1-6ac339d46ea5")
 	)
@@ -11261,10 +11257,6 @@
 		(uuid "372973dd-df51-4699-8271-99697a04468f")
 	)
 	(no_connect
-		(at 524.51 389.89)
-		(uuid "3bdfd41c-d973-49b0-8a8f-d7a8cb88d618")
-	)
-	(no_connect
 		(at 275.59 375.92)
 		(uuid "697480e6-ef9d-4779-80aa-8f401ff5ea7a")
 	)
@@ -11281,12 +11273,12 @@
 		(uuid "762a1e08-f9d3-4ebd-83a5-388d4f715ab7")
 	)
 	(no_connect
-		(at 237.49 165.1)
-		(uuid "7947a379-6788-4067-beb3-1c0ba2fe7187")
+		(at 524.51 356.87)
+		(uuid "77b7e533-f4da-4a71-aaed-43138b757cdb")
 	)
 	(no_connect
-		(at 524.51 384.81)
-		(uuid "8234321e-463f-4ded-b950-b52a2c8fdee8")
+		(at 237.49 165.1)
+		(uuid "7947a379-6788-4067-beb3-1c0ba2fe7187")
 	)
 	(no_connect
 		(at 524.51 323.85)
@@ -11299,6 +11291,14 @@
 	(no_connect
 		(at 237.49 185.42)
 		(uuid "a3f47e11-fd30-468c-8839-7fad2732f7d0")
+	)
+	(no_connect
+		(at 524.51 351.79)
+		(uuid "ac8366c8-4439-476c-8956-33f38c794e91")
+	)
+	(no_connect
+		(at 524.51 354.33)
+		(uuid "bd8c43be-ed18-4a2f-a1f8-0e5bda5520c1")
 	)
 	(no_connect
 		(at 336.55 355.6)
@@ -11991,16 +11991,6 @@
 			(type default)
 		)
 		(uuid "1d4f7799-07ca-4876-a2b2-2fb7b830f5c3")
-	)
-	(wire
-		(pts
-			(xy 524.51 356.87) (xy 547.37 356.87)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1dbd2da0-5fee-4d13-8a3a-5cb5183cf9ee")
 	)
 	(wire
 		(pts
@@ -12864,16 +12854,6 @@
 	)
 	(wire
 		(pts
-			(xy 524.51 351.79) (xy 547.37 351.79)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4307c929-054a-408e-9df7-5699cd40fa14")
-	)
-	(wire
-		(pts
 			(xy 351.79 359.41) (xy 351.79 360.68)
 		)
 		(stroke
@@ -13191,6 +13171,16 @@
 			(type default)
 		)
 		(uuid "5035060b-538a-45c5-adf4-e746098951c5")
+	)
+	(wire
+		(pts
+			(xy 524.51 389.89) (xy 547.37 389.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5048dc34-e956-4aaf-8d22-04e7c3013abe")
 	)
 	(wire
 		(pts
@@ -14471,16 +14461,6 @@
 			(type default)
 		)
 		(uuid "7e35b859-1f7c-4c6a-a0d5-12659cfb3f54")
-	)
-	(wire
-		(pts
-			(xy 524.51 354.33) (xy 547.37 354.33)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7e36d300-34bc-455b-8a4b-1079c282c135")
 	)
 	(wire
 		(pts
@@ -16124,6 +16104,16 @@
 	)
 	(wire
 		(pts
+			(xy 524.51 387.35) (xy 547.37 387.35)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "be42742f-320d-4ead-b06b-ba2e9fa6a9e9")
+	)
+	(wire
+		(pts
 			(xy 289.56 215.9) (xy 289.56 219.71)
 		)
 		(stroke
@@ -17534,6 +17524,16 @@
 	)
 	(wire
 		(pts
+			(xy 524.51 384.81) (xy 547.37 384.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ed7c0b0f-6b7a-4d93-b5c1-f9654b6a2f0f")
+	)
+	(wire
+		(pts
 			(xy 433.07 308.61) (xy 433.07 307.34)
 		)
 		(stroke
@@ -18162,6 +18162,16 @@
 		)
 		(uuid "35e03b35-820f-46ef-97b9-14aea5bb95ba")
 	)
+	(label "PWM_R"
+		(at 547.37 387.35 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "3e9e1cb4-430c-41ab-b6e2-6467c317d203")
+	)
 	(label "SWCLK"
 		(at 313.69 440.69 0)
 		(effects
@@ -18182,16 +18192,6 @@
 		)
 		(uuid "4251e996-6ba9-468e-bf5f-119896f6a53d")
 	)
-	(label "PWM_B"
-		(at 547.37 356.87 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "45537488-4afa-4dea-b4bb-2f83133d23ee")
-	)
 	(label "QSPI_SD3"
 		(at 450.85 336.55 0)
 		(effects
@@ -18201,16 +18201,6 @@
 			(justify left bottom)
 		)
 		(uuid "45858d52-7714-494d-8592-d5eac61c8587")
-	)
-	(label "PWM_R"
-		(at 567.69 137.16 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "45a48a8d-e9b1-4024-9dba-b9f464650896")
 	)
 	(label "PWR_STAT"
 		(at 547.37 344.17 180)
@@ -18291,6 +18281,16 @@
 			(justify left bottom)
 		)
 		(uuid "594cf8c8-ffc3-4aff-8390-7fd4339a9ee9")
+	)
+	(label "PWM_G"
+		(at 547.37 389.89 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "59b0151a-f871-421c-99bb-f0478f2eecda")
 	)
 	(label "USB_BOOT"
 		(at 613.41 212.09 0)
@@ -18502,16 +18502,6 @@
 		)
 		(uuid "8cd62c06-5327-415e-84e4-3bbbe326373f")
 	)
-	(label "PWM_G"
-		(at 567.69 147.32 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "917baed2-fe1c-4ed5-b919-59465a5c8373")
-	)
 	(label "FLASH_SS"
 		(at 417.83 449.58 0)
 		(effects
@@ -18591,6 +18581,16 @@
 			(justify right bottom)
 		)
 		(uuid "bd9d380c-646d-43a2-9b15-1c4f57fc1faf")
+	)
+	(label "PWM_G"
+		(at 567.69 137.16 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "bdaabd7a-252f-45c7-ad5f-267f49a439bf")
 	)
 	(label "WL_ON"
 		(at 547.37 374.65 180)
@@ -18742,16 +18742,6 @@
 		)
 		(uuid "dad62956-a320-412c-9c96-8b27dd6d57d5")
 	)
-	(label "PWM_R"
-		(at 547.37 351.79 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "dbd14654-7238-4178-a88c-106123382ce1")
-	)
 	(label "VIN_LDO"
 		(at 340.36 340.36 0)
 		(effects
@@ -18812,16 +18802,6 @@
 		)
 		(uuid "ec24aedd-0743-4d28-9842-cc038da9e8c3")
 	)
-	(label "PWM_G"
-		(at 547.37 354.33 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "f6cc3b66-416e-4441-bda1-0bb170c6c092")
-	)
 	(label "GPIO2"
 		(at 547.37 321.31 180)
 		(effects
@@ -18842,6 +18822,16 @@
 		)
 		(uuid "f7f01765-039b-4e1b-912b-0299cc7f3a43")
 	)
+	(label "PWM_B"
+		(at 547.37 384.81 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "f87901ff-b778-4c32-88b8-ba7c9815b91a")
+	)
 	(label "V_RGB"
 		(at 558.8 146.05 180)
 		(effects
@@ -18861,6 +18851,16 @@
 			(justify left bottom)
 		)
 		(uuid "feb130cf-747e-4026-adda-ef7abca8d2b9")
+	)
+	(label "PWM_R"
+		(at 567.69 147.32 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "fec46e69-3316-4b8b-bc12-31b8363717b4")
 	)
 	(label "ARGB-DATA"
 		(at 567.69 96.52 0)
@@ -29952,6 +29952,7 @@
 	(symbol
 		(lib_id "Device:C")
 		(at 449.58 154.94 0)
+		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -29959,7 +29960,7 @@
 		(dnp no)
 		(uuid "a274a93d-bd48-4d46-90ae-a7f5464c87c3")
 		(property "Reference" "C36"
-			(at 453.39 153.6699 0)
+			(at 445.77 153.6699 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -29968,7 +29969,7 @@
 			)
 		)
 		(property "Value" "0.1u"
-			(at 453.39 156.2099 0)
+			(at 445.77 156.2099 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -29977,7 +29978,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
-			(at 450.5452 158.75 0)
+			(at 448.6148 158.75 0)
 			(effects
 				(font
 					(size 1.27 1.27)
