@@ -31178,6 +31178,7 @@
 	(symbol
 		(lib_id "Device:C_Polarized_US")
 		(at 393.7 140.97 0)
+		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -31185,7 +31186,7 @@
 		(dnp no)
 		(uuid "b79a9f97-1a23-434d-ba80-eb1d33bca77f")
 		(property "Reference" "C27"
-			(at 397.51 139.0649 0)
+			(at 389.89 139.0649 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -31194,7 +31195,7 @@
 			)
 		)
 		(property "Value" "22u"
-			(at 397.51 141.6049 0)
+			(at 389.89 141.6049 0)
 			(effects
 				(font
 					(size 1.27 1.27)
