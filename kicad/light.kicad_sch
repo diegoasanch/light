@@ -1996,8 +1996,8 @@
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "AE"
-				(at -1.905 1.905 0)
+			(property "Reference" "AE1"
+				(at -1.524 0.762 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -2005,8 +2005,8 @@
 					(justify right)
 				)
 			)
-			(property "Value" "Antenna"
-				(at -1.905 0 0)
+			(property "Value" "PRO-OB-607"
+				(at -1.524 -1.778 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -2014,7 +2014,7 @@
 					(justify right)
 				)
 			)
-			(property "Footprint" ""
+			(property "Footprint" "PRO-OB-607:PRO-OB-607"
 				(at 0 0 0)
 				(effects
 					(font
@@ -2077,10 +2077,10 @@
 				)
 			)
 			(symbol "Antenna_1_1"
-				(pin input line
-					(at 0 -5.08 90)
+				(pin power_in line
+					(at -2.54 -3.81 0)
 					(length 2.54)
-					(name "A"
+					(name "GND"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2088,6 +2088,24 @@
 						)
 					)
 					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at 0 -5.08 90)
+					(length 2.54)
+					(name "RF_Feed"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -11882,6 +11900,16 @@
 	)
 	(wire
 		(pts
+			(xy 251.46 397.51) (xy 250.19 397.51)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "24df3426-9ee1-4830-84b3-c4bed33c6cb9")
+	)
+	(wire
+		(pts
 			(xy 488.95 278.13) (xy 500.38 278.13)
 		)
 		(stroke
@@ -13759,6 +13787,16 @@
 			(type default)
 		)
 		(uuid "6f698549-24b2-4aef-81f1-ec334bff7845")
+	)
+	(wire
+		(pts
+			(xy 250.19 397.51) (xy 250.19 400.05)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "709a624e-e22c-40ae-9e1c-25d4ddbdecd9")
 	)
 	(wire
 		(pts
@@ -24053,6 +24091,72 @@
 			(project ""
 				(path "/fbb17af3-099c-429d-b186-ab4e8e0fdddf"
 					(reference "#PWR017")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 250.19 400.05 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "5c1d0199-d865-4a36-b485-dfcd92ec82d3")
+		(property "Reference" "#PWR051"
+			(at 250.19 406.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 250.19 405.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 250.19 400.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 250.19 400.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 250.19 400.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "65800a2c-da2d-4a6b-82be-b3ceed331ffc")
+		)
+		(instances
+			(project "light"
+				(path "/fbb17af3-099c-429d-b186-ab4e8e0fdddf"
+					(reference "#PWR051")
 					(unit 1)
 				)
 			)
@@ -34448,6 +34552,9 @@
 		)
 		(pin "1"
 			(uuid "4b33b43f-cd4c-4be5-92d3-e286d41bbb2c")
+		)
+		(pin "2"
+			(uuid "df5a22c0-f2e6-4e31-8b88-f6b10990e2f0")
 		)
 		(instances
 			(project ""
