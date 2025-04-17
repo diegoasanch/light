@@ -89,7 +89,6 @@
 			(dielectric_constraints no)
 		)
 		(pad_to_mask_clearance 0)
-		(solder_mask_min_width 0.12)
 		(allow_soldermask_bridges_in_footprints no)
 		(tenting front back)
 		(pcbplotparams
@@ -130,7 +129,7 @@
 			(mirror no)
 			(drillshape 0)
 			(scaleselection 1)
-			(outputdirectory "")
+			(outputdirectory "fab/gerbers/")
 		)
 	)
 	(net 0 "")
@@ -27088,6 +27087,17 @@
 		(sheetname "/")
 		(sheetfile "light.kicad_sch")
 		(attr smd)
+		(fp_circle
+			(center -1.7 1.875)
+			(end -1.575 2.025)
+			(stroke
+				(width 0.1)
+				(type default)
+			)
+			(fill yes)
+			(layer "F.SilkS")
+			(uuid "4e67e14c-1da0-4b3c-bb8d-eac17dbe63f5")
+		)
 		(fp_line
 			(start -2.1 1.7)
 			(end 2.1 1.7)
@@ -29044,7 +29054,7 @@
 		(path "/ae0e3478-47f0-43cc-88ab-b3b92ca6e780")
 		(sheetname "/")
 		(sheetfile "light.kicad_sch")
-		(attr exclude_from_pos_files)
+		(attr exclude_from_pos_files exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end 0 -0.7)
@@ -29709,7 +29719,7 @@
 		(path "/193d0daf-6956-4d6e-832c-5ab49f92cd0c")
 		(sheetname "/")
 		(sheetfile "light.kicad_sch")
-		(attr exclude_from_pos_files)
+		(attr exclude_from_pos_files exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end 0 -0.7)
@@ -30089,7 +30099,7 @@
 		(path "/e74ad6ed-aa02-4e3f-b167-cccf63a68190")
 		(sheetname "/")
 		(sheetfile "light.kicad_sch")
-		(attr exclude_from_pos_files)
+		(attr exclude_from_pos_files exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end 0 -0.7)
@@ -30468,7 +30478,7 @@
 		(path "/8f1917ee-b923-47fe-bc93-3c834f5866af")
 		(sheetname "/")
 		(sheetfile "light.kicad_sch")
-		(attr exclude_from_pos_files)
+		(attr exclude_from_pos_files exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end 0 -0.7)
@@ -30849,7 +30859,7 @@
 		(path "/69058fef-a517-409b-b6ce-f71cc08d4abb")
 		(sheetname "/")
 		(sheetfile "light.kicad_sch")
-		(attr exclude_from_pos_files)
+		(attr exclude_from_pos_files exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end 0 -0.7)
@@ -31241,7 +31251,7 @@
 		(path "/a35490c4-a4b2-4a78-aa3a-ba3b765a2ab9")
 		(sheetname "/")
 		(sheetfile "light.kicad_sch")
-		(attr exclude_from_pos_files)
+		(attr exclude_from_pos_files exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end 0 -0.7)
@@ -44681,12 +44691,6 @@
 			(pts
 				(xy 179.67 107.55) (xy 181.57 107.55) (xy 181.57 109.15) (xy 179.67 109.15)
 			)
-		)
-	)
-	(group ""
-		(uuid "4f6df032-d2ab-4bef-be1f-ab78e7f4b8b1")
-		(members "2c66380e-97c7-4b7c-8da7-4e76a0fca1b8" "31287df7-630d-489c-9976-1b6b69cbbd48"
-			"bebc7ac6-1469-4e41-8cd5-54cba792b605" "f008a3d2-84b9-4f4f-b39e-4767834b208a"
 		)
 	)
 	(group ""

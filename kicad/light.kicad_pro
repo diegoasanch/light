@@ -555,8 +555,8 @@
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "plot": "",
-      "pos_files": "",
+      "plot": "fab/gerbers/",
+      "pos_files": "fab/component_placement/",
       "specctra_dsn": "",
       "step": "",
       "svg": "",
@@ -566,7 +566,7 @@
   },
   "schematic": {
     "annotate_start_num": 0,
-    "bom_export_filename": "${PROJECTNAME}.csv",
+    "bom_export_filename": "${PROJECTNAME}_bom.csv",
     "bom_fmt_presets": [],
     "bom_fmt_settings": {
       "field_delimiter": ",",
