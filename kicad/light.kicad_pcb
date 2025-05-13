@@ -54268,9 +54268,7 @@
 	)
 	(group ""
 		(uuid "b4159c9b-a610-4776-aa8a-4e03eaf40f48")
-		(members "1eb46a89-8092-44e8-ad1e-5dc776a8a22d" "33446f39-6641-4901-bf15-6a062c9a5a38"
-			"c75f4015-e6d8-4d37-b560-c69294e1e5b2"
-		)
+		(members "33446f39-6641-4901-bf15-6a062c9a5a38" "c75f4015-e6d8-4d37-b560-c69294e1e5b2")
 	)
 	(group ""
 		(uuid "dbd9603c-ba82-4cee-b602-59420bf83a22")
