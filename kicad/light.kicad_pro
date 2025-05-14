@@ -80,10 +80,6 @@
           "Manually checked, this one's fine"
         ],
         [
-          "starved_thermal|147450000|83570000|cee4eee1-a1a1-4072-a049-4cf2e3292155|d2a910f1-c70e-4388-8767-d7a542945e5e|F.Cu",
-          "Manually checked, this one's fine"
-        ],
-        [
           "starved_thermal|152910000|99820000|cee4eee1-a1a1-4072-a049-4cf2e3292155|5bc80547-e8e9-4a58-acff-01bd313b0b10|F.Cu",
           "Manually checked, this one's fine"
         ],
@@ -231,6 +227,7 @@
         0.15,
         0.1565,
         0.2,
+        0.25,
         0.3,
         0.4,
         0.6,

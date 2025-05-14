@@ -15365,7 +15365,7 @@
 	)
 	(wire
 		(pts
-			(xy 403.86 55.88) (xy 412.75 55.88)
+			(xy 403.86 55.88) (xy 416.56 55.88)
 		)
 		(stroke
 			(width 0)
@@ -15455,7 +15455,7 @@
 	)
 	(wire
 		(pts
-			(xy 420.37 55.88) (xy 426.72 55.88)
+			(xy 424.18 55.88) (xy 426.72 55.88)
 		)
 		(stroke
 			(width 0)
@@ -18953,6 +18953,16 @@
 		)
 		(uuid "de2ad7a2-27e4-44d8-b3e9-2b60c757ed2f")
 	)
+	(label "VRGB_OUT"
+		(at 415.29 55.88 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "de8d60fc-14a0-4733-9ffc-f581d5f263cb")
+	)
 	(label "WL_CLK"
 		(at 261.62 283.21 180)
 		(effects
@@ -19724,7 +19734,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 502.412 245.11 90)
 			(effects
 				(font
@@ -20899,7 +20909,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 490.982 245.11 90)
 			(effects
 				(font
@@ -21348,7 +21358,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0201_0603Metric"
 			(at 347.472 76.2 90)
 			(effects
 				(font
@@ -27626,7 +27636,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 480.06 218.948 90)
 			(effects
 				(font
@@ -29401,7 +29411,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 513.842 245.11 90)
 			(effects
 				(font
@@ -29653,7 +29663,7 @@
 	)
 	(symbol
 		(lib_id "Jumper:SolderJumper_2_Bridged")
-		(at 416.56 55.88 0)
+		(at 420.37 55.88 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
@@ -29661,7 +29671,7 @@
 		(dnp no)
 		(uuid "9c83dc7d-5a40-42c4-acd3-b7c9b7e0bdd5")
 		(property "Reference" "JP5"
-			(at 416.56 51.308 0)
+			(at 420.37 51.308 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -29669,7 +29679,7 @@
 			)
 		)
 		(property "Value" "V_RGB out"
-			(at 416.56 53.34 0)
+			(at 420.37 53.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -29677,7 +29687,7 @@
 			)
 		)
 		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Bridged_RoundedPad1.0x1.5mm"
-			(at 416.56 55.88 0)
+			(at 420.37 55.88 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -29686,7 +29696,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 416.56 55.88 0)
+			(at 420.37 55.88 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -29695,7 +29705,7 @@
 			)
 		)
 		(property "Description" "Solder Jumper, 2-pole, closed/bridged"
-			(at 416.56 55.88 0)
+			(at 420.37 55.88 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -29746,7 +29756,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0201_0603Metric"
 			(at 416.052 71.12 90)
 			(effects
 				(font
@@ -30018,7 +30028,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
 			(at 408.6352 74.93 0)
 			(effects
 				(font
@@ -30289,7 +30299,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 480.06 229.108 90)
 			(effects
 				(font
@@ -31708,7 +31718,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 480.06 239.268 90)
 			(effects
 				(font
@@ -32955,7 +32965,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+		(property "Footprint" "Resistor_SMD:R_0201_0603Metric"
 			(at 369.062 80.01 90)
 			(effects
 				(font
@@ -33180,7 +33190,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0201_0603Metric"
 			(at 379.222 80.01 90)
 			(effects
 				(font
@@ -35550,7 +35560,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0201_0603Metric"
 			(at 347.472 66.04 90)
 			(effects
 				(font
