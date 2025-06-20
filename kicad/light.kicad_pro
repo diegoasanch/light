@@ -58,44 +58,7 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [
-        [
-          "starved_thermal|131989900|115571650|cee4eee1-a1a1-4072-a049-4cf2e3292155|2ed1d7b3-5e69-4646-aa33-fade6cf747ca|F.Cu",
-          "Manually checked, this one's fine"
-        ],
-        [
-          "starved_thermal|137630000|113370000|cee4eee1-a1a1-4072-a049-4cf2e3292155|051494f6-05a3-426d-9547-75a6150ebf6a|F.Cu",
-          "Manually checked, this one's fine"
-        ],
-        [
-          "starved_thermal|140082000|96747200|cee4eee1-a1a1-4072-a049-4cf2e3292155|e6c0bc0d-0082-420f-8c19-fad81ca9bb83|F.Cu",
-          "Manually checked, this one's fine"
-        ],
-        [
-          "starved_thermal|143260000|109279800|cee4eee1-a1a1-4072-a049-4cf2e3292155|ba57c3c3-e6d7-4477-963d-1a10aad38b2f|F.Cu",
-          "Manually checked, this one's fine"
-        ],
-        [
-          "starved_thermal|147071000|91547000|cee4eee1-a1a1-4072-a049-4cf2e3292155|620b88a5-0586-47e7-a0ac-388c8473add6|F.Cu",
-          "Manually checked, this one's fine"
-        ],
-        [
-          "starved_thermal|152910000|99820000|cee4eee1-a1a1-4072-a049-4cf2e3292155|5bc80547-e8e9-4a58-acff-01bd313b0b10|F.Cu",
-          "Manually checked, this one's fine"
-        ],
-        [
-          "starved_thermal|163510000|95130000|cee4eee1-a1a1-4072-a049-4cf2e3292155|3e7fd42c-b281-4cec-af43-630bf73d8f65|F.Cu",
-          "Manually checked, this one's fine"
-        ],
-        [
-          "starved_thermal|169632000|95125200|cee4eee1-a1a1-4072-a049-4cf2e3292155|20e97039-d6a6-460c-9b03-65d8daaad385|F.Cu",
-          "Manually checked, this one's fine"
-        ],
-        [
-          "starved_thermal|170370000|109630000|cee4eee1-a1a1-4072-a049-4cf2e3292155|6bd78070-4479-4bed-835a-72c62f4d425d|F.Cu",
-          "Manually checked, this one's fine"
-        ]
-      ],
+      "drc_exclusions": [],
       "meta": {
         "version": 2
       },
