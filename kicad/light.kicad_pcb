@@ -36479,7 +36479,7 @@
 			)
 		)
 	)
-	(gr_text "rev 2\n04-18-2025"
+	(gr_text "rev 3\n2025-06-19"
 		(at 144.75 103.33 0)
 		(layer "F.SilkS")
 		(uuid "f63432a6-27f9-4318-a1bc-dfe9acae232e")
