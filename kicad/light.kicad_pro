@@ -84,10 +84,6 @@
           ""
         ],
         [
-          "starved_thermal|152910000|99820000|cee4eee1-a1a1-4072-a049-4cf2e3292155|5bc80547-e8e9-4a58-acff-01bd313b0b10|F.Cu",
-          ""
-        ],
-        [
           "starved_thermal|160722000|101075200|cee4eee1-a1a1-4072-a049-4cf2e3292155|fa5fe961-7241-45a0-b77f-a5eab614e5af|F.Cu",
           ""
         ],
@@ -108,27 +104,7 @@
           ""
         ],
         [
-          "unconnected_items|133199184|95920403|cee4eee1-a1a1-4072-a049-4cf2e3292155|43a1c995-19c1-4497-a31a-c05f53c1452d",
-          ""
-        ],
-        [
-          "unconnected_items|142646139|113636759|8b55f9ed-19b8-4e88-8131-a5039ac829f9|67a7407a-6e8e-44b1-bec0-c1c9e62af56b",
-          ""
-        ],
-        [
           "unconnected_items|144533808|90033907|cee4eee1-a1a1-4072-a049-4cf2e3292155|231ecdc9-c603-4af0-b441-0997272ff151",
-          ""
-        ],
-        [
-          "unconnected_items|150091878|88507328|273f61cb-fffa-410e-a67d-0e7140dc4f68|fdc4bc49-6959-4cd7-a248-95f28fc8d4e7",
-          ""
-        ],
-        [
-          "unconnected_items|180668599|80680627|e2d0202f-5f84-4a85-bee6-923b43772e1f|9524bc5d-5e1b-4c2a-95f9-f515b8a943f1",
-          ""
-        ],
-        [
-          "unconnected_items|181047356|81048450|cee4eee1-a1a1-4072-a049-4cf2e3292155|e2d0202f-5f84-4a85-bee6-923b43772e1f",
           ""
         ]
       ],
@@ -180,6 +156,7 @@
         "solder_mask_bridge": "error",
         "starved_thermal": "warning",
         "text_height": "warning",
+        "text_on_edge_cuts": "error",
         "text_thickness": "warning",
         "through_hole_pad_without_hole": "error",
         "too_many_vias": "error",
@@ -211,7 +188,7 @@
         "min_track_width": 0.127,
         "min_via_annular_width": 0.1,
         "min_via_diameter": 0.6,
-        "solder_mask_to_copper_clearance": 0.0,
+        "solder_mask_to_copper_clearance": 0.005,
         "use_height_for_length_calcs": true
       },
       "teardrop_options": [

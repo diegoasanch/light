@@ -5,8 +5,8 @@
 	(uuid "fbb17af3-099c-429d-b186-ab4e8e0fdddf")
 	(paper "A2")
 	(title_block
-		(date "2025-04-18")
-		(rev "2")
+		(date "2025-08-06")
+		(rev "3")
 	)
 	(lib_symbols
 		(symbol "Connector:Barrel_Jack_MountingPin"
