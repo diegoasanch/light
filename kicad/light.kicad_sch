@@ -5,8 +5,8 @@
 	(uuid "fbb17af3-099c-429d-b186-ab4e8e0fdddf")
 	(paper "A2")
 	(title_block
-		(date "2025-08-06")
-		(rev "3")
+		(date "2025-08-09")
+		(rev "4")
 	)
 	(lib_symbols
 		(symbol "Connector:Barrel_Jack_MountingPin"
@@ -22275,7 +22275,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 441.6552 67.31 0)
 			(effects
 				(font
