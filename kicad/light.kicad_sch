@@ -19419,7 +19419,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "NMOS"
+		(property "Value" "IRLML6344"
 			(at 505.46 218.4399 0)
 			(effects
 				(font
@@ -19475,6 +19475,15 @@
 		)
 		(property "Sim.Pins" "1=D 2=G 3=S"
 			(at 499.11 232.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C53550"
+			(at 499.11 217.17 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21068,6 +21077,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C2765186"
+			(at 100.33 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "A9"
 			(uuid "28ef6bc9-4632-4c88-82e4-7177b5cf9049")
 		)
@@ -21633,7 +21651,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "NMOS"
+		(property "Value" "IRLML6344"
 			(at 528.32 238.7599 0)
 			(effects
 				(font
@@ -21689,6 +21707,15 @@
 		)
 		(property "Sim.Pins" "1=D 2=G 3=S"
 			(at 521.97 252.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C53550"
+			(at 521.97 237.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22091,6 +22118,15 @@
 		)
 		(property "Description" "Push button switch, generic, two pins"
 			(at 490.22 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C843684"
+			(at 490.22 132.08 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -23122,7 +23158,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "NMOS"
+		(property "Value" "IRLML6344"
 			(at 516.89 228.5999 0)
 			(effects
 				(font
@@ -23178,6 +23214,15 @@
 		)
 		(property "Sim.Pins" "1=D 2=G 3=S"
 			(at 510.54 242.57 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C53550"
+			(at 510.54 227.33 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -24936,6 +24981,15 @@
 		)
 		(property "Description" "Push button switch, generic, two pins"
 			(at 403.86 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C2886897"
+			(at 403.86 129.54 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -27202,6 +27256,15 @@
 		)
 		(property "Description" ""
 			(at 364.49 240.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C42411118"
+			(at 370.84 254 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -29646,6 +29709,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C42411119"
+			(at 309.88 222.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "c089225a-1938-4d15-8b7e-010b2418356c")
 		)
@@ -30529,6 +30601,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C92487"
+			(at 340.36 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "22944867-eafe-465e-9055-63f71bda091e")
 		)
@@ -31127,6 +31208,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 325.12 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C92487"
 			(at 325.12 67.31 0)
 			(effects
 				(font
@@ -31815,6 +31905,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C2895280"
+			(at 270.51 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "8b0c5a14-b919-4570-af48-67eb9cb24fa8")
 		)
@@ -31877,6 +31976,15 @@
 		)
 		(property "Description" "Generic connector, double row, 02x04, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)"
 			(at 519.43 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C7509542"
+			(at 519.43 189.23 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -32028,6 +32136,15 @@
 			)
 		)
 		(property "Description" "DC Barrel Jack with a mounting pin"
+			(at 118.11 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C720558"
 			(at 118.11 129.54 0)
 			(effects
 				(font
@@ -33345,6 +33462,15 @@
 		)
 		(property "Description" "Push button switch, generic, two pins"
 			(at 445.77 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C2886897"
+			(at 445.77 129.54 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -34950,7 +35076,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1000u"
+		(property "Value" "470u"
 			(at 499.11 187.3249 0)
 			(effects
 				(font
@@ -34978,6 +35104,15 @@
 			)
 		)
 		(property "Description" "Polarized capacitor, US symbol"
+			(at 495.3 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C2977552"
 			(at 495.3 186.69 0)
 			(effects
 				(font
@@ -36594,6 +36729,15 @@
 		)
 		(property "Description" "Schottky diode"
 			(at 251.46 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C50645"
+			(at 251.46 50.8 90)
 			(effects
 				(font
 					(size 1.27 1.27)
