@@ -30645,6 +30645,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C703747"
+			(at 222.25 43.18 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "4bac032c-ef6a-42fb-8f9f-2b2a50e955a8")
 		)
@@ -33665,7 +33674,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C_Polarized_US")
+		(lib_id "Device:C")
 		(at 231.14 48.26 0)
 		(mirror y)
 		(unit 1)
@@ -33675,7 +33684,7 @@
 		(dnp no)
 		(uuid "b79a9f97-1a23-434d-ba80-eb1d33bca77f")
 		(property "Reference" "C27"
-			(at 227.33 46.3549 0)
+			(at 238.252 47.244 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -33684,7 +33693,7 @@
 			)
 		)
 		(property "Value" "22u"
-			(at 227.33 48.8949 0)
+			(at 238.252 49.784 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -33692,8 +33701,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:CP_Elec_4x5.4"
-			(at 231.14 48.26 0)
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
+			(at 230.1748 52.07 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -33710,7 +33719,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Polarized capacitor, US symbol"
+		(property "Description" "Unpolarized capacitor"
 			(at 231.14 48.26 0)
 			(effects
 				(font
@@ -33719,7 +33728,7 @@
 				(hide yes)
 			)
 		)
-		(property "JLC" "C2895280"
+		(property "JLC" "C5674"
 			(at 231.14 48.26 0)
 			(effects
 				(font
