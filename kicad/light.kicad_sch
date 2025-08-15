@@ -20229,6 +20229,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C76937"
+			(at 384.81 109.22 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "0902b2c2-dd3f-4336-adf7-48d108d51d13")
 		)
@@ -21023,6 +21032,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C76928"
+			(at 302.26 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "3d341ba5-5d27-4fd2-a51c-2ad66c842a37")
 		)
@@ -21792,6 +21810,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C23733"
+			(at 297.18 341.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "47928ed2-85b5-445f-96d8-00b80bc84b67")
 		)
@@ -21812,7 +21839,7 @@
 		(at 447.04 233.68 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "193d0daf-6956-4d6e-832c-5ab49f92cd0c")
@@ -23190,6 +23217,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C1538"
+			(at 224.79 68.58 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "48dcdf6c-dda1-44b9-9d87-54f2454ab2ae")
 		)
@@ -23250,6 +23286,15 @@
 		)
 		(property "Description" "Unpolarized capacitor"
 			(at 490.22 314.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C76937"
+			(at 490.22 314.96 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -23464,6 +23509,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 401.32 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C141660"
 			(at 401.32 60.96 0)
 			(effects
 				(font
@@ -23877,6 +23931,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 201.93 261.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C52923"
 			(at 201.93 261.62 0)
 			(effects
 				(font
@@ -25632,6 +25695,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C76937"
+			(at 294.64 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "39f6122a-6bc3-4983-9646-7871a33094ce")
 		)
@@ -25761,6 +25833,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 205.74 237.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C76937"
 			(at 205.74 237.49 0)
 			(effects
 				(font
@@ -26604,6 +26685,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C76937"
+			(at 179.07 43.18 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "5768f041-a14e-4f31-9fcb-eecf98d3d5cd")
 		)
@@ -26674,6 +26764,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C12530"
+			(at 180.34 237.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "5ee65f24-a0ca-4db6-80fb-9593a30db0fe")
 		)
@@ -26734,6 +26833,15 @@
 		)
 		(property "Description" "Unpolarized capacitor"
 			(at 455.93 278.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C76937"
+			(at 455.93 278.13 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -27141,6 +27249,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C20617855"
+			(at 96.52 302.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "a798c0b5-23a5-4822-aa43-6e645dd3822d")
 		)
@@ -27161,7 +27278,7 @@
 		(at 81.28 68.58 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "69058fef-a517-409b-b6ce-f71cc08d4abb")
@@ -27352,6 +27469,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 372.11 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C76928"
 			(at 372.11 180.34 0)
 			(effects
 				(font
@@ -27562,6 +27688,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C76928"
+			(at 349.25 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "1b00a7f8-13cb-4e7a-a163-3fd2195096e4")
 		)
@@ -27690,6 +27825,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 360.68 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C76928"
 			(at 360.68 180.34 0)
 			(effects
 				(font
@@ -27935,6 +28079,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C23733"
+			(at 260.35 220.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "3a61afeb-9ff6-49ec-aea5-a56c6050a1a3")
 		)
@@ -27997,6 +28150,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 213.36 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C19666"
 			(at 213.36 189.23 0)
 			(effects
 				(font
@@ -28200,6 +28362,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 337.82 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C76928"
 			(at 337.82 180.34 0)
 			(effects
 				(font
@@ -28535,6 +28706,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 254 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C16780"
 			(at 254 110.49 0)
 			(effects
 				(font
@@ -29276,6 +29456,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C76937"
+			(at 342.9 107.95 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "151145bb-114e-4241-83bd-bc9cdb2e8c55")
 		)
@@ -29337,6 +29526,15 @@
 		)
 		(property "Description" "Unpolarized capacitor"
 			(at 289.56 201.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C23733"
+			(at 289.56 201.93 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -29540,6 +29738,15 @@
 		)
 		(property "Description" "Unpolarized capacitor"
 			(at 247.65 271.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C161373"
+			(at 247.65 271.78 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -29891,6 +30098,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C76937"
+			(at 490.22 278.13 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "d8519d24-c780-4945-8814-02d852ae1b78")
 		)
@@ -29953,6 +30169,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 285.75 341.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C76928"
 			(at 285.75 341.63 0)
 			(effects
 				(font
@@ -30095,6 +30320,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C15195"
+			(at 154.94 73.66 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "2cb3a910-bdf3-482a-b20e-a3cd0e9cd514")
 		)
@@ -30157,6 +30391,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 394.97 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C76928"
 			(at 394.97 180.34 0)
 			(effects
 				(font
@@ -30255,7 +30498,7 @@
 		(at 447.04 223.52 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "8f1917ee-b923-47fe-bc93-3c834f5866af")
@@ -30437,6 +30680,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C76928"
+			(at 326.39 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "2f8e65c3-e176-4b8f-bfd8-5bb65e4193bc")
 		)
@@ -30499,6 +30751,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 250.19 220.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C23733"
 			(at 250.19 220.98 0)
 			(effects
 				(font
@@ -30856,6 +31117,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C23733"
+			(at 194.31 237.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "ed31ff22-d2af-4668-a020-7936b6a8e6a8")
 		)
@@ -31186,6 +31456,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 290.83 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C23733"
 			(at 290.83 180.34 0)
 			(effects
 				(font
@@ -31817,6 +32096,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C285010"
+			(at 368.3 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "40e07a8f-85d7-4e88-9cb0-bb3529dc38e3")
 		)
@@ -31887,6 +32175,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C76937"
+			(at 279.4 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "43586eec-a222-43c3-8905-864160c43d2f")
 		)
@@ -31907,7 +32204,7 @@
 		(at 447.04 213.36 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "a35490c4-a4b2-4a78-aa3a-ba3b765a2ab9")
@@ -32213,6 +32510,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 102.87 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C96446"
 			(at 102.87 132.08 0)
 			(effects
 				(font
@@ -32568,6 +32874,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C76937"
+			(at 123.19 185.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "0fb2890e-c38f-4d1c-994e-9b5b3b719e42")
 		)
@@ -32770,6 +33085,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C76937"
+			(at 113.03 185.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "fa286861-172d-4546-b9ef-25f87b221926")
 		)
@@ -32837,6 +33161,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C76937"
+			(at 455.93 314.96 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "f05859c6-0640-47dc-9808-9c00afd04591")
 		)
@@ -32857,7 +33190,7 @@
 		(at 81.28 73.66 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "ae0e3478-47f0-43cc-88ab-b3b92ca6e780")
@@ -33383,6 +33716,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C76928"
+			(at 279.4 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "ffc49ec8-3eea-4769-85ec-ebc317ae84a4")
 		)
@@ -33443,6 +33785,15 @@
 		)
 		(property "Description" "Unpolarized capacitor"
 			(at 425.45 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C76937"
+			(at 425.45 109.22 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -33520,6 +33871,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C76928"
+			(at 383.54 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "78bc121e-208f-4ac5-bcd8-3a7dc06eb599")
 		)
@@ -33582,6 +33942,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 96.52 314.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C76908"
 			(at 96.52 314.96 0)
 			(effects
 				(font
@@ -34040,6 +34409,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 189.23 261.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C23733"
 			(at 189.23 261.62 0)
 			(effects
 				(font
@@ -35368,6 +35746,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C161373"
+			(at 247.65 256.54 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "99a3c1f7-dcd3-4806-a7d7-49d19ca5ba98")
 		)
@@ -36669,6 +37056,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C16780"
+			(at 168.91 113.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "4d9dbec5-d3dd-4a1f-b6b5-8306fbe6a416")
 		)
@@ -37248,7 +37644,7 @@
 		(at 463.55 191.77 180)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "e74ad6ed-aa02-4e3f-b167-cccf63a68190")
@@ -37895,6 +38291,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C3284478"
+			(at 90.17 304.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "4b33b43f-cd4c-4be5-92d3-e286d41bbb2c")
 		)
@@ -38316,6 +38721,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C76928"
+			(at 179.07 113.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "d8bef54b-6c33-48e4-ae96-40e7f9a5dbc3")
 		)
@@ -38630,6 +39044,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 243.84 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C16780"
 			(at 243.84 110.49 0)
 			(effects
 				(font
