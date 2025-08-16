@@ -20305,6 +20305,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C41637"
+			(at 379.73 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "c33b285a-e001-4c7d-aa26-c41c60714991")
 		)
@@ -20771,6 +20780,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C25744"
+			(at 463.55 241.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "f14a74b3-6cb5-485c-99a7-d44d8e439e3a")
 		)
@@ -20964,6 +20982,15 @@
 		)
 		(property "Description" "Resistor"
 			(at 273.05 271.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C270365"
+			(at 273.05 271.78 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21322,6 +21349,15 @@
 					(size 1.27 1.27)
 				)
 				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C140321"
+			(at 167.64 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 				(hide yes)
 			)
 		)
@@ -21749,6 +21785,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C270346"
+			(at 347.98 344.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "0fc146b0-0921-4be6-bb17-8961cfc1ae3a")
 		)
@@ -21956,6 +22001,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 452.12 241.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C25744"
 			(at 452.12 241.3 0)
 			(effects
 				(font
@@ -22286,6 +22340,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C270364"
+			(at 229.87 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "6695cf7f-f6a2-44e7-b0ee-d1c0fda547b5")
 		)
@@ -22414,6 +22477,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 309.88 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C106225"
 			(at 309.88 73.66 0)
 			(effects
 				(font
@@ -24525,6 +24597,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C25756"
+			(at 212.09 68.58 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "28e1ee27-ce7c-4a1a-9f59-91bb1476a32e")
 		)
@@ -25113,6 +25194,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C25744"
+			(at 298.45 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "7734e72a-cdc9-45d1-9159-9371917bc9a8")
 		)
@@ -25524,6 +25614,15 @@
 		)
 		(property "Description" "Resistor"
 			(at 187.96 280.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C138021"
+			(at 187.96 280.67 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -25965,6 +26064,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C25741"
+			(at 158.75 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "b9e1ab52-6213-43a3-a757-096b1efb6929")
 		)
@@ -26115,6 +26223,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 339.09 344.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C270346"
 			(at 339.09 344.17 0)
 			(effects
 				(font
@@ -26595,6 +26712,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C41637"
+			(at 337.82 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "8f3a2dfd-19e4-4b8a-9cf4-eeec3964a314")
 		)
@@ -26663,6 +26789,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 184.15 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C270364"
 			(at 184.15 138.43 0)
 			(effects
 				(font
@@ -28045,6 +28180,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C488409"
+			(at 179.07 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "6"
 			(uuid "6866691c-6063-4059-bcc9-14e159ed9966")
 		)
@@ -28347,6 +28491,15 @@
 		)
 		(property "Description" "Resistor"
 			(at 187.96 275.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C25744"
+			(at 187.96 275.59 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -29385,6 +29538,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C25117"
+			(at 439.42 213.36 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "9b2d02c5-a45e-4672-ac28-8b8417e06f62")
 		)
@@ -29684,6 +29846,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C295807"
+			(at 229.87 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "98ddc0aa-a1b4-4ad1-a883-37f1111d9274")
 		)
@@ -29885,6 +30056,15 @@
 			)
 		)
 		(property "Description" "Single Switch  Debouncer, SOT-143"
+			(at 420.37 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C41637"
 			(at 420.37 121.92 0)
 			(effects
 				(font
@@ -30095,6 +30275,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 127 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C25117"
 			(at 127 59.69 0)
 			(effects
 				(font
@@ -30542,6 +30731,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 134.62 185.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C25744"
 			(at 134.62 185.42 0)
 			(effects
 				(font
@@ -31467,6 +31665,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C25744"
+			(at 474.98 241.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "7feb3c64-36ea-463a-b095-c5171a4dee77")
 		)
@@ -31673,6 +31880,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 450.85 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C11702"
 			(at 450.85 111.76 0)
 			(effects
 				(font
@@ -31896,6 +32112,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C473534"
+			(at 378.46 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "3d87b79b-30d8-4608-aa78-95f06b7df494")
 		)
@@ -32090,6 +32315,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 134.62 196.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C25741"
 			(at 134.62 196.85 0)
 			(effects
 				(font
@@ -32450,6 +32684,15 @@
 		)
 		(property "Description" "Resistor"
 			(at 439.42 223.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C25117"
+			(at 439.42 223.52 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -34117,6 +34360,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C25117"
+			(at 439.42 233.68 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "be68c825-5abb-4b36-9ce9-baba2153a428")
 		)
@@ -34805,6 +35057,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C25744"
+			(at 288.29 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "24c2d3d9-6cce-4015-81ab-45509d02589f")
 		)
@@ -35409,6 +35670,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C270365"
+			(at 331.47 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "1cfe0c97-ceb8-45d1-a0ef-b56481707954")
 		)
@@ -35472,6 +35742,15 @@
 		)
 		(property "Description" "128Mbit / 16MiB Serial Flash Memory, Standard/Dual/Quad SPI, 2.7-3.6V, SOIC-8"
 			(at 279.4 336.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C97521"
+			(at 279.4 364.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -35626,6 +35905,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 341.63 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C270364"
 			(at 341.63 77.47 0)
 			(effects
 				(font
@@ -36063,6 +36351,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C25744"
+			(at 187.96 288.29 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "c0d5adce-9903-4efd-94e2-84f3f20ab5d4")
 		)
@@ -36199,6 +36496,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C137933"
+			(at 147.32 196.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "7626ee93-f411-47ec-bbcb-45ea7ec2e268")
 		)
@@ -36259,6 +36565,15 @@
 		)
 		(property "Description" "Resistor"
 			(at 369.57 210.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C473051"
+			(at 369.57 210.82 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -36962,6 +37277,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C6583742"
+			(at 143.51 273.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "14"
 			(uuid "e19be638-ae3f-4a03-b7b7-58da70f8b21e")
 		)
@@ -37240,6 +37564,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C20625731"
+			(at 259.08 264.16 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "3"
 			(uuid "d0e687a8-80e9-4d78-ab75-e620a1723e1b")
 		)
@@ -37308,6 +37641,15 @@
 		)
 		(property "Description" "Resistor"
 			(at 391.16 237.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C25104"
+			(at 391.16 237.49 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -37610,6 +37952,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C1002"
+			(at 113.03 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "7f87348a-d965-413f-8860-cc5ab3e24509")
 		)
@@ -37670,6 +38021,15 @@
 		)
 		(property "Description" "Resistor"
 			(at 369.57 215.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C473051"
+			(at 369.57 215.9 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -38207,6 +38567,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C138139"
+			(at 309.88 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "44802996-ec0c-4659-8314-6f5d936740af")
 		)
@@ -38484,6 +38853,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C25117"
+			(at 205.74 285.75 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "8b621d77-22f9-492d-bff2-f4f8d908791a")
 		)
@@ -38547,6 +38925,15 @@
 			)
 		)
 		(property "Description" "Low Power,High Accuracy Digital Humidity Sensor with Temperature Sensor"
+			(at 328.93 354.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C82227"
 			(at 328.93 354.33 0)
 			(effects
 				(font
@@ -39077,6 +39464,15 @@
 		)
 		(property "Supplier" "LCSC"
 			(at 312.42 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C17702124"
+			(at 312.42 123.19 90)
 			(effects
 				(font
 					(size 1.27 1.27)
