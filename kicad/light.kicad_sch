@@ -20692,6 +20692,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C324471"
+			(at 181.61 255.27 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "1189020b-99b7-46af-8508-119d8414a1ff")
 		)
@@ -23729,6 +23738,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C12333"
+			(at 105.41 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "9ad79036-a75d-4deb-a2a1-eeda50b3e1ed")
 		)
@@ -25224,6 +25242,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C160403"
+			(at 132.08 347.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "3"
 			(uuid "9038946d-7755-4f1d-9a91-72b0eed37a7e")
 		)
@@ -25736,7 +25763,7 @@
 				)
 			)
 		)
-		(property "Value" "PMEG6020AELR"
+		(property "Value" "PMEG60T30ELRX"
 			(at 118.11 50.292 0)
 			(effects
 				(font
@@ -25763,6 +25790,15 @@
 			)
 		)
 		(property "Description" "60V, 2A low leakage current MEGA Schottky barrier rectifier, SOD-123W"
+			(at 118.11 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C2938304"
 			(at 118.11 53.34 0)
 			(effects
 				(font
@@ -25992,6 +26028,15 @@
 		)
 		(property "Sim.Pins" "1=K 2=A"
 			(at 127 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C7371904"
+			(at 127 69.85 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -29050,6 +29095,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C160403"
+			(at 180.34 347.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "3"
 			(uuid "370c99ec-afc0-42ca-a254-3bb4c641261c")
 		)
@@ -29354,7 +29408,7 @@
 				)
 			)
 		)
-		(property "Value" "PMEG6020AELR"
+		(property "Value" "PMEG60T30ELRX"
 			(at 93.98 121.412 0)
 			(effects
 				(font
@@ -29381,6 +29435,15 @@
 			)
 		)
 		(property "Description" "60V, 2A low leakage current MEGA Schottky barrier rectifier, SOD-123W"
+			(at 93.98 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C2938304"
 			(at 93.98 124.46 0)
 			(effects
 				(font
@@ -30788,7 +30851,7 @@
 		(at 107.95 293.37 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp yes)
 		(fields_autoplaced yes)
@@ -34139,7 +34202,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "01x04"
+		(property "Value" "02x04"
 			(at 467.106 185.166 90)
 			(effects
 				(font
@@ -34175,7 +34238,7 @@
 				(hide yes)
 			)
 		)
-		(property "JLC" "C7509542"
+		(property "JLC" "C2883572"
 			(at 478.79 185.42 90)
 			(effects
 				(font
@@ -34498,6 +34561,15 @@
 		)
 		(property "Sim.Pins" "1=K 2=A"
 			(at 113.03 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C7371906"
+			(at 113.03 138.43 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -36592,7 +36664,7 @@
 		(at 219.71 349.25 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp yes)
 		(fields_autoplaced yes)
@@ -37269,6 +37341,15 @@
 			)
 		)
 		(property "Description" "Inductor"
+			(at 219.71 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C222926"
 			(at 219.71 121.92 0)
 			(effects
 				(font
@@ -39095,7 +39176,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "SS24/SS34"
+		(property "Value" "SS34"
 			(at 214.63 49.2124 90)
 			(effects
 				(font
@@ -39131,7 +39212,7 @@
 				(hide yes)
 			)
 		)
-		(property "JLC" "C50645"
+		(property "JLC" "C8678"
 			(at 212.09 48.26 90)
 			(effects
 				(font
