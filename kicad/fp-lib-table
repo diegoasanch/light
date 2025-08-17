@@ -20,4 +20,5 @@
   (lib (name "LQH5BPZ4R7NT0L")(type "KiCad")(uri "${LIGHT_PROJECT_LIB_DIR}/LQH5BPZ4R7NT0L.pretty")(options "")(descr ""))
   (lib (name "GT-EVA01AA-L1")(type "KiCad")(uri "${LIGHT_PROJECT_LIB_DIR}/GT-EVA01AA-L1.pretty")(options "")(descr ""))
   (lib (name "TPS2120")(type "KiCad")(uri "${LIGHT_PROJECT_LIB_DIR}/TPS2120.pretty")(options "")(descr ""))
+  (lib (name "TPS2121")(type "KiCad")(uri "${LIGHT_PROJECT_LIB_DIR}/TPS2121.pretty")(options "")(descr ""))
 )
