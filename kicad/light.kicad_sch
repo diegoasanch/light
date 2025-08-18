@@ -23712,7 +23712,7 @@
 				(hide yes)
 			)
 		)
-		(property "JLC" ""
+		(property "JLC" "C1857713"
 			(at 325.12 77.47 0)
 			(effects
 				(font
@@ -26605,7 +26605,7 @@
 				(hide yes)
 			)
 		)
-		(property "JLC" ""
+		(property "JLC" "C2612393"
 			(at 321.31 52.07 90)
 			(effects
 				(font
@@ -26749,7 +26749,7 @@
 				(hide yes)
 			)
 		)
-		(property "JLC" ""
+		(property "JLC" "C1857713"
 			(at 335.28 77.47 0)
 			(effects
 				(font
@@ -27921,7 +27921,7 @@
 				(hide yes)
 			)
 		)
-		(property "JLC" ""
+		(property "JLC" "C226583"
 			(at 316.23 69.85 90)
 			(effects
 				(font
@@ -28836,6 +28836,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 229.87 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C295786"
 			(at 229.87 110.49 0)
 			(effects
 				(font
@@ -30183,6 +30192,15 @@
 				(hide yes)
 			)
 		)
+		(property "JLC" "C295779"
+			(at 229.87 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "888cad3c-b994-460c-bb6d-5cb2bbe01453")
 		)
@@ -31125,6 +31143,15 @@
 		)
 		(property "Description" "Unpolarized capacitor"
 			(at 153.67 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C92487"
+			(at 153.67 55.88 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -33228,7 +33255,7 @@
 				(hide yes)
 			)
 		)
-		(property "JLC" ""
+		(property "JLC" "C1857713"
 			(at 330.2 77.47 0)
 			(effects
 				(font
@@ -36885,7 +36912,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "400"
+		(property "Value" "390"
 			(at 149.86 198.1199 0)
 			(effects
 				(font
@@ -36921,7 +36948,7 @@
 				(hide yes)
 			)
 		)
-		(property "JLC" ""
+		(property "JLC" "C473604"
 			(at 147.32 196.85 0)
 			(effects
 				(font
@@ -39922,7 +39949,7 @@
 				(hide yes)
 			)
 		)
-		(property "JLC" ""
+		(property "JLC" "C423655"
 			(at 321.31 57.15 90)
 			(effects
 				(font
@@ -39993,6 +40020,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 243.84 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C141660"
 			(at 243.84 110.49 0)
 			(effects
 				(font
