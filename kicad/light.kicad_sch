@@ -11119,12 +11119,6 @@
 		(uuid "28d5a861-a3ba-4667-8376-5dcafbad796a")
 	)
 	(junction
-		(at 447.04 233.68)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "2b316f0f-8604-4757-a1f2-2f1ae48128cb")
-	)
-	(junction
 		(at 134.62 190.5)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -11695,12 +11689,6 @@
 		(uuid "c485a5f0-6e63-4ce0-beb3-e8e8993bfab2")
 	)
 	(junction
-		(at 463.55 191.77)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "c807e260-494b-4351-8f4d-f03d82dd8164")
-	)
-	(junction
 		(at 294.64 50.8)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -11827,12 +11815,6 @@
 		(uuid "e9c0d55c-3fb0-4746-8f3e-1d053170ee3b")
 	)
 	(junction
-		(at 447.04 213.36)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "ea648d05-1a23-4c37-afb1-d92f690e9521")
-	)
-	(junction
 		(at 179.07 283.21)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -11885,12 +11867,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "f82f0779-c089-4ebb-b213-cafac3f5793f")
-	)
-	(junction
-		(at 447.04 223.52)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "fd6d633b-b29f-487c-8f53-693fb9f2e613")
 	)
 	(no_connect
 		(at 361.95 300.99)
@@ -12265,16 +12241,6 @@
 			(type default)
 		)
 		(uuid "0c64dbf1-11e5-4e92-93af-cfc0f26164aa")
-	)
-	(wire
-		(pts
-			(xy 447.04 191.77) (xy 463.55 191.77)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0ca418d6-522a-497a-b63e-7a5eae0143fc")
 	)
 	(wire
 		(pts
@@ -13308,7 +13274,7 @@
 	)
 	(wire
 		(pts
-			(xy 443.23 233.68) (xy 447.04 233.68)
+			(xy 443.23 233.68) (xy 474.98 233.68)
 		)
 		(stroke
 			(width 0)
@@ -13435,16 +13401,6 @@
 			(type default)
 		)
 		(uuid "3eb035dc-f104-452b-82de-1dd16c1a748e")
-	)
-	(wire
-		(pts
-			(xy 443.23 223.52) (xy 447.04 223.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4090a87c-00a6-4684-a0d4-8a6edbb7d4dc")
 	)
 	(wire
 		(pts
@@ -14348,7 +14304,7 @@
 	)
 	(wire
 		(pts
-			(xy 463.55 191.77) (xy 476.25 191.77)
+			(xy 447.04 191.77) (xy 476.25 191.77)
 		)
 		(stroke
 			(width 0)
@@ -14405,16 +14361,6 @@
 			(type default)
 		)
 		(uuid "6402898a-1615-44e5-bbd7-ce7996c37b5f")
-	)
-	(wire
-		(pts
-			(xy 447.04 233.68) (xy 474.98 233.68)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6489e774-2b34-470a-9b09-d3c6ffcb87b2")
 	)
 	(wire
 		(pts
@@ -17128,7 +17074,7 @@
 	)
 	(wire
 		(pts
-			(xy 447.04 223.52) (xy 463.55 223.52)
+			(xy 443.23 223.52) (xy 463.55 223.52)
 		)
 		(stroke
 			(width 0)
@@ -17188,7 +17134,7 @@
 	)
 	(wire
 		(pts
-			(xy 447.04 213.36) (xy 452.12 213.36)
+			(xy 443.23 213.36) (xy 452.12 213.36)
 		)
 		(stroke
 			(width 0)
@@ -18105,16 +18051,6 @@
 			(type default)
 		)
 		(uuid "e5e38b70-3317-4f50-9c70-b8cb482e9c9c")
-	)
-	(wire
-		(pts
-			(xy 443.23 213.36) (xy 447.04 213.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e6144e5e-ed3e-4bac-a3c2-694a030dac19")
 	)
 	(wire
 		(pts
@@ -19663,7 +19599,7 @@
 				)
 			)
 		)
-		(property "Value" "WS2812B-1010"
+		(property "Value" "WS2812B-2020"
 			(at 513.334 286.004 0)
 			(effects
 				(font
@@ -19699,7 +19635,7 @@
 				(hide yes)
 			)
 		)
-		(property "JLC" ""
+		(property "JLC" "C965555"
 			(at 499.11 288.29 0)
 			(effects
 				(font
@@ -21632,72 +21568,6 @@
 			(project "light"
 				(path "/fbb17af3-099c-429d-b186-ab4e8e0fdddf"
 					(reference "C43")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 447.04 233.68 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(dnp no)
-		(uuid "193d0daf-6956-4d6e-832c-5ab49f92cd0c")
-		(property "Reference" "TP7"
-			(at 445.008 225.806 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "PWM_B"
-			(at 443.738 227.838 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 452.12 233.68 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 452.12 233.68 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 447.04 233.68 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "4905d08e-e917-42f6-a3bd-d9684d562964")
-		)
-		(instances
-			(project "light"
-				(path "/fbb17af3-099c-429d-b186-ab4e8e0fdddf"
-					(reference "TP7")
 					(unit 1)
 				)
 			)
@@ -25242,7 +25112,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 431.4952 280.67 0)
 			(effects
 				(font
@@ -25261,6 +25131,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 430.53 276.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC" "C140782"
 			(at 430.53 276.86 0)
 			(effects
 				(font
@@ -27272,7 +27151,7 @@
 				)
 			)
 		)
-		(property "Value" "WS2812B-1010"
+		(property "Value" "WS2812B-2020"
 			(at 479.044 286.004 0)
 			(effects
 				(font
@@ -27308,7 +27187,7 @@
 				(hide yes)
 			)
 		)
-		(property "JLC" ""
+		(property "JLC" "C965555"
 			(at 464.82 288.29 0)
 			(effects
 				(font
@@ -30515,72 +30394,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 447.04 223.52 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(dnp no)
-		(uuid "8f1917ee-b923-47fe-bc93-3c834f5866af")
-		(property "Reference" "TP6"
-			(at 445.008 215.646 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "PWM_G"
-			(at 443.738 217.678 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 452.12 223.52 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 452.12 223.52 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 447.04 223.52 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "4b22f927-9778-4d5a-a0cb-eca6a2661ef4")
-		)
-		(instances
-			(project "light"
-				(path "/fbb17af3-099c-429d-b186-ab4e8e0fdddf"
-					(reference "TP6")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 365.76 80.01 0)
 		(unit 1)
@@ -32103,72 +31916,6 @@
 			(project "light"
 				(path "/fbb17af3-099c-429d-b186-ab4e8e0fdddf"
 					(reference "C36")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 447.04 213.36 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(dnp no)
-		(uuid "a35490c4-a4b2-4a78-aa3a-ba3b765a2ab9")
-		(property "Reference" "TP5"
-			(at 445.008 205.486 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "PWM_R"
-			(at 443.738 207.518 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 452.12 213.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 452.12 213.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 447.04 213.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "4921c218-f415-40e0-9c50-429bce54e6c4")
-		)
-		(instances
-			(project ""
-				(path "/fbb17af3-099c-429d-b186-ab4e8e0fdddf"
-					(reference "TP5")
 					(unit 1)
 				)
 			)
@@ -36288,7 +36035,7 @@
 				(hide yes)
 			)
 		)
-		(property "JLC" "C473604"
+		(property "JLC" "C25109"
 			(at 147.32 196.85 0)
 			(effects
 				(font
@@ -37821,72 +37568,6 @@
 			(project ""
 				(path "/fbb17af3-099c-429d-b186-ab4e8e0fdddf"
 					(reference "H1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 463.55 191.77 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(dnp no)
-		(uuid "e74ad6ed-aa02-4e3f-b167-cccf63a68190")
-		(property "Reference" "TP9"
-			(at 465.582 199.644 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "V_RGB"
-			(at 466.852 197.612 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 458.47 191.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 458.47 191.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 463.55 191.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "55a91974-8fb9-44d0-a835-5462aff6d754")
-		)
-		(instances
-			(project "light"
-				(path "/fbb17af3-099c-429d-b186-ab4e8e0fdddf"
-					(reference "TP9")
 					(unit 1)
 				)
 			)
