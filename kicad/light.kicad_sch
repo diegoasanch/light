@@ -11179,6 +11179,12 @@
 		(uuid "38b1b8c2-717b-44d1-aed2-2ba77f8a9aec")
 	)
 	(junction
+		(at 86.36 53.34)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "3a3f5778-8893-464b-bd43-0c710b2fc533")
+	)
+	(junction
 		(at 247.65 43.18)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -17534,7 +17540,7 @@
 	)
 	(wire
 		(pts
-			(xy 81.28 53.34) (xy 105.41 53.34)
+			(xy 81.28 53.34) (xy 86.36 53.34)
 		)
 		(stroke
 			(width 0)
@@ -17601,6 +17607,16 @@
 			(type default)
 		)
 		(uuid "d5d4f9eb-77b8-4a3b-8267-77c614384839")
+	)
+	(wire
+		(pts
+			(xy 86.36 53.34) (xy 105.41 53.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d5f73dae-b505-4e47-9420-730f2a02a545")
 	)
 	(wire
 		(pts
@@ -19122,6 +19138,16 @@
 		)
 		(uuid "7f93c2e2-91b6-4ee6-8a91-2677c444ea11")
 	)
+	(label "LX1"
+		(at 218.44 116.84 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "81fb1c18-6271-4188-919d-3a66b4ffd32b")
+	)
 	(label "QSPI_SD0"
 		(at 255.27 361.95 0)
 		(effects
@@ -19511,6 +19537,16 @@
 			(justify left bottom)
 		)
 		(uuid "f4330109-2211-4789-82b1-a0d0f086d80e")
+	)
+	(label "LX2"
+		(at 219.71 127 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "f56c04ed-3d3a-4f24-b36a-b4120628b3d7")
 	)
 	(label "GPIO2"
 		(at 384.81 229.87 180)
@@ -38345,6 +38381,73 @@
 			(project "light"
 				(path "/fbb17af3-099c-429d-b186-ab4e8e0fdddf"
 					(reference "#PWR059")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 86.36 53.34 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f69c8c0d-8b6b-437c-accc-53b8ff0b1062")
+		(property "Reference" "TP1"
+			(at 88.9 48.7679 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "VBUS"
+			(at 88.9 51.3079 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
+			(at 91.44 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 91.44 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "test point"
+			(at 86.36 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "75abd7d0-2ed6-4402-9dba-b76b48dbe3cd")
+		)
+		(instances
+			(project ""
+				(path "/fbb17af3-099c-429d-b186-ab4e8e0fdddf"
+					(reference "TP1")
 					(unit 1)
 				)
 			)
