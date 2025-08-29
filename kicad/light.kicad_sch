@@ -15760,7 +15760,7 @@
 	)
 	(wire
 		(pts
-			(xy 363.22 52.07) (xy 381 52.07)
+			(xy 363.22 52.07) (xy 379.73 52.07)
 		)
 		(stroke
 			(width 0)
@@ -19309,7 +19309,7 @@
 		(uuid "b52752c1-fb14-40d4-abe0-668fb16c0bbc")
 	)
 	(label "PWR_DRGB_LVL"
-		(at 381 52.07 180)
+		(at 379.73 52.07 180)
 		(effects
 			(font
 				(size 1.27 1.27)
