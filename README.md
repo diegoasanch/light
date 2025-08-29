@@ -24,3 +24,20 @@ You can view the [PCB and schematics online here](https://kicanvas.org/?github=h
 ## Why
 
 I'm currently leveling up my electronics skills and learning about PCB design; I did a [similar (albeit much more simple) project](https://github.com/diegoasanch/RGB-Controller) in the past, so since I'm already familiar with the concepts I thought it would be a good starter project into the world of PCBs.
+
+---
+
+# PCB
+
+<div align="center">
+  <img src="./assets/light-F_Cu.svg" width="75%">
+</div>
+<div align="center">
+  <img src="./assets/light-B_Cu.svg" width="75%">
+</div>
+<div align="center">
+  <img src="./assets/light-In1_Cu.svg" width="75%">
+</div>
+<div align="center">
+  <img src="./assets/light-In2_Cu.svg" width="75%">
+</div>
