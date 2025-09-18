@@ -33,3 +33,6 @@ kicad/production/
 
 .DS_Store
 how-to-import.htm
+
+# Cargo
+target/
