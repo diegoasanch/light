@@ -14,12 +14,12 @@ You can view the [PCB and schematics online here](https://kicanvas.org/?github=h
 
 ## What you'll see here
 
-| File type                                     | Status      |
-| --------------------------------------------- | ----------- |
-| KiCad design files for the schematics and PCB | In-progress |
-| Firmware source code                          | -           |
-| Frontend source code                          | -           |
-| 3D models for the enclosure                   | -           |
+| File type                                     | Status        |
+| --------------------------------------------- | -----------   |
+| KiCad design files for the schematics and PCB | ✅             |
+| Firmware source code                          | 🏗️ in progress |
+| Frontend source code                          | -             |
+| 3D models for the enclosure                   | -             |
 
 ## Why
 
@@ -27,17 +27,16 @@ I'm currently leveling up my electronics skills and learning about PCB design; I
 
 ---
 
-# PCB
+# Project structre
+
+## PCB
+
+KiCad project, located in `./kicad/` contains all of the designs and BOM
 
 <div align="center">
-  <img src="./assets/light-F_Cu.svg" width="75%">
+  <img src="./assets/light-v1-copper.png" width="75%">
 </div>
-<div align="center">
-  <img src="./assets/light-B_Cu.svg" width="75%">
-</div>
-<div align="center">
-  <img src="./assets/light-In1_Cu.svg" width="75%">
-</div>
-<div align="center">
-  <img src="./assets/light-In2_Cu.svg" width="75%">
-</div>
+
+## Firmware
+
+Cargo project using embassy-rs `./firmware/`
