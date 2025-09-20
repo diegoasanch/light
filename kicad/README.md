@@ -10,3 +10,7 @@ To configure it go to `Preferences > Configure Paths...` and either create the n
 <div align="center">
   <img src="../assets/kicad_readme_project_path.png" width="65%">
 </div>
+
+## PCB 3D Viewer
+
+- Board color: #0A244A, 95% opacity
