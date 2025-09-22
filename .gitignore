@@ -30,6 +30,7 @@ fp-info-cache
 *.xml
 *.csv
 kicad/production/
+kicad/fab/
 
 .DS_Store
 how-to-import.htm

@@ -44,7 +44,7 @@ async fn main(_spawner: Spawner) {
     info!("WS2812: Initialized with {} LEDs", NUM_LEDS);
     info!("LED pattern: Red, Green, Blue, Black, White");
     let mut i = 0;
-    let brightness_level = (255f32 * 0.2) as u8;
+    let brightness_level = (255f32 * 0.05) as u8;
 
     loop {
         // cycle through the colors
