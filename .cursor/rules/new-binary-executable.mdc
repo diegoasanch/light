@@ -1,0 +1,9 @@
+---
+alwaysApply: false
+---
+
+When creating a new executable file, place it on the `./firmware/src/bin/` directory.
+
+If the file is a test, name the file `test-<name>.rs`.
+
+Use the `test-hello-world.rs` file as a template for setting up the embassy executor for the new file.

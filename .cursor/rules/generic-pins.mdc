@@ -1,0 +1,16 @@
+---
+globs: *.rs
+alwaysApply: false
+---
+
+When implementing a module that relies on GPIO pins, always receive the pin as input using the `embassy-rs`' recommended way
+
+```
+Peri<'static, AnyPin>
+```
+
+or 
+
+```
+Input<'d>
+```
