@@ -3,7 +3,6 @@
 
 use defmt::*;
 use embassy_executor::Spawner;
-use embassy_time::Timer;
 use {defmt_rtt as _, panic_probe as _};
 
 use firmware::rotary_encoder::{Direction, RotaryEncoder};

@@ -4,34 +4,53 @@
 use defmt::*;
 use embassy_executor::Spawner;
 use embassy_rp::peripherals::PIO0;
+use embassy_sync::{
+    blocking_mutex::raw::{NoopRawMutex, ThreadModeRawMutex},
+    channel::{Channel, Receiver, Sender},
+};
 use embassy_time::Timer;
 use smart_leds::RGB8;
+use static_cell::StaticCell;
 use {defmt_rtt as _, panic_probe as _};
 
-use firmware::argb::Argb;
+use firmware::{
+    argb::Argb,
+    rotary_encoder::{Direction, RotaryEncoder},
+};
 
-const NUM_LEDS: usize = 2; // Try changing this to any number: 1, 3, 10, 100, 1000, etc.
+const NUM_LEDS: usize = 64;
 const NUM_COLORS: usize = 4;
+// const NUM_COLORS: usize = 10;
 const COLORS: [RGB8; NUM_COLORS] = [
     RGB8::new(255, 0, 0),
-    RGB8::new(0, 255, 0),
+    RGB8::new(255, 0, 0),
+    RGB8::new(255, 0, 0),
     RGB8::new(0, 0, 255),
-    RGB8::new(255, 255, 255),
 ];
 
+static CHANNEL: Channel<ThreadModeRawMutex, Direction, 10> = Channel::new();
+
 #[embassy_executor::main]
-async fn main(_spawner: Spawner) {
+async fn main(spawner: Spawner) {
     info!("Starting WS2812 ARGB LED control example");
     let p = embassy_rp::init(Default::default());
 
-    let mut led_data = [RGB8::default(); NUM_LEDS];
+    // Use PIN_20 for the external LEDs
+    let argb = Argb::<PIO0, NUM_LEDS>::new(p.PIN_20, p.PIO0, p.DMA_CH0);
 
-    // Use PIN_5 for the on-board LEDs
-    let mut argb = Argb::<PIO0, NUM_LEDS>::new(p.PIN_5, p.PIO0, p.DMA_CH0);
+    let encoder = RotaryEncoder::new(p.PIN_12.into(), p.PIN_13.into());
+
+    spawner.spawn(leds_task(argb)).unwrap();
+    spawner.spawn(test_task(encoder, CHANNEL.sender())).unwrap();
+}
+
+#[embassy_executor::task]
+async fn leds_task(mut argb: Argb<'static, PIO0, NUM_LEDS>) {
+    let mut led_data = [RGB8::default(); NUM_LEDS];
 
     // Set brightness to 5% (0.05)
     // argb.set_brightness(1.0);
-    argb.set_brightness(0.25);
+    argb.set_brightness(0.005);
 
     info!("ARGB LED: Initialized with {} LEDs", argb.led_count());
     info!("LED pattern: Red, Green, Blue, Black, White");
@@ -64,5 +83,18 @@ async fn main(_spawner: Spawner) {
         Timer::after_millis(300).await;
 
         i += 1;
+    }
+}
+
+#[embassy_executor::task]
+async fn test_task(
+    mut encoder: RotaryEncoder<'static>,
+    channel: Sender<'static, ThreadModeRawMutex, Direction, 10>,
+) {
+    info!("Starting test task");
+
+    loop {
+        let direction = encoder.wait_for_rotation().await;
+        channel.send(direction).await;
     }
 }
