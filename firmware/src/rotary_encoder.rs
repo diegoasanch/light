@@ -31,6 +31,7 @@
 use defmt::{error, info};
 use embassy_futures::select::{Either, select};
 use embassy_rp::gpio::{AnyPin, Input, Pull};
+use embassy_time::{Duration, Instant};
 
 /// Direction of rotation for the rotary encoder
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -106,29 +107,57 @@ impl<'d> RotaryEncoder<'d> {
     /// Waits for a rotation event and returns the direction
     ///
     /// This method blocks until a valid rotation is detected.
-    /// It uses edge detection on both pins and quadrature decoding to determine the direction.
+    /// It groups fast consecutive edges (a "cluster") and returns the majority
+    /// direction inside that cluster. This smooths out occasional invalid or
+    /// inverted transitions produced by the mechanical encoder.
     pub async fn wait_for_rotation(&mut self) -> Direction {
+        // A gap larger than this marks the end of a cluster. Based on
+        // measurements: clusters last ~2.7ms and are ~60ms apart. 20ms
+        // safely separates clusters while keeping all intra-cluster edges.
+        const CLUSTER_GAP: Duration = Duration::from_millis(20);
+
+        let mut last_edge_instant = Instant::now();
+        let mut cw_votes: u8 = 0;
+        let mut ccw_votes: u8 = 0;
+
         loop {
-            // Wait for any edge on either pin using select
             match select(
                 self.pin_a.wait_for_any_edge(),
                 self.pin_b.wait_for_any_edge(),
             )
             .await
             {
-                // Pin A changed first
-                Either::First(_) => {}
-                // Pin B changed first
-                Either::Second(_) => {}
+                Either::First(_) | Either::Second(_) => {}
+            }
+
+            let now = Instant::now();
+
+            // If the gap since last edge is large, we consider the previous
+            // cluster finished and, if it had any votes, return its majority.
+            if now.duration_since(last_edge_instant) > CLUSTER_GAP {
+                if cw_votes > 0 || ccw_votes > 0 {
+                    let result = if cw_votes >= ccw_votes {
+                        Direction::Clockwise
+                    } else {
+                        Direction::CounterClockwise
+                    };
+                    // Reset counts for the next call before returning
+                    cw_votes = 0;
+                    ccw_votes = 0;
+                    last_edge_instant = now;
+                    return result;
+                }
             }
 
             let current_state = self.get_state();
-            let direction = self.decode_direction(self.last_state, current_state);
-            self.last_state = current_state;
-
-            if let Some(dir) = direction {
-                return dir;
+            if let Some(dir) = self.decode_direction(self.last_state, current_state) {
+                match dir {
+                    Direction::Clockwise => cw_votes = cw_votes.saturating_add(1),
+                    Direction::CounterClockwise => ccw_votes = ccw_votes.saturating_add(1),
+                }
             }
+            self.last_state = current_state;
+            last_edge_instant = now;
         }
     }
 
