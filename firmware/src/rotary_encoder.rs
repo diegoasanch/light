@@ -29,7 +29,7 @@
 //! ```
 
 use defmt::{error, info};
-use embassy_futures::select::{Either, select};
+use embassy_futures::select::{Either, Either3, select, select3};
 use embassy_rp::gpio::{AnyPin, Input, Pull};
 use embassy_time::{Duration, Instant, Timer};
 
@@ -114,7 +114,7 @@ impl<'d> RotaryEncoder<'d> {
         // A cluster is reported when either:
         // 1) 4 valid transitions are collected, or
         // 2) 15ms elapse since the first edge of the cluster, whichever happens first.
-        const CLUSTER_TIMEOUT: Duration = Duration::from_millis(15);
+        const CLUSTER_TIMEOUT: Duration = Duration::from_millis(100);
         const MAX_VALID_EVENTS: u8 = 4;
 
         loop {
@@ -163,20 +163,16 @@ impl<'d> RotaryEncoder<'d> {
 
                 // Wait for either next edge or the deadline
                 let remaining = deadline.saturating_duration_since(Instant::now());
-                match select(
-                    select(
-                        self.pin_a.wait_for_any_edge(),
-                        self.pin_b.wait_for_any_edge(),
-                    ),
+                match select3(
+                    self.pin_a.wait_for_any_edge(),
+                    self.pin_b.wait_for_any_edge(),
                     Timer::after(remaining),
                 )
                 .await
                 {
-                    Either::First(Either::First(_)) | Either::First(Either::Second(_)) => {
+                    Either3::First(_) | Either3::Second(_) => {
                         current_state = self.get_state();
-                        if let Some(dir) =
-                            self.decode_direction(self.last_state, current_state)
-                        {
+                        if let Some(dir) = self.decode_direction(self.last_state, current_state) {
                             match dir {
                                 Direction::Clockwise => {
                                     cw_votes = cw_votes.saturating_add(1);
@@ -190,7 +186,7 @@ impl<'d> RotaryEncoder<'d> {
                         self.last_state = current_state;
                     }
                     // Deadline reached
-                    Either::Second(_) => {
+                    Either3::Third(_) => {
                         break;
                     }
                 }
