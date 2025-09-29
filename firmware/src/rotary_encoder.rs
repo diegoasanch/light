@@ -31,7 +31,7 @@
 use defmt::{error, info};
 use embassy_futures::select::{Either, select};
 use embassy_rp::gpio::{AnyPin, Input, Pull};
-use embassy_time::{Duration, Instant};
+use embassy_time::{Duration, Instant, Timer};
 
 /// Direction of rotation for the rotary encoder
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -111,16 +111,14 @@ impl<'d> RotaryEncoder<'d> {
     /// direction inside that cluster. This smooths out occasional invalid or
     /// inverted transitions produced by the mechanical encoder.
     pub async fn wait_for_rotation(&mut self) -> Direction {
-        // A gap larger than this marks the end of a cluster. Based on
-        // measurements: clusters last ~2.7ms and are ~60ms apart. 20ms
-        // safely separates clusters while keeping all intra-cluster edges.
-        const CLUSTER_GAP: Duration = Duration::from_millis(20);
-
-        let mut last_edge_instant = Instant::now();
-        let mut cw_votes: u8 = 0;
-        let mut ccw_votes: u8 = 0;
+        // A cluster is reported when either:
+        // 1) 4 valid transitions are collected, or
+        // 2) 15ms elapse since the first edge of the cluster, whichever happens first.
+        const CLUSTER_TIMEOUT: Duration = Duration::from_millis(15);
+        const MAX_VALID_EVENTS: u8 = 4;
 
         loop {
+            // Wait for first edge to start a cluster
             match select(
                 self.pin_a.wait_for_any_edge(),
                 self.pin_b.wait_for_any_edge(),
@@ -130,34 +128,81 @@ impl<'d> RotaryEncoder<'d> {
                 Either::First(_) | Either::Second(_) => {}
             }
 
-            let now = Instant::now();
+            // Initialize cluster state
+            let cluster_start = Instant::now();
+            let deadline = cluster_start + CLUSTER_TIMEOUT;
+            let mut cw_votes: u8 = 0;
+            let mut ccw_votes: u8 = 0;
+            let mut valid_events: u8 = 0;
 
-            // If the gap since last edge is large, we consider the previous
-            // cluster finished and, if it had any votes, return its majority.
-            if now.duration_since(last_edge_instant) > CLUSTER_GAP {
-                if cw_votes > 0 || ccw_votes > 0 {
-                    let result = if cw_votes >= ccw_votes {
-                        Direction::Clockwise
-                    } else {
-                        Direction::CounterClockwise
-                    };
-                    // Reset counts for the next call before returning
-                    cw_votes = 0;
-                    ccw_votes = 0;
-                    last_edge_instant = now;
-                    return result;
-                }
-            }
-
-            let current_state = self.get_state();
+            // Account for the first event
+            let mut current_state = self.get_state();
             if let Some(dir) = self.decode_direction(self.last_state, current_state) {
                 match dir {
-                    Direction::Clockwise => cw_votes = cw_votes.saturating_add(1),
-                    Direction::CounterClockwise => ccw_votes = ccw_votes.saturating_add(1),
+                    Direction::Clockwise => {
+                        cw_votes = cw_votes.saturating_add(1);
+                    }
+                    Direction::CounterClockwise => {
+                        ccw_votes = ccw_votes.saturating_add(1);
+                    }
                 }
+                valid_events = valid_events.saturating_add(1);
             }
             self.last_state = current_state;
-            last_edge_instant = now;
+
+            // Keep collecting within the cluster until we hit either condition
+            loop {
+                // Condition 1: Full cluster collected
+                if valid_events >= MAX_VALID_EVENTS {
+                    break;
+                }
+                // Condition 2: Timeout since cluster start
+                if Instant::now() >= deadline {
+                    break;
+                }
+
+                // Wait for either next edge or the deadline
+                let remaining = deadline.saturating_duration_since(Instant::now());
+                match select(
+                    select(
+                        self.pin_a.wait_for_any_edge(),
+                        self.pin_b.wait_for_any_edge(),
+                    ),
+                    Timer::after(remaining),
+                )
+                .await
+                {
+                    Either::First(Either::First(_)) | Either::First(Either::Second(_)) => {
+                        current_state = self.get_state();
+                        if let Some(dir) =
+                            self.decode_direction(self.last_state, current_state)
+                        {
+                            match dir {
+                                Direction::Clockwise => {
+                                    cw_votes = cw_votes.saturating_add(1);
+                                }
+                                Direction::CounterClockwise => {
+                                    ccw_votes = ccw_votes.saturating_add(1);
+                                }
+                            }
+                            valid_events = valid_events.saturating_add(1);
+                        }
+                        self.last_state = current_state;
+                    }
+                    // Deadline reached
+                    Either::Second(_) => {
+                        break;
+                    }
+                }
+            }
+
+            // Decide majority and return cluster result immediately
+            let dir = if cw_votes >= ccw_votes {
+                Direction::Clockwise
+            } else {
+                Direction::CounterClockwise
+            };
+            return dir;
         }
     }
 
