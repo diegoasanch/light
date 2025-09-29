@@ -78,6 +78,8 @@ pub struct RotaryEncoder<'d> {
     last_state: EncoderState,
 }
 
+const CLUSTER_THRESHOLD: u8 = 4;
+
 impl<'d> RotaryEncoder<'d> {
     /// Creates a new rotary encoder controller
     ///
@@ -114,7 +116,7 @@ impl<'d> RotaryEncoder<'d> {
         // Single-loop, time-based clustering. A cluster is a fixed 15ms window
         // anchored at the first edge; we report the majority of valid
         // transitions seen within that window, exactly once.
-        const CLUSTER_SPAN: Duration = Duration::from_millis(15);
+        const CLUSTER_SPAN: Duration = Duration::from_millis(50);
 
         let mut cluster_active = false;
         let mut cluster_deadline = Instant::now();
@@ -131,18 +133,6 @@ impl<'d> RotaryEncoder<'d> {
                 )
                 .await
                 {
-                    // More edges within the window – accumulate votes.
-                    Either3::First(_) | Either3::Second(_) => {
-                        let current_state = self.get_state();
-                        if let Some(dir) = self.decode_direction(self.last_state, current_state) {
-                            match dir {
-                                Direction::Clockwise => cw_votes = cw_votes.saturating_add(1),
-                                Direction::CounterClockwise => ccw_votes = ccw_votes.saturating_add(1),
-                            }
-                        }
-                        self.last_state = current_state;
-                        continue;
-                    }
                     // Window elapsed – emit result once and exit.
                     Either3::Third(_) => {
                         let result = if cw_votes >= ccw_votes {
@@ -154,30 +144,42 @@ impl<'d> RotaryEncoder<'d> {
                         cluster_active = false;
                         return result;
                     }
+                    _ => {}
                 }
             } else {
                 // Idle: wait for first edge to start a cluster.
-                match select(self.pin_a.wait_for_any_edge(), self.pin_b.wait_for_any_edge()).await {
-                    Either::First(_) | Either::Second(_) => {
+                match select(
+                    self.pin_a.wait_for_any_edge(),
+                    self.pin_b.wait_for_any_edge(),
+                )
+                .await
+                {
+                    _ => {
                         // Anchor the cluster window to this first edge.
                         cluster_active = true;
                         cluster_deadline = Instant::now() + CLUSTER_SPAN;
                         cw_votes = 0;
                         ccw_votes = 0;
-
-                        // Count initial transition if valid.
-                        let current_state = self.get_state();
-                        if let Some(dir) = self.decode_direction(self.last_state, current_state) {
-                            match dir {
-                                Direction::Clockwise => cw_votes = cw_votes.saturating_add(1),
-                                Direction::CounterClockwise => ccw_votes = ccw_votes.saturating_add(1),
-                            }
-                        }
-                        self.last_state = current_state;
-                        continue;
                     }
                 }
             }
+            // Count initial transition if valid.
+            let current_state = self.get_state();
+            if let Some(dir) = self.decode_direction(self.last_state, current_state) {
+                match dir {
+                    Direction::Clockwise => cw_votes = cw_votes.saturating_add(1),
+                    Direction::CounterClockwise => ccw_votes = ccw_votes.saturating_add(1),
+                }
+            }
+
+            if cw_votes >= CLUSTER_THRESHOLD {
+                return Direction::Clockwise;
+            } else if ccw_votes >= CLUSTER_THRESHOLD {
+                return Direction::CounterClockwise;
+            }
+
+            self.last_state = current_state;
+            continue;
         }
     }
 
