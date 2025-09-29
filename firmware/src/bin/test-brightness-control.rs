@@ -4,8 +4,8 @@
 use defmt::*;
 use embassy_executor::Spawner;
 use embassy_rp::peripherals::PIO0;
-use embassy_sync::{blocking_mutex::raw::ThreadModeRawMutex, mutex::Mutex};
-use embassy_time::Timer;
+use embassy_sync::{blocking_mutex::raw::ThreadModeRawMutex, channel::Channel, mutex::Mutex};
+use embassy_time::{Duration, Ticker};
 use smart_leds::RGB8;
 use {defmt_rtt as _, panic_probe as _};
 
@@ -23,6 +23,12 @@ const COLORS: [RGB8; NUM_COLORS] = [
     RGB8::new(255, 255, 255), // White
 ];
 
+#[derive(Debug, Clone, Copy)]
+pub enum EncoderMessage {
+    Clockwise,
+    CounterClockwise,
+}
+
 // Shared ARGB LED controller using Mutex
 type ArgbType = Mutex<ThreadModeRawMutex, Option<Argb<'static, PIO0, NUM_LEDS>>>;
 static ARGB_LED: ArgbType = Mutex::new(None);
@@ -31,18 +37,17 @@ static ARGB_LED: ArgbType = Mutex::new(None);
 type BrightnessType = Mutex<ThreadModeRawMutex, f32>;
 static BRIGHTNESS: BrightnessType = Mutex::new(0.1); // Start at 10% brightness
 
+// Shared channel for encoder-brightness communication
+static ENCODER_CHANNEL: Channel<ThreadModeRawMutex, EncoderMessage, 8> = Channel::new();
+
 #[embassy_executor::main]
 async fn main(spawner: Spawner) {
     info!("Starting LED Brightness Control with Rotary Encoder");
     let p = embassy_rp::init(Default::default());
 
-    // Initialize ARGB LED controller
     let argb = Argb::<PIO0, NUM_LEDS>::new(p.PIN_20, p.PIO0, p.DMA_CH0);
-
-    // Initialize rotary encoder
     let encoder = RotaryEncoder::new(p.PIN_12.into(), p.PIN_13.into());
 
-    // Store the ARGB controller in the global mutex
     {
         *(ARGB_LED.lock().await) = Some(argb);
     }
@@ -50,11 +55,10 @@ async fn main(spawner: Spawner) {
     info!("ARGB LED: Initialized with {} LEDs", NUM_LEDS);
     info!("Rotary Encoder: Initialized on GPIO pins 12 (A) and 13 (B)");
     info!("Controls: Clockwise = Increase brightness, Counter-clockwise = Decrease brightness");
-    info!("Brightness range: 0.0 (off) to 1.0 (full brightness)");
 
-    // Spawn tasks
     spawner.spawn(led_display_task()).unwrap();
     spawner.spawn(encoder_task(encoder)).unwrap();
+    spawner.spawn(brightness_control_task()).unwrap();
 }
 
 /// Task that displays the LED pattern and applies brightness changes
@@ -66,6 +70,7 @@ async fn led_display_task() {
     loop {
         // Get current brightness
         let current_brightness = *BRIGHTNESS.lock().await;
+        let mut ticker = Ticker::every(Duration::from_millis(100));
 
         // Create a shifting color pattern
         for j in 0..NUM_LEDS {
@@ -82,39 +87,47 @@ async fn led_display_task() {
             }
         }
 
-        // Log current brightness
-        info!("LED Brightness: {}%", (current_brightness * 100.0) as u8);
-
-        // Wait before next update
-        Timer::after_millis(100).await;
-
-        // Advance pattern
         pattern_offset += 1;
+
+        ticker.next().await;
     }
 }
 
-/// Task that monitors rotary encoder and adjusts brightness
+/// Task that monitors rotary encoder and sends updates through channel
 #[embassy_executor::task]
 async fn encoder_task(mut encoder: RotaryEncoder<'static>) {
+    info!("Encoder task: Waiting for rotation events...");
+
+    loop {
+        let message = match encoder.wait_for_rotation().await {
+            Direction::Clockwise => EncoderMessage::Clockwise,
+            Direction::CounterClockwise => EncoderMessage::CounterClockwise,
+        };
+        ENCODER_CHANNEL.send(message).await;
+    }
+}
+
+/// Task that receives encoder messages and updates brightness
+#[embassy_executor::task]
+async fn brightness_control_task() {
     const BRIGHTNESS_STEP: f32 = 0.01; // 1% steps
     const MIN_BRIGHTNESS: f32 = 0.0;
     const MAX_BRIGHTNESS: f32 = 1.0;
 
-    info!("Encoder task: Waiting for rotation events...");
+    info!("Brightness control task: Waiting for encoder messages...");
 
     loop {
-        let direction = encoder.wait_for_rotation().await;
+        let message = ENCODER_CHANNEL.receive().await;
 
-        // Update brightness based on encoder direction
         let mut brightness_guard = BRIGHTNESS.lock().await;
         let current_brightness = *brightness_guard;
 
-        let new_brightness = match direction {
-            Direction::Clockwise => {
+        let new_brightness = match message {
+            EncoderMessage::Clockwise => {
                 let new = current_brightness + BRIGHTNESS_STEP;
                 new.min(MAX_BRIGHTNESS)
             }
-            Direction::CounterClockwise => {
+            EncoderMessage::CounterClockwise => {
                 let new = current_brightness - BRIGHTNESS_STEP;
                 new.max(MIN_BRIGHTNESS)
             }
@@ -122,20 +135,6 @@ async fn encoder_task(mut encoder: RotaryEncoder<'static>) {
 
         *brightness_guard = new_brightness;
 
-        // Log the change
-        match direction {
-            Direction::Clockwise => {
-                info!(
-                    "Encoder: Clockwise rotation - Brightness increased to {}%",
-                    (new_brightness * 100.0) as u8
-                );
-            }
-            Direction::CounterClockwise => {
-                info!(
-                    "Encoder: Counter-clockwise rotation - Brightness decreased to {}%",
-                    (new_brightness * 100.0) as u8
-                );
-            }
-        }
+        info!("brightness: {}%", (new_brightness * 100.0) as u8);
     }
 }

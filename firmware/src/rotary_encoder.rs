@@ -49,14 +49,16 @@ pub enum EncoderState {
     S3 = 3,
 }
 
-impl From<u8> for EncoderState {
-    fn from(value: u8) -> Self {
+impl TryFrom<u8> for EncoderState {
+    type Error = ();
+
+    fn try_from(value: u8) -> Result<Self, Self::Error> {
         match value {
-            0 => EncoderState::S0,
-            1 => EncoderState::S1,
-            2 => EncoderState::S2,
-            3 => EncoderState::S3,
-            _ => panic!("Invalid EncoderState value: {}", value),
+            0 => Ok(EncoderState::S0),
+            1 => Ok(EncoderState::S1),
+            2 => Ok(EncoderState::S2),
+            3 => Ok(EncoderState::S3),
+            _ => Err(()),
         }
     }
 }
@@ -84,7 +86,10 @@ impl<'d> RotaryEncoder<'d> {
         let a_state = if pin_a.is_high() { 1 } else { 0 };
         let b_state = if pin_b.is_high() { 2 } else { 0 };
         let last_state_bin = a_state | b_state;
-        let last_state = EncoderState::from(last_state_bin);
+        let last_state = match EncoderState::try_from(last_state_bin) {
+            Ok(state) => state,
+            Err(_) => EncoderState::S0,
+        };
 
         Self {
             pin_a,
@@ -98,7 +103,10 @@ impl<'d> RotaryEncoder<'d> {
         let a_state = if self.pin_a.is_high() { 1 } else { 0 };
         let b_state = if self.pin_b.is_high() { 2 } else { 0 };
         let last_state_bin = a_state | b_state;
-        EncoderState::from(last_state_bin)
+        match EncoderState::try_from(last_state_bin) {
+            Ok(state) => state,
+            Err(_) => EncoderState::S0,
+        }
     }
 
     /// Decodes rotation direction from state transitions
