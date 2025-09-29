@@ -111,94 +111,73 @@ impl<'d> RotaryEncoder<'d> {
     /// direction inside that cluster. This smooths out occasional invalid or
     /// inverted transitions produced by the mechanical encoder.
     pub async fn wait_for_rotation(&mut self) -> Direction {
-        // A cluster is reported when either:
-        // 1) 4 valid transitions are collected, or
-        // 2) 15ms elapse since the first edge of the cluster, whichever happens first.
-        const CLUSTER_TIMEOUT: Duration = Duration::from_millis(100);
-        const MAX_VALID_EVENTS: u8 = 4;
+        // Single-loop, time-based clustering. A cluster is a fixed 15ms window
+        // anchored at the first edge; we report the majority of valid
+        // transitions seen within that window, exactly once.
+        const CLUSTER_SPAN: Duration = Duration::from_millis(15);
+
+        let mut cluster_active = false;
+        let mut cluster_deadline = Instant::now();
+        let mut cw_votes: u8 = 0;
+        let mut ccw_votes: u8 = 0;
 
         loop {
-            // Wait for first edge to start a cluster
-            match select(
-                self.pin_a.wait_for_any_edge(),
-                self.pin_b.wait_for_any_edge(),
-            )
-            .await
-            {
-                Either::First(_) | Either::Second(_) => {}
-            }
-
-            // Initialize cluster state
-            let cluster_start = Instant::now();
-            let deadline = cluster_start + CLUSTER_TIMEOUT;
-            let mut cw_votes: u8 = 0;
-            let mut ccw_votes: u8 = 0;
-            let mut valid_events: u8 = 0;
-
-            // Account for the first event
-            let mut current_state = self.get_state();
-            if let Some(dir) = self.decode_direction(self.last_state, current_state) {
-                match dir {
-                    Direction::Clockwise => {
-                        cw_votes = cw_votes.saturating_add(1);
-                    }
-                    Direction::CounterClockwise => {
-                        ccw_votes = ccw_votes.saturating_add(1);
-                    }
-                }
-                valid_events = valid_events.saturating_add(1);
-            }
-            self.last_state = current_state;
-
-            // Keep collecting within the cluster until we hit either condition
-            loop {
-                // Condition 1: Full cluster collected
-                if valid_events >= MAX_VALID_EVENTS {
-                    break;
-                }
-                // Condition 2: Timeout since cluster start
-                if Instant::now() >= deadline {
-                    break;
-                }
-
-                // Wait for either next edge or the deadline
-                let remaining = deadline.saturating_duration_since(Instant::now());
+            if cluster_active {
+                // While a cluster is active, wait for either another edge or the deadline.
                 match select3(
                     self.pin_a.wait_for_any_edge(),
                     self.pin_b.wait_for_any_edge(),
-                    Timer::after(remaining),
+                    Timer::at(cluster_deadline),
                 )
                 .await
                 {
+                    // More edges within the window – accumulate votes.
                     Either3::First(_) | Either3::Second(_) => {
-                        current_state = self.get_state();
+                        let current_state = self.get_state();
                         if let Some(dir) = self.decode_direction(self.last_state, current_state) {
                             match dir {
-                                Direction::Clockwise => {
-                                    cw_votes = cw_votes.saturating_add(1);
-                                }
-                                Direction::CounterClockwise => {
-                                    ccw_votes = ccw_votes.saturating_add(1);
-                                }
+                                Direction::Clockwise => cw_votes = cw_votes.saturating_add(1),
+                                Direction::CounterClockwise => ccw_votes = ccw_votes.saturating_add(1),
                             }
-                            valid_events = valid_events.saturating_add(1);
                         }
                         self.last_state = current_state;
+                        continue;
                     }
-                    // Deadline reached
+                    // Window elapsed – emit result once and exit.
                     Either3::Third(_) => {
-                        break;
+                        let result = if cw_votes >= ccw_votes {
+                            Direction::Clockwise
+                        } else {
+                            Direction::CounterClockwise
+                        };
+                        // Reset cluster state before returning
+                        cluster_active = false;
+                        return result;
+                    }
+                }
+            } else {
+                // Idle: wait for first edge to start a cluster.
+                match select(self.pin_a.wait_for_any_edge(), self.pin_b.wait_for_any_edge()).await {
+                    Either::First(_) | Either::Second(_) => {
+                        // Anchor the cluster window to this first edge.
+                        cluster_active = true;
+                        cluster_deadline = Instant::now() + CLUSTER_SPAN;
+                        cw_votes = 0;
+                        ccw_votes = 0;
+
+                        // Count initial transition if valid.
+                        let current_state = self.get_state();
+                        if let Some(dir) = self.decode_direction(self.last_state, current_state) {
+                            match dir {
+                                Direction::Clockwise => cw_votes = cw_votes.saturating_add(1),
+                                Direction::CounterClockwise => ccw_votes = ccw_votes.saturating_add(1),
+                            }
+                        }
+                        self.last_state = current_state;
+                        continue;
                     }
                 }
             }
-
-            // Decide majority and return cluster result immediately
-            let dir = if cw_votes >= ccw_votes {
-                Direction::Clockwise
-            } else {
-                Direction::CounterClockwise
-            };
-            return dir;
         }
     }
 
