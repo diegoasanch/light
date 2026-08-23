@@ -13,58 +13,28 @@
 //!
 //! # Example
 //! ```rust
-//! use firmware::create_argb;
+//! use embassy_rp::peripherals::{DMA_CH1, PIO1};
+//! use embassy_rp::pio::InterruptHandler;
+//! use embassy_rp::{bind_interrupts, dma};
+//! use firmware::argb::Argb;
+//!
+//! bind_interrupts!(struct Irqs {
+//!     PIO1_IRQ_0 => InterruptHandler<PIO1>;
+//!     DMA_IRQ_0 => dma::InterruptHandler<DMA_CH1>;
+//! });
 //!
 //! const NUM_LEDS: usize = 10;
-//! let mut argb = create_argb!(NUM_LEDS, led_pin, p.PIO0, p.DMA_CH0);
+//! let mut argb = Argb::<PIO1, NUM_LEDS>::new(led_pin, p.PIO1, p.DMA_CH1, Irqs);
 //! argb.set_brightness(0.5);
 //! argb.write(&led_colors).await;
 //! ```
 
-use embassy_rp::dma::Channel;
-use embassy_rp::peripherals::{PIO0, PIO1};
+use embassy_rp::Peri;
+use embassy_rp::dma::{self, ChannelInstance};
+use embassy_rp::interrupt::typelevel::Binding;
 use embassy_rp::pio::{Instance as PioInstance, InterruptHandler, Pio, PioPin};
-use embassy_rp::pio_programs::ws2812::{PioWs2812, PioWs2812Program};
-use embassy_rp::{Peri, bind_interrupts};
+use embassy_rp::pio_programs::ws2812::{Grb, PioWs2812, PioWs2812Program};
 use smart_leds::{RGB8, brightness};
-
-bind_interrupts!(struct Irqs {
-    PIO0_IRQ_0 => InterruptHandler<PIO0>;
-    PIO1_IRQ_0 => InterruptHandler<PIO1>;
-});
-
-/// Macro to generate constructors for different PIO instances
-macro_rules! impl_pio_constructors {
-    ($($pio:ty, $irq:ty;)*) => {
-        $(
-            impl<'d, const N: usize> Argb<'d, $pio, N> {
-                pub fn new<Pin: PioPin, D: Channel>(
-                    pin: Peri<'d, Pin>,
-                    pio: Peri<'d, $pio>,
-                    dma_ch: Peri<'d, D>,
-                ) -> Self {
-                    let Pio {
-                        mut common, sm0, ..
-                    } = Pio::new(pio, Irqs);
-                    let program = PioWs2812Program::new(&mut common);
-                    let ws2812 = PioWs2812::new(&mut common, sm0, dma_ch, pin, &program);
-
-                    Self {
-                        brightness: DEFAULT_BRIGHTNESS,
-                        led_count: N,
-                        ws2812,
-                    }
-                }
-            }
-        )*
-    };
-}
-
-// Generate constructors for PIO0 and PIO1
-impl_pio_constructors! {
-    PIO0, embassy_rp::interrupt::PIO0_IRQ_0;
-    PIO1, embassy_rp::interrupt::PIO1_IRQ_0;
-}
 
 /// ARGB (Addressable RGB) LED controller
 ///
@@ -73,16 +43,45 @@ impl_pio_constructors! {
 /// strips where all LEDs show the same color.
 ///
 /// This struct provides a high-level interface for controlling WS2812/WS2812B/NeoPixel
-/// LED strips using the RP2040's PIO (Programmable I/O) peripheral for precise timing.
+/// LED strips using the RP2350's PIO (Programmable I/O) peripheral for precise timing.
 pub struct Argb<'d, P: PioInstance, const N: usize> {
     brightness: f32, // 0-1
     led_count: usize,
-    ws2812: PioWs2812<'d, P, 0, N>,
+    ws2812: PioWs2812<'d, P, 0, N, Grb>,
 }
 
 const DEFAULT_BRIGHTNESS: f32 = 1.0;
 
 impl<'d, P: PioInstance, const N: usize> Argb<'d, P, N> {
+    /// Creates a new ARGB controller on the given PIO instance and DMA channel.
+    ///
+    /// `irqs` must be a `bind_interrupts!` struct binding both the PIO's IRQ0
+    /// (`pio::InterruptHandler<P>`) and `DMA_IRQ_0` (`dma::InterruptHandler<D>`)
+    /// for the channel used. Interrupt bindings live in the binary, not this
+    /// library, so binaries that also use PIO0 for other drivers (e.g. the
+    /// cyw43 WiFi SPI) can put this driver on PIO1 without handler collisions.
+    pub fn new<D: ChannelInstance>(
+        pin: Peri<'d, impl PioPin>,
+        pio: Peri<'d, P>,
+        dma_ch: Peri<'d, D>,
+        irqs: impl Binding<P::Interrupt, InterruptHandler<P>>
+        + Binding<D::Interrupt, dma::InterruptHandler<D>>
+        + Copy
+        + 'd,
+    ) -> Self {
+        let Pio {
+            mut common, sm0, ..
+        } = Pio::new(pio, irqs);
+        let program = PioWs2812Program::new(&mut common);
+        let ws2812 = PioWs2812::new(&mut common, sm0, dma_ch, irqs, pin, &program);
+
+        Self {
+            brightness: DEFAULT_BRIGHTNESS,
+            led_count: N,
+            ws2812,
+        }
+    }
+
     /// Sets the global brightness for all LEDs
     ///
     /// # Arguments

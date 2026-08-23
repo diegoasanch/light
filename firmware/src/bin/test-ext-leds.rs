@@ -3,14 +3,15 @@
 
 use defmt::*;
 use embassy_executor::Spawner;
-use embassy_rp::peripherals::PIO0;
+use embassy_rp::peripherals::{DMA_CH0, PIO0};
+use embassy_rp::pio::InterruptHandler;
+use embassy_rp::{bind_interrupts, dma};
 use embassy_sync::{
-    blocking_mutex::raw::{NoopRawMutex, ThreadModeRawMutex},
-    channel::{Channel, Receiver, Sender},
+    blocking_mutex::raw::ThreadModeRawMutex,
+    channel::{Channel, Sender},
 };
 use embassy_time::Timer;
 use smart_leds::RGB8;
-use static_cell::StaticCell;
 use {defmt_rtt as _, panic_probe as _};
 
 use firmware::{
@@ -30,18 +31,23 @@ const COLORS: [RGB8; NUM_COLORS] = [
 
 static CHANNEL: Channel<ThreadModeRawMutex, Direction, 10> = Channel::new();
 
+bind_interrupts!(struct Irqs {
+    PIO0_IRQ_0 => InterruptHandler<PIO0>;
+    DMA_IRQ_0 => dma::InterruptHandler<DMA_CH0>;
+});
+
 #[embassy_executor::main]
 async fn main(spawner: Spawner) {
     info!("Starting WS2812 ARGB LED control example");
     let p = embassy_rp::init(Default::default());
 
     // Use PIN_20 for the external LEDs
-    let argb = Argb::<PIO0, NUM_LEDS>::new(p.PIN_20, p.PIO0, p.DMA_CH0);
+    let argb = Argb::<PIO0, NUM_LEDS>::new(p.PIN_20, p.PIO0, p.DMA_CH0, Irqs);
 
     let encoder = RotaryEncoder::new(p.PIN_12.into(), p.PIN_13.into());
 
-    spawner.spawn(leds_task(argb)).unwrap();
-    spawner.spawn(test_task(encoder, CHANNEL.sender())).unwrap();
+    spawner.spawn(unwrap!(leds_task(argb)));
+    spawner.spawn(unwrap!(test_task(encoder, CHANNEL.sender())));
 }
 
 #[embassy_executor::task]

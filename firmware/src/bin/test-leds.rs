@@ -3,12 +3,19 @@
 
 use defmt::*;
 use embassy_executor::Spawner;
-use embassy_rp::peripherals::PIO0;
+use embassy_rp::peripherals::{DMA_CH0, PIO0};
+use embassy_rp::pio::InterruptHandler;
+use embassy_rp::{bind_interrupts, dma};
 use embassy_time::Timer;
 use smart_leds::RGB8;
 use {defmt_rtt as _, panic_probe as _};
 
 use firmware::argb::Argb;
+
+bind_interrupts!(struct Irqs {
+    PIO0_IRQ_0 => InterruptHandler<PIO0>;
+    DMA_IRQ_0 => dma::InterruptHandler<DMA_CH0>;
+});
 
 const NUM_LEDS: usize = 2; // Try changing this to any number: 1, 3, 10, 100, 1000, etc.
 const NUM_COLORS: usize = 4;
@@ -27,7 +34,7 @@ async fn main(_spawner: Spawner) {
     let mut led_data = [RGB8::default(); NUM_LEDS];
 
     // Use PIN_5 for the on-board LEDs
-    let mut argb = Argb::<PIO0, NUM_LEDS>::new(p.PIN_5, p.PIO0, p.DMA_CH0);
+    let mut argb = Argb::<PIO0, NUM_LEDS>::new(p.PIN_5, p.PIO0, p.DMA_CH0, Irqs);
 
     // Set brightness to 5% (0.05)
     // argb.set_brightness(1.0);

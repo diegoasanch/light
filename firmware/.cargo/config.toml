@@ -5,4 +5,9 @@ runner = "probe-rs run --chip RP235x"
 target = "thumbv8m.main-none-eabihf"
 
 [env]
-DEFMT_LOG = "debug"
+# cyw43/cyw43-pio at trace during WiFi bring-up: the driver's FEEDBEAD detection
+# loop logs at trace only — at plain `debug` a dead bus is totally silent.
+# defmt filtering is compile-time; changing only the shell env var does not
+# reliably recompile already-built dependency crates (run `cargo clean -p cyw43
+# -p cyw43-pio` after changing this). Shell env still overrides this value.
+DEFMT_LOG = "debug,cyw43=trace,cyw43_pio=trace"

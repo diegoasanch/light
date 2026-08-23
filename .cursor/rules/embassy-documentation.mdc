@@ -1,0 +1,9 @@
+---
+globs: firmware/**
+alwaysApply: false
+---
+
+Consult documentation and examples for embassy in the following sites
+
+- [The embassy book](https://embassy.dev/book/index.html)
+- [The embassy github repository](https://github.com/embassy-rs/embassy)

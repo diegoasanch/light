@@ -3,7 +3,9 @@
 
 use defmt::*;
 use embassy_executor::Spawner;
-use embassy_rp::peripherals::PIO0;
+use embassy_rp::peripherals::{DMA_CH0, PIO0};
+use embassy_rp::pio::InterruptHandler;
+use embassy_rp::{bind_interrupts, dma};
 use embassy_sync::{blocking_mutex::raw::ThreadModeRawMutex, channel::Channel, mutex::Mutex};
 use embassy_time::{Duration, Ticker};
 use smart_leds::RGB8;
@@ -40,12 +42,17 @@ static BRIGHTNESS: BrightnessType = Mutex::new(0.1); // Start at 10% brightness
 // Shared channel for encoder-brightness communication
 static ENCODER_CHANNEL: Channel<ThreadModeRawMutex, EncoderMessage, 8> = Channel::new();
 
+bind_interrupts!(struct Irqs {
+    PIO0_IRQ_0 => InterruptHandler<PIO0>;
+    DMA_IRQ_0 => dma::InterruptHandler<DMA_CH0>;
+});
+
 #[embassy_executor::main]
 async fn main(spawner: Spawner) {
     info!("Starting LED Brightness Control with Rotary Encoder");
     let p = embassy_rp::init(Default::default());
 
-    let argb = Argb::<PIO0, NUM_LEDS>::new(p.PIN_20, p.PIO0, p.DMA_CH0);
+    let argb = Argb::<PIO0, NUM_LEDS>::new(p.PIN_20, p.PIO0, p.DMA_CH0, Irqs);
     let encoder = RotaryEncoder::new(p.PIN_12.into(), p.PIN_13.into());
 
     {
@@ -56,9 +63,9 @@ async fn main(spawner: Spawner) {
     info!("Rotary Encoder: Initialized on GPIO pins 12 (A) and 13 (B)");
     info!("Controls: Clockwise = Increase brightness, Counter-clockwise = Decrease brightness");
 
-    spawner.spawn(led_display_task()).unwrap();
-    spawner.spawn(encoder_task(encoder)).unwrap();
-    spawner.spawn(brightness_control_task()).unwrap();
+    spawner.spawn(unwrap!(led_display_task()));
+    spawner.spawn(unwrap!(encoder_task(encoder)));
+    spawner.spawn(unwrap!(brightness_control_task()));
 }
 
 /// Task that displays the LED pattern and applies brightness changes
@@ -66,11 +73,11 @@ async fn main(spawner: Spawner) {
 async fn led_display_task() {
     let mut led_data = [RGB8::default(); NUM_LEDS];
     let mut pattern_offset = 0;
+    let mut ticker = Ticker::every(Duration::from_millis(100));
 
     loop {
         // Get current brightness
         let current_brightness = *BRIGHTNESS.lock().await;
-        let mut ticker = Ticker::every(Duration::from_millis(100));
 
         // Create a shifting color pattern
         for j in 0..NUM_LEDS {
@@ -79,12 +86,10 @@ async fn led_display_task() {
         }
 
         // Update LED display with current brightness
-        {
-            let mut argb_guard = ARGB_LED.lock().await;
-            if let Some(argb) = argb_guard.as_mut() {
-                argb.set_brightness(current_brightness);
-                argb.write(&led_data).await;
-            }
+        let mut argb_guard = ARGB_LED.lock().await;
+        if let Some(argb) = argb_guard.as_mut() {
+            argb.set_brightness(current_brightness);
+            argb.write(&led_data).await;
         }
 
         pattern_offset += 1;
