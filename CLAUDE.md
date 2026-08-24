@@ -2,8 +2,10 @@
 
 Custom-PCB RGB light controller. Full-stack hobby hardware project: KiCad board
 design + embedded Rust firmware. 4 boards were fabbed and assembled (2025);
-all peripherals validated on hardware except WiFi (fixed in firmware 2026-08,
-pending bench validation — see `firmware/WIFI.md`).
+ALL peripherals validated on hardware, including WiFi (broken 2025, fixed and
+bench-validated 2026-08-23: join/DHCP/HTTP confirmed — see `firmware/WIFI.md`).
+Next firmware milestone: `test-wifi-leds` (cyw43 + Argb coexistence), then a
+unified main.
 
 ## Layout
 
@@ -12,10 +14,12 @@ pending bench validation — see `firmware/WIFI.md`).
 - `firmware/` — embedded Rust (embassy) for the RP2350A. No unified main yet:
   `src/bin/test-*.rs` are per-peripheral hardware test binaries; shared drivers
   live in `src/` (`argb.rs`, `rotary_encoder.rs`).
-- `micropython/` — one-off MicroPython experiments. NOTE: stock Pico 2W
-  MicroPython builds can NEVER work on this board (they hardcode WL_CLK=GPIO29;
-  this board uses GPIO11). Rust/embassy is the only supported path for WiFi.
 - `assets/` — renders/photos for the README.
+
+Rust/embassy is the only supported path for WiFi: stock Pico 2W
+MicroPython/CircuitPython builds can NEVER work on this board (they hardcode
+WL_CLK=GPIO29; this board uses GPIO11). The old `micropython/` experiments
+were removed 2026-08 for exactly this reason.
 
 ## Hardware (as built, netlist-verified)
 

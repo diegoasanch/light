@@ -3,6 +3,12 @@
 //! Run `test-wifi-scan` FIRST to validate the chip/bus — this binary assumes the
 //! radio already works and adds credentials + the network stack on top.
 //!
+//! The HTTP target is Apple's captive-portal probe (`captive.apple.com`): it is
+//! plain HTTP by design (iOS hotspot detection depends on it), never redirects,
+//! and returns a tiny "Success" body — ideal for this TLS-less build. Most
+//! public APIs 301 to HTTPS, and worldtimeapi.org is dead (SYN retransmits
+//! observed on the bench, 2026-08-23).
+//!
 //! Credentials are taken from compile-time env vars so they never live in the repo:
 //!
 //!     WIFI_NETWORK="MySSID" WIFI_PASSWORD="secret" \
@@ -32,8 +38,6 @@ use embassy_rp::{bind_interrupts, dma};
 use embassy_time::{Duration, Timer};
 use reqwless::client::HttpClient;
 use reqwless::request::Method;
-use serde::Deserialize;
-use serde_json_core::from_slice;
 use static_cell::StaticCell;
 use {defmt_rtt as _, panic_probe as _};
 
@@ -140,7 +144,7 @@ async fn main(spawner: Spawner) {
         let dns_client = DnsSocket::new(stack);
 
         let mut http_client = HttpClient::new(&tcp_client, &dns_client);
-        let url = "http://worldtimeapi.org/api/timezone/America/Argentina/Buenos_Aires";
+        let url = "http://captive.apple.com/hotspot-detect.html";
 
         info!("connecting to {}", &url);
 
@@ -162,7 +166,8 @@ async fn main(spawner: Spawner) {
             }
         };
 
-        info!("Response status: {}", response.status.0);
+        let status = response.status.0;
+        info!("Response status: {}", status);
 
         let body = match response.body().read_to_end().await {
             Ok(b) => match from_utf8(b) {
@@ -180,18 +185,11 @@ async fn main(spawner: Spawner) {
             }
         };
 
-        #[derive(Deserialize)]
-        struct ApiResponse<'a> {
-            datetime: &'a str,
-        }
-
-        match from_slice::<ApiResponse>(body.as_bytes()) {
-            Ok((output, _used)) => info!("current datetime: {}", output.datetime),
-            Err(_) => {
-                error!("Failed to parse response body");
-                let preview = if body.len() > 200 { &body[..200] } else { body };
-                info!("body preview: {}", preview);
-            }
+        if status == 200 && body.contains("Success") {
+            info!("=== INTERNET CONNECTIVITY CONFIRMED === body: {}", body);
+        } else {
+            let preview = if body.len() > 200 { &body[..200] } else { body };
+            warn!("unexpected response; body preview: {}", preview);
         }
 
         Timer::after(Duration::from_secs(15)).await;

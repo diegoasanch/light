@@ -38,3 +38,6 @@ how-to-import.htm
 
 # Cargo
 target/
+
+# Bench-session defmt log captures (may contain SSIDs / network details)
+firmware/*.log

@@ -1,9 +1,32 @@
 # WiFi on this board — status, history, and bench playbook
 
-**Status (2026-08-23):** all identified WiFi blockers were software, all are now
-fixed, and every binary compiles. The chip has **never actually been probed** by
-working software — pending first real bench test with `test-wifi-scan`.
-No hardware fault was found in an exhaustive schematic/netlist/footprint audit.
+**Status (2026-08-23): WiFi WORKS — bench-validated end to end.** All 2025
+blockers were software, all are fixed, and the first bench session confirmed it:
+chip detected (ID 43439 at t=0.27s), firmware + CLM loaded, WPA2-PSK join,
+DHCP lease, DNS, TCP, and an HTTP response from the open internet, on the first
+run. No hardware fault existed — the exhaustive schematic/netlist/footprint
+audit that predicted this was correct. Bench results below; the diagnostic
+playbook further down is retained for regressions and for boards #2–#4.
+
+## Bench validation results (2026-08-23, board #1)
+
+From the first real `test-wifi` run (`firmware/test-wifi.log`):
+
+| Milestone | Result |
+|---|---|
+| Chip detection (gSPI on GPIO24/11/25, REG_ON on 23) | chip ID **43439** at t=0.27s |
+| Firmware + CLM download (231 KB over the bus) | clean, no retries |
+| MAC address | `b0:65:3a:66:b5:46` — the module's **OTP MAC**, not the NVRAM generic (`00:a0:50:…`), so per-module MACs work; still verify uniqueness across boards #2–#4 |
+| WPA2-PSK join | auth + 4-way handshake OK, `link_state 1` at t=6.7s |
+| DHCP | lease in ~130 ms (`192.168.68.54/22`, gw `.68.1`, 2h lease) |
+| DNS + TCP + HTTP | response ~160 ms after connect |
+
+Two HTTP-target gotchas hit on the bench, neither a board problem:
+`worldtimeapi.org` is dead (SYN retransmit loop — the "retransmitting" hang),
+and most public APIs 301-redirect to HTTPS, which this build deliberately
+omits (reqwless TLS off). `test-wifi` now targets
+`http://captive.apple.com/hotspot-detect.html` — plain HTTP by design (iOS
+captive-portal detection depends on it), never redirects, tiny "Success" body.
 
 ## What was actually wrong (the 2025 mystery, solved)
 
@@ -214,17 +237,17 @@ verified on all 4 boards, quote Murata's own "SPI is supported" answer
    `macaddr` (the module's OTP usually overrides it, but with 4 boards on one
    LAN, verify before deploying).
 
-## Credentials leak (do before pushing!)
+## Credentials leak (RESOLVED 2026-08-23)
 
-Commit `7d74556` contains the real WiFi SSID+password. It is **not pushed**
-(origin/main = `46aeac8`). The working tree was scrubbed on 2026-08-23
-(`WIFI_FINAL_SOLUTION.md` redacted, `micropython/wifi-get.py` placeholders,
-new wifi bins use env vars) — **verify with `git grep -i` for your SSID before
-committing**, then rewrite history so the secret never lands on GitHub:
-`git reset --soft 46aeac8` and re-commit the clean tree as fresh commits.
-Compiled artifacts under untracked `target/` also contain the old strings;
-`cargo clean` if that bothers you. Treat the password as burned and rotate it —
-it's cheap.
+A 2025 commit contained the real WiFi SSID+password. It was never pushed, and
+history was rewritten before the first push (`git reset --soft` onto the last
+clean commit; a full-history `git grep` across `git rev-list --all` confirms
+zero hits). The old commit survives only in the local reflog. The wifi bins
+take credentials via compile-time env vars (`WIFI_NETWORK`, `WIFI_PASSWORD`)
+so secrets never enter the tree; bench logs are gitignored (`firmware/*.log`).
+Compiled artifacts under untracked `target/` may still contain the old strings;
+`cargo clean` if that bothers you. Treat the old password as burned and rotate
+it — it's cheap.
 
 The four `WIFI_*.md` docs are kept only as historical artifacts with warning
 banners; they are safe to delete once this file feels sufficient.

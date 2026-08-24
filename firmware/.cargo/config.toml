@@ -10,4 +10,5 @@ target = "thumbv8m.main-none-eabihf"
 # defmt filtering is compile-time; changing only the shell env var does not
 # reliably recompile already-built dependency crates (run `cargo clean -p cyw43
 # -p cyw43-pio` after changing this). Shell env still overrides this value.
-DEFMT_LOG = "debug,cyw43=trace,cyw43_pio=trace"
+DEFMT_LOG = "debug"
+# DEFMT_LOG = "debug,cyw43=trace,cyw43_pio=trace"
