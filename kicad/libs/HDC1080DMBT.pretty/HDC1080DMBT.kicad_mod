@@ -321,7 +321,7 @@
 		(uuid "ffb6d90f-1ec9-4ac6-a7a2-a761e52154b8")
 	)
 	(embedded_fonts no)
-	(model "${LIGHT_PROJECT_LIB_DIR}/HDC1080DMBT/HDC1080DMBT.STEP"
+	(model "${KIPRJMOD}/libs/HDC1080DMBT/HDC1080DMBT.STEP"
 		(offset
 			(xyz 0 0 0)
 		)

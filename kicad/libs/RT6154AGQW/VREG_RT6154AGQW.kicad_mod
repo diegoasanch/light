@@ -350,7 +350,7 @@
 		(uuid "6272baae-ea31-4ce5-8bbc-3ec5e3be857d")
 	)
 	(embedded_fonts no)
-	(model "${LIGHT_PROJECT_LIB_DIR}/RT6154AGQW/RT6154AGQW.stp"
+	(model "${KIPRJMOD}/libs/RT6154AGQW/RT6154AGQW.stp"
 		(offset
 			(xyz 0 0 0)
 		)

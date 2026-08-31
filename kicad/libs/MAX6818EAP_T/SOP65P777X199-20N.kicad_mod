@@ -333,7 +333,7 @@
 		(uuid "bcb65a11-540c-49d5-86ce-5021c8406170")
 	)
 	(embedded_fonts no)
-	(model "${LIGHT_PROJECT_LIB_DIR}/MAX6818EAP_T/MAX6818EAP_T.step"
+	(model "${KIPRJMOD}/libs/MAX6818EAP_T/MAX6818EAP_T.step"
 		(offset
 			(xyz 0 0 0)
 		)

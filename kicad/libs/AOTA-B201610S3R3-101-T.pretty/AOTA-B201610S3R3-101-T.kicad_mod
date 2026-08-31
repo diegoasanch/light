@@ -126,7 +126,7 @@
 		(uuid "2b4c57da-5b24-4f3d-b5dd-9a0a9c77e256")
 	)
 	(embedded_fonts no)
-	(model "${LIGHT_PROJECT_LIB_DIR}/AOTA-B201610S3R3-101-T.pretty/AOTA-B201610S3R3-101-T.stp"
+	(model "${KIPRJMOD}/libs/AOTA-B201610S3R3-101-T.pretty/AOTA-B201610S3R3-101-T.stp"
 		(offset
 			(xyz 0 0 0)
 		)

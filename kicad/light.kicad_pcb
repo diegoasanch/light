@@ -30,12 +30,14 @@
 		(stackup
 			(layer "F.SilkS"
 				(type "Top Silk Screen")
+				(color "White")
 			)
 			(layer "F.Paste"
 				(type "Top Solder Paste")
 			)
 			(layer "F.Mask"
 				(type "Top Solder Mask")
+				(color "rgba(8, 72, 155, 0.902)")
 				(thickness 0.01)
 			)
 			(layer "F.Cu"
@@ -77,6 +79,7 @@
 			)
 			(layer "B.Mask"
 				(type "Bottom Solder Mask")
+				(color "rgba(8, 72, 155, 0.902)")
 				(thickness 0.01)
 			)
 			(layer "B.Paste"
@@ -84,8 +87,9 @@
 			)
 			(layer "B.SilkS"
 				(type "Bottom Silk Screen")
+				(color "White")
 			)
-			(copper_finish "None")
+			(copper_finish "ENIG")
 			(dielectric_constraints no)
 		)
 		(pad_to_mask_clearance 0)
@@ -2699,7 +2703,7 @@
 			(uuid "72768343-d402-4b6a-b8dd-86f62aaa2108")
 		)
 		(embedded_fonts no)
-		(model "${LIGHT_PROJECT_LIB_DIR}/HDC1080DMBT/HDC1080DMBT.STEP"
+		(model "${KIPRJMOD}/libs/HDC1080DMBT/HDC1080DMBT.STEP"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -3462,7 +3466,7 @@
 			(uuid "f10d9cd2-a3e4-4e2e-8ba0-374ffd944a2a")
 		)
 		(embedded_fonts no)
-		(model "${LIGHT_PROJECT_LIB_DIR}/AOTA-B201610S3R3-101-T.pretty/AOTA-B201610S3R3-101-T.stp"
+		(model "${KIPRJMOD}/libs/AOTA-B201610S3R3-101-T.pretty/AOTA-B201610S3R3-101-T.stp"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -6397,7 +6401,7 @@
 			(uuid "4ae98f43-4187-4fd0-a102-f7890dbd3142")
 		)
 		(embedded_fonts no)
-		(model "${LIGHT_PROJECT_LIB_DIR}/TPS5405DR/TPS5405DR.step"
+		(model "${KIPRJMOD}/libs/TPS5405DR/TPS5405DR.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -7947,7 +7951,7 @@
 			(uuid "13c3be0f-eddb-4cd9-8155-d6361cd3fa61")
 		)
 		(embedded_fonts no)
-		(model "${LIGHT_PROJECT_LIB_DIR}/SM03B-SRSS/SM03B-SRSS-TB_LF__SN_.step"
+		(model "${KIPRJMOD}/libs/SM03B-SRSS/SM03B-SRSS-TB_LF__SN_.step"
 			(offset
 				(xyz 0 1.3 -0.4)
 			)
@@ -8791,7 +8795,7 @@
 			(uuid "82282d97-ab5a-4e2e-a800-cc0e3f68ae9d")
 		)
 		(embedded_fonts no)
-		(model "${LIGHT_PROJECT_LIB_DIR}/LQH5BPZ4R7NT0L.pretty/LQH5BPZ4R7NT0L.step"
+		(model "${KIPRJMOD}/libs/LQH5BPZ4R7NT0L.pretty/LQH5BPZ4R7NT0L.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -10885,7 +10889,7 @@
 			(uuid "16a8b9bb-4e4e-403a-92d3-6d9f6f0337ab")
 		)
 		(embedded_fonts no)
-		(model "${LIGHT_PROJECT_LIB_DIR}/WS2812C-2020/WS2812C-2020.step"
+		(model "${KIPRJMOD}/libs/WS2812C-2020/WS2812C-2020.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -14045,7 +14049,7 @@
 			(uuid "0d03e6c9-b0e0-41bf-831f-340a6add6e2f")
 		)
 		(embedded_fonts no)
-		(model "${LIGHT_PROJECT_LIB_DIR}/SM03B-SRSS/SM03B-SRSS-TB_LF__SN_.step"
+		(model "${KIPRJMOD}/libs/SM03B-SRSS/SM03B-SRSS-TB_LF__SN_.step"
 			(offset
 				(xyz 0 1.3 -0.4)
 			)
@@ -16268,7 +16272,7 @@
 			(uuid "fde7b693-0b1a-4780-989c-409381e20eba")
 		)
 		(embedded_fonts no)
-		(model "${LIGHT_PROJECT_LIB_DIR}/LBEE5KL1YN-814/LBEE5KL1YN-814.step"
+		(model "${KIPRJMOD}/libs/LBEE5KL1YN-814/LBEE5KL1YN-814.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -16871,7 +16875,7 @@
 			(uuid "bf0169b2-b4e6-4210-8e79-1d9e080d7a10")
 		)
 		(embedded_fonts no)
-		(model "${LIGHT_PROJECT_LIB_DIR}/SS24/SS24.step"
+		(model "${KIPRJMOD}/libs/SS24/SS24.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -18891,7 +18895,7 @@
 			(uuid "320e8d5a-1c0e-4f86-9b23-faea3499e733")
 		)
 		(embedded_fonts no)
-		(model "${LIGHT_PROJECT_LIB_DIR}/RT6154AGQW/RT6154AGQW.stp"
+		(model "${KIPRJMOD}/libs/RT6154AGQW/RT6154AGQW.stp"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -19501,7 +19505,7 @@
 			(uuid "cfadb62e-7068-4578-8685-22d9780985aa")
 		)
 		(embedded_fonts no)
-		(model "${LIGHT_PROJECT_LIB_DIR}/WS2812C-2020/WS2812C-2020.step"
+		(model "${KIPRJMOD}/libs/WS2812C-2020/WS2812C-2020.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -22842,7 +22846,7 @@
 			(uuid "0b42f1f5-863a-4fac-9eb3-93abc0af25e3")
 		)
 		(embedded_fonts no)
-		(model "${LIGHT_PROJECT_LIB_DIR}/NRS5024.pretty/NRS5024T2R2NMGJ--3DModel-STEP-269445.STEP"
+		(model "${KIPRJMOD}/libs/NRS5024.pretty/NRS5024T2R2NMGJ--3DModel-STEP-269445.STEP"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -23524,7 +23528,7 @@
 			(uuid "d3e8c419-e111-4024-b7d8-0ccd4edcb379")
 		)
 		(embedded_fonts no)
-		(model "${LIGHT_PROJECT_LIB_DIR}/TPS2115ADRBR/TPS2115ADRBR.step"
+		(model "${KIPRJMOD}/libs/TPS2115ADRBR/TPS2115ADRBR.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -25297,7 +25301,7 @@
 			)
 		)
 		(embedded_fonts no)
-		(model "${LIGHT_PROJECT_LIB_DIR}/PRO-OB-607.pretty/PRO-OB-607.step"
+		(model "${KIPRJMOD}/libs/PRO-OB-607.pretty/PRO-OB-607.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -27181,18 +27185,7 @@
 			)
 		)
 		(embedded_fonts no)
-		(model "${LIGHT_PROJECT_LIB_DIR}/GT-EVA01AA-L1.pretty/OBJ_NEW_PCB.obj"
-			(offset
-				(xyz -0 0.474 -0.45)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz -0 -0 0)
-			)
-		)
-		(model "${LIGHT_PROJECT_LIB_DIR}/GT-EVA01AA-L1.pretty/OBJ_NEW_PCB.mtl"
+		(model "${KIPRJMOD}/libs/GT-EVA01AA-L1.pretty/GT-EVA01AA-L1.wrl"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -30632,7 +30625,7 @@
 			(uuid "e413476e-48de-40d0-a69b-089566b47348")
 		)
 		(embedded_fonts no)
-		(model "${LIGHT_PROJECT_LIB_DIR}/TPS2121/TPS2121RUXR.step"
+		(model "${KIPRJMOD}/libs/TPS2121/TPS2121RUXR.step"
 			(offset
 				(xyz 0 0 0)
 			)

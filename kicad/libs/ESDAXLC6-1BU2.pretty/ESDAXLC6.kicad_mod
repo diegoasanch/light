@@ -177,7 +177,7 @@
 		(uuid "4dcec203-dc5e-4bc1-9e2b-4b86e0d51dd6")
 	)
 	(embedded_fonts no)
-	(model "${LIGHT_PROJECT_LIB_DIR}/ESDAXLC6-1BU2/ESDAXLC6-1BU2.step"
+	(model "${KIPRJMOD}/libs/ESDAXLC6-1BU2/ESDAXLC6-1BU2.step"
 		(offset
 			(xyz 0 0 0)
 		)

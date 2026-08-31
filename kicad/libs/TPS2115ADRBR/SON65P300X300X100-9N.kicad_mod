@@ -256,7 +256,7 @@
 		(uuid "8954e29a-4c6b-418e-bd10-fcca946bcf82")
 	)
 	(embedded_fonts no)
-	(model "${LIGHT_PROJECT_LIB_DIR}/TPS2115ADRBR/TPS2115ADRBR.step"
+	(model "${KIPRJMOD}/libs/TPS2115ADRBR/TPS2115ADRBR.step"
 		(offset
 			(xyz 0 0 0)
 		)

@@ -811,7 +811,7 @@
 		)
 	)
 	(embedded_fonts no)
-	(model "${LIGHT_PROJECT_LIB_DIR}/1054500101/1054500101.step"
+	(model "${KIPRJMOD}/libs/1054500101/1054500101.step"
 		(offset
 			(xyz 0 3.75 0)
 		)

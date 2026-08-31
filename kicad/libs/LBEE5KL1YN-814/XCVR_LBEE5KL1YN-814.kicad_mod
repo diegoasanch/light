@@ -1053,7 +1053,7 @@
 		(uuid "ed318c7b-1b67-4bb7-b6fa-8a434f8c10d5")
 	)
 	(embedded_fonts no)
-	(model "${LIGHT_PROJECT_LIB_DIR}/LBEE5KL1YN-814/LBEE5KL1YN-814.step"
+	(model "${KIPRJMOD}/libs/LBEE5KL1YN-814/LBEE5KL1YN-814.step"
 		(offset
 			(xyz 0 0 0)
 		)

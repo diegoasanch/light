@@ -114,7 +114,7 @@
 		(uuid "60afd7c6-dfb9-4a15-9321-804c386be9ed")
 	)
 	(embedded_fonts no)
-	(model "${LIGHT_PROJECT_LIB_DIR}/NRS5024.pretty/NRS5024T2R2NMGJ--3DModel-STEP-269445.STEP"
+	(model "${KIPRJMOD}/libs/NRS5024.pretty/NRS5024T2R2NMGJ--3DModel-STEP-269445.STEP"
 		(offset
 			(xyz 0 0 0)
 		)

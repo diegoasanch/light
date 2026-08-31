@@ -187,7 +187,7 @@
 		(uuid "01b0f615-ffd5-46a5-9276-9b1a31a0e815")
 	)
 	(embedded_fonts no)
-	(model "${LIGHT_PROJECT_LIB_DIR}/2450AT18B100E/2450AT18B100E.step"
+	(model "${KIPRJMOD}/libs/2450AT18B100E/2450AT18B100E.step"
 		(offset
 			(xyz 0 0 0.5)
 		)

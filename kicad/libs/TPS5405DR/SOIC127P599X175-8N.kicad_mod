@@ -237,7 +237,7 @@
 		(uuid "d6553521-10bb-4f3f-b59a-5b8fc7fbb0f7")
 	)
 	(embedded_fonts no)
-	(model "${LIGHT_PROJECT_LIB_DIR}/TPS5405DR/TPS5405DR.step"
+	(model "${KIPRJMOD}/libs/TPS5405DR/TPS5405DR.step"
 		(offset
 			(xyz 0 0 0)
 		)

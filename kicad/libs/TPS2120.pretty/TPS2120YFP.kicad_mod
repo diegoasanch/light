@@ -573,7 +573,7 @@
 		(uuid "cd22acb5-3e52-4d57-848b-cd50fe34925d")
 	)
 	(embedded_fonts no)
-	(model "${LIGHT_PROJECT_LIB_DIR}/TPS2120/TPS2120YFPT.step"
+	(model "${KIPRJMOD}/libs/TPS2120/TPS2120YFPT.step"
 		(offset
 			(xyz 0 0 -0)
 		)
