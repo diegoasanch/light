@@ -30,12 +30,14 @@
 		(stackup
 			(layer "F.SilkS"
 				(type "Top Silk Screen")
+				(color "White")
 			)
 			(layer "F.Paste"
 				(type "Top Solder Paste")
 			)
 			(layer "F.Mask"
 				(type "Top Solder Mask")
+				(color "rgba(8, 72, 155, 0.902)")
 				(thickness 0.01)
 			)
 			(layer "F.Cu"
@@ -77,6 +79,7 @@
 			)
 			(layer "B.Mask"
 				(type "Bottom Solder Mask")
+				(color "rgba(8, 72, 155, 0.902)")
 				(thickness 0.01)
 			)
 			(layer "B.Paste"
@@ -84,8 +87,9 @@
 			)
 			(layer "B.SilkS"
 				(type "Bottom Silk Screen")
+				(color "White")
 			)
-			(copper_finish "None")
+			(copper_finish "ENIG")
 			(dielectric_constraints no)
 		)
 		(pad_to_mask_clearance 0)

@@ -28,4 +28,26 @@ resolves the legacy variable to its own model directory automatically (the
 
 ## PCB 3D Viewer
 
-- Board color: #0A244A, 95% opacity
+Colors matching the fabbed boards (blue mask, white silk, ENIG) are encoded in
+two places:
+
+- **Board stackup** (Board Setup → Physical Stackup, checked into this repo):
+  solder mask `rgba(8, 72, 155, 0.902)`, silkscreen `White`, finish `ENIG`.
+  Tick "Use board stackup colors" in the 3D viewer to use them. Note:
+  `kicad-cli pcb render --use-board-stackup-colors` is broken in KiCad 10.0.5
+  (renders the mask black even for stock templates) — use the preset below for
+  CLI renders.
+- **"fab blue" 3D viewer preset** (machine-local, in KiCad's `3d_viewer.json`):
+  soldermask `rgba(8, 72, 155, 0.902)`, silkscreen `rgb(245, 245, 245)`,
+  board body `rgba(30, 33, 32, 0.902)`, copper `rgb(191, 156, 59)`.
+  Recreate it via 3D viewer → Appearance → save preset if on a new machine.
+
+Render like the fab:
+
+```bash
+kicad-cli pcb render --preset "fab blue" --quality high -w 1920 -h 1440 --side top --background opaque --output render.png kicad/light.kicad_pcb
+```
+
+(The old manual note — board color #0A244A @ 95% — predates the fabbed boards
+and is superseded by the values above, which were matched against photos of
+the assembled rev with the blue JLC mask.)
