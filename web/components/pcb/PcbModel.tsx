@@ -126,6 +126,9 @@ export function PcbModel({ data, visibility, explode }: Props) {
       barrelGroup.current.position.y = sB;
       barrelGroup.current.scale.y = (stack.total + (sF - sB)) / stack.total;
     }
+    // Stretched barrels go slightly translucent so they don't read as solid
+    // rods obscuring the separated layers.
+    materials.barrel.opacity = 1 - explodeRef.current * 0.45;
   });
 
   return (

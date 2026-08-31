@@ -65,6 +65,9 @@ export function createMaterials() {
     roughness: 0.38,
     side: THREE.DoubleSide,
     envMapIntensity: 0.9,
+    // opacity is animated with the exploded view (see PcbModel's useFrame)
+    transparent: true,
+    opacity: 1,
   });
   return { goldExposed, copperCovered, copperInner, mask, silk, core, prepreg, barrel };
 }
