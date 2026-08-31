@@ -146,7 +146,7 @@
 		(uuid "af237fca-6bcb-4071-8d6f-8e7ab50d12b9")
 	)
 	(embedded_fonts no)
-	(model "${LIGHT_PROJECT_LIB_DIR}/LQH5BPZ4R7NT0L.pretty/LQH5BPZ4R7NT0L.step"
+	(model "${KIPRJMOD}/libs/LQH5BPZ4R7NT0L.pretty/LQH5BPZ4R7NT0L.step"
 		(offset
 			(xyz 0 0 0)
 		)

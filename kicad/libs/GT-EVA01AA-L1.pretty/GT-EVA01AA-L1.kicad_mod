@@ -595,18 +595,7 @@
 		)
 	)
 	(embedded_fonts no)
-	(model "${LIGHT_PROJECT_LIB_DIR}/GT-EVA01AA-L1.pretty/OBJ_NEW_PCB.obj"
-		(offset
-			(xyz -0 0.474 -0.45)
-		)
-		(scale
-			(xyz 1 1 1)
-		)
-		(rotate
-			(xyz -0 -0 0)
-		)
-	)
-	(model "${LIGHT_PROJECT_LIB_DIR}/GT-EVA01AA-L1.pretty/OBJ_NEW_PCB.mtl"
+	(model "${KIPRJMOD}/libs/GT-EVA01AA-L1.pretty/GT-EVA01AA-L1.wrl"
 		(offset
 			(xyz 0 0 0)
 		)

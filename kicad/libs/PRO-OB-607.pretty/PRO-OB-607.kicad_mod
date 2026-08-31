@@ -735,7 +735,7 @@
 		)
 	)
 	(embedded_fonts no)
-	(model "${LIGHT_PROJECT_LIB_DIR}/PRO-OB-607.pretty/PRO-OB-607.step"
+	(model "${KIPRJMOD}/libs/PRO-OB-607.pretty/PRO-OB-607.step"
 		(offset
 			(xyz 0 0 0)
 		)

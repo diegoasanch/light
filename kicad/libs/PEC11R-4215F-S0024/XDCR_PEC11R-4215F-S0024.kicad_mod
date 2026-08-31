@@ -307,7 +307,7 @@
 		(uuid "15f5b99e-ec02-4d9f-be3e-4668a70c0c6d")
 	)
 	(embedded_fonts no)
-	(model "${LIGHT_PROJECT_LIB_DIR}/PEC11R-4215F-S0024/PEC11R-4215F-S0024.step"
+	(model "${KIPRJMOD}/libs/PEC11R-4215F-S0024/PEC11R-4215F-S0024.step"
 		(offset
 			(xyz 0 0 6.5)
 		)

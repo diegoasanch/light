@@ -227,7 +227,7 @@
 		(uuid "feff3935-b69d-41e0-86ea-7c431daef2fe")
 	)
 	(embedded_fonts no)
-	(model "${LIGHT_PROJECT_LIB_DIR}/SS24/SS24.step"
+	(model "${KIPRJMOD}/libs/SS24/SS24.step"
 		(offset
 			(xyz 0 0 0)
 		)

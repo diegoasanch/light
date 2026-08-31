@@ -201,7 +201,7 @@
 		(uuid "d8232bd0-ec2f-48cd-a35f-657b999c9087")
 	)
 	(embedded_fonts no)
-	(model "${LIGHT_PROJECT_LIB_DIR}/WS2812C-2020/WS2812C-2020.step"
+	(model "${KIPRJMOD}/libs/WS2812C-2020/WS2812C-2020.step"
 		(offset
 			(xyz 0 0 0)
 		)

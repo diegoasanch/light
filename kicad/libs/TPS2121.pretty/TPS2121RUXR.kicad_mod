@@ -413,7 +413,7 @@
 		(uuid "afbd2924-04eb-4774-9251-4b75fb25063f")
 	)
 	(embedded_fonts no)
-	(model "${LIGHT_PROJECT_LIB_DIR}/TPS2121/TPS2121RUXR.step"
+	(model "${KIPRJMOD}/libs/TPS2121/TPS2121RUXR.step"
 		(offset
 			(xyz 0 0 0)
 		)
