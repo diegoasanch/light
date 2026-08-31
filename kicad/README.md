@@ -22,7 +22,14 @@ resolves the legacy variable to its own model directory automatically (the
 - `libs/GT-EVA01AA-L1.pretty/` — rotary encoder (G-Switch GT-EVA01AA-L1,
   LCSC C17702124) WRL/STEP fetched from the EasyEDA parts API via
   `easyeda2kicad`. The WRL is referenced by the board; the same-basename STEP
-  is there for `kicad-cli pcb export step --subst-models`.
+  is there for `kicad-cli pcb export step/glb --subst-models`. The raw
+  EasyEDA STEP sits 0.9741 mm off the WRL in Y, so the committed STEP has the
+  origin of its root `AXIS2_PLACEMENT_3D` (entity `#15348`) shifted by that
+  amount — shifting the `CARTESIAN_POINT`s instead gets applied twice by the
+  OCC import chain, and any edit must round-trip the file byte-exactly
+  (an earlier encoding-damaged copy made OCC import it as empty geometry).
+  Verified via `web/scripts/sync-pcb.ts`'s GLB export: model bbox center
+  lands on the footprint to <0.1 µm.
 - `DEBUG` (J8) and `GPIO` (J9) headers are marked DNP, so the 3D viewer hides
   their models unless "Models marked DNP" is enabled — this is intentional.
 
