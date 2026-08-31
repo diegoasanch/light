@@ -277,8 +277,26 @@ function Components({
     const top = new THREE.Group();
     const bottom = new THREE.Group();
     const mid = boardTotal / 2 / 1000; // GLB is in meters
-    for (const child of scene.children) {
-      (child.position.y < mid ? bottom : top).add(child.clone(true));
+    // The exporter nests every per-component node under a single bare
+    // identity node — unwrap such wrappers to reach the refdes level.
+    let level: THREE.Object3D[] = scene.children;
+    while (
+      level.length === 1 &&
+      level[0].children.length > 0 &&
+      !(level[0] as THREE.Mesh).isMesh &&
+      level[0].position.lengthSq() === 0 &&
+      level[0].quaternion.w === 1
+    ) {
+      level = level[0].children;
+    }
+    // Classify by bounding-box center: top-side bodies live above the board
+    // mid-plane, bottom-side bodies below — robust against per-model offsets
+    // and baked orientation corrections in the node transforms.
+    const box = new THREE.Box3();
+    for (const child of level) {
+      box.setFromObject(child);
+      const centerY = box.isEmpty() ? mid : (box.min.y + box.max.y) / 2;
+      (centerY < mid ? bottom : top).add(child.clone(true));
     }
     return { top, bottom };
   }, [scene, boardTotal]);
