@@ -10,11 +10,33 @@
   --text-2: #5c6478;
   --accent: #4f8df9;
   --accent-dim: rgba(79, 141, 249, 0.16);
+  --tint: rgba(126, 155, 224, 0.06);
+  --tint-strong: rgba(126, 155, 224, 0.2);
+  --knob: #e9edf7;
+  --knob-shadow: rgba(0, 0, 0, 0.5);
   --gold: #c9a648;
   --mask-blue: #08489b;
 
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+:root[data-theme="light"] {
+  --bg-0: #edf0f6;
+  --bg-1: #ffffff;
+  --panel: rgba(255, 255, 255, 0.72);
+  --panel-solid: #ffffff;
+  --border: rgba(28, 48, 96, 0.13);
+  --border-strong: rgba(28, 48, 96, 0.26);
+  --text-0: #161b27;
+  --text-1: #4b5468;
+  --text-2: #8791a5;
+  --accent: #2e6ee4;
+  --accent-dim: rgba(46, 110, 228, 0.13);
+  --tint: rgba(40, 70, 140, 0.06);
+  --tint-strong: rgba(40, 70, 140, 0.16);
+  --knob: #ffffff;
+  --knob-shadow: rgba(20, 32, 60, 0.28);
 }
 
 * {
@@ -35,6 +57,7 @@ body {
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
+  transition: background-color 300ms ease, color 300ms ease;
 }
 
 ::selection {

@@ -12,7 +12,13 @@ import { useEffect } from "react";
 
 import { PcbModel } from "./pcb/PcbModel";
 import type { BoardData } from "@/lib/pcb-types";
-import type { ViewerSettings } from "./pcb/viewer-state";
+import {
+  BACKDROP_MAP,
+  BACKDROPS,
+  LIGHTING,
+  LIGHTING_MAP,
+  type ViewerSettings,
+} from "./pcb/viewer-state";
 
 interface Props {
   data: BoardData;
@@ -38,67 +44,45 @@ function DevCameraHook() {
 interface THREE_Vec { set: (x: number, y: number, z: number) => void }
 
 export function Viewer({ data, settings }: Props) {
+  const backdrop = BACKDROP_MAP[settings.backdrop] ?? BACKDROPS[0];
+  const rig = LIGHTING_MAP[settings.lighting] ?? LIGHTING[0];
+
   return (
     <Canvas
       dpr={[1, 2]}
       camera={{ position: [-42, 52, 46], fov: 32, near: 0.5, far: 2000 }}
       gl={{ antialias: true }}
-      style={{ background: "radial-gradient(120% 90% at 50% 20%, #0e101a 0%, #05070d 60%, #020307 100%)" }}
+      style={{ background: backdrop.css, transition: "background 400ms ease" }}
     >
       <DevCameraHook />
       <PcbModel data={data} visibility={settings.visibility} explode={settings.explode} />
 
-      {/* studio-style procedural environment — no network fetches */}
-      <Environment resolution={256} frames={1}>
-        <color attach="background" args={["#06070c"]} />
-        <Lightformer
-          intensity={2.4}
-          position={[0, 60, 0]}
-          rotation-x={Math.PI / 2}
-          scale={[110, 110, 1]}
-          color="#e7ecff"
-        />
-        <Lightformer
-          intensity={1.6}
-          position={[-60, 25, -35]}
-          rotation-y={Math.PI / 2.6}
-          scale={[110, 14, 1]}
-          color="#ffe9c4"
-        />
-        <Lightformer
-          intensity={1.1}
-          position={[62, 18, 30]}
-          rotation-y={-Math.PI / 2.4}
-          scale={[100, 10, 1]}
-          color="#bcd2ff"
-        />
-        <Lightformer
-          intensity={1.4}
-          position={[0, -55, 40]}
-          rotation-x={-Math.PI / 2.4}
-          scale={[110, 60, 1]}
-          color="#8fa8d8"
-        />
-        <Lightformer
-          intensity={1.0}
-          position={[30, -45, -40]}
-          rotation-x={Math.PI / 1.7}
-          scale={[90, 40, 1]}
-          color="#ffe2b8"
-        />
+      {/* procedural environment (no network fetches); keyed so a rig change rebuilds the map */}
+      <Environment key={rig.id} resolution={256} frames={1}>
+        <color attach="background" args={[rig.envBackground]} />
+        {rig.formers.map((f, i) => (
+          <Lightformer
+            key={i}
+            intensity={f.intensity}
+            position={f.position}
+            rotation={f.rotation}
+            scale={[f.scale[0], f.scale[1], 1]}
+            color={f.color}
+          />
+        ))}
       </Environment>
 
-      <directionalLight position={[-35, 60, 25]} intensity={0.7} color="#fff3dd" />
-      <ambientLight intensity={0.12} />
+      <directionalLight position={rig.sun.position} intensity={rig.sun.intensity} color={rig.sun.color} />
+      <ambientLight intensity={rig.ambient} />
 
       <ContactShadows
         position={[0, -14 - settings.explode * 18, 0]}
-        opacity={0.55}
+        opacity={backdrop.shadowOpacity}
         scale={150}
         blur={2.4}
         far={44 + settings.explode * 22}
         resolution={512}
-        color="#000208"
+        color={backdrop.shadowColor}
         frames={Infinity}
       />
 
@@ -114,7 +98,7 @@ export function Viewer({ data, settings }: Props) {
 
       <EffectComposer>
         <Bloom mipmapBlur intensity={0.35} luminanceThreshold={1.05} luminanceSmoothing={0.2} />
-        <Vignette eskil={false} offset={0.18} darkness={0.72} />
+        <Vignette eskil={false} offset={0.18} darkness={backdrop.vignette} />
       </EffectComposer>
     </Canvas>
   );

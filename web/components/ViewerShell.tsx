@@ -19,6 +19,10 @@ export function ViewerShell() {
   const [settings, setSettings] = useState<ViewerSettings>(DEFAULT_SETTINGS);
 
   useEffect(() => {
+    document.documentElement.dataset.theme = settings.theme;
+  }, [settings.theme]);
+
+  useEffect(() => {
     let cancelled = false;
     fetch("/pcb/board.json")
       .then((r) => {

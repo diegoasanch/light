@@ -54,7 +54,7 @@
 .presetBtn {
   appearance: none;
   border: 1px solid var(--border);
-  background: rgba(126, 155, 224, 0.05);
+  background: var(--tint);
   color: var(--text-1);
   font: inherit;
   font-size: 12px;
@@ -107,7 +107,7 @@
 
 @media (hover: hover) and (pointer: fine) {
   .row:hover {
-    background: rgba(126, 155, 224, 0.07);
+    background: var(--tint);
   }
 }
 
@@ -192,7 +192,7 @@
     to right,
     var(--accent) 0%,
     var(--accent) var(--fill, 0%),
-    rgba(126, 155, 224, 0.22) var(--fill, 0%)
+    var(--tint-strong) var(--fill, 0%)
   );
   outline: none;
   cursor: pointer;
@@ -204,9 +204,9 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: var(--text-0);
+  background: var(--knob);
   border: none;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 1px 6px var(--knob-shadow);
   transition: transform 140ms var(--ease-out);
 }
 
@@ -218,9 +218,9 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: var(--text-0);
+  background: var(--knob);
   border: none;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 1px 6px var(--knob-shadow);
 }
 
 .sliderValue {
@@ -230,6 +230,91 @@
   min-width: 34px;
   text-align: right;
   font-variant-numeric: tabular-nums;
+}
+
+/* ---- segmented control ---- */
+.segmented {
+  position: relative;
+  display: flex;
+  background: var(--tint);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 2px;
+}
+
+.segThumb {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  border-radius: 7px;
+  background: var(--panel-solid);
+  border: 1px solid var(--border-strong);
+  box-shadow: 0 1px 5px var(--knob-shadow);
+  transition: transform 200ms var(--ease-out);
+}
+
+.segBtn {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  appearance: none;
+  background: none;
+  border: none;
+  color: var(--text-1);
+  font: inherit;
+  font-size: 12px;
+  padding: 5px 0;
+  border-radius: 7px;
+  cursor: pointer;
+  transition:
+    color 140ms ease,
+    transform 140ms var(--ease-out);
+}
+
+.segBtn:active {
+  transform: scale(0.95);
+}
+
+.segBtnActive {
+  color: var(--text-0);
+}
+
+/* ---- backdrop swatches ---- */
+.sceneSwatches {
+  display: flex;
+  gap: 8px;
+}
+
+.sceneSwatch {
+  appearance: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  padding: 0;
+  cursor: pointer;
+  transition:
+    transform 140ms var(--ease-out),
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.sceneSwatch:active {
+  transform: scale(0.9);
+}
+
+.sceneSwatchActive {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2.5px var(--accent-dim);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sceneSwatch:hover {
+    transform: scale(1.08);
+  }
+  .sceneSwatchActive:hover {
+    transform: none;
+  }
 }
 
 /* ---- switch ---- */
@@ -257,7 +342,7 @@
   width: 30px;
   height: 18px;
   border-radius: 9px;
-  background: rgba(126, 155, 224, 0.18);
+  background: var(--tint-strong);
   position: relative;
   transition: background-color 180ms ease;
   flex: none;
@@ -274,7 +359,8 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: var(--text-0);
+  background: var(--knob);
+  box-shadow: 0 1px 4px var(--knob-shadow);
   transition: transform 180ms var(--ease-out);
 }
 
@@ -290,6 +376,9 @@
   .presetBtn,
   .box,
   .thumb,
+  .segThumb,
+  .segBtn,
+  .sceneSwatch,
   .slider::-webkit-slider-thumb {
     transition-property: background-color, border-color, color;
   }

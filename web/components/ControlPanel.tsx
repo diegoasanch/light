@@ -5,7 +5,10 @@ import { useId } from "react";
 import styles from "./ControlPanel.module.css";
 import { PALETTE } from "./pcb/materials";
 import {
+  applyTheme,
+  BACKDROPS,
   LAYER_CONTROLS,
+  LIGHTING,
   PRESETS,
   type LayerVisibility,
   type ViewerSettings,
@@ -65,6 +68,47 @@ export function ControlPanel({ settings, onChange }: Props) {
       </section>
 
       <section className={styles.section}>
+        <div className={styles.sectionTitle}>Scene</div>
+        <Segmented
+          options={[
+            { id: "dark", label: "Dark" },
+            { id: "light", label: "Light" },
+          ]}
+          value={settings.theme}
+          onChange={(t) => onChange(applyTheme(settings, t as "dark" | "light"))}
+          ariaLabel="Interface theme"
+        />
+        <div className={styles.groupLabel}>Lighting</div>
+        <div className={styles.presets}>
+          {LIGHTING.map((l) => (
+            <button
+              key={l.id}
+              type="button"
+              className={`${styles.presetBtn} ${settings.lighting === l.id ? styles.presetBtnActive : ""}`}
+              onClick={() => onChange({ ...settings, lighting: l.id })}
+            >
+              {l.label}
+            </button>
+          ))}
+        </div>
+        <div className={styles.groupLabel}>Backdrop</div>
+        <div className={styles.sceneSwatches}>
+          {BACKDROPS.map((b) => (
+            <button
+              key={b.id}
+              type="button"
+              title={b.label}
+              aria-label={`${b.label} backdrop`}
+              aria-pressed={settings.backdrop === b.id}
+              className={`${styles.sceneSwatch} ${settings.backdrop === b.id ? styles.sceneSwatchActive : ""}`}
+              style={{ background: b.css }}
+              onClick={() => onChange({ ...settings, backdrop: b.id })}
+            />
+          ))}
+        </div>
+      </section>
+
+      <section className={styles.section}>
         <div className={styles.sectionTitle}>Explode</div>
         <div className={styles.sliderRow}>
           <input
@@ -113,6 +157,44 @@ export function ControlPanel({ settings, onChange }: Props) {
         />
       </section>
     </aside>
+  );
+}
+
+function Segmented({
+  options,
+  value,
+  onChange,
+  ariaLabel,
+}: {
+  options: { id: string; label: string }[];
+  value: string;
+  onChange: (id: string) => void;
+  ariaLabel: string;
+}) {
+  const index = Math.max(0, options.findIndex((o) => o.id === value));
+  return (
+    <div className={styles.segmented} role="radiogroup" aria-label={ariaLabel}>
+      <span
+        className={styles.segThumb}
+        aria-hidden
+        style={{
+          width: `calc((100% - 4px) / ${options.length})`,
+          transform: `translateX(${index * 100}%)`,
+        }}
+      />
+      {options.map((o) => (
+        <button
+          key={o.id}
+          type="button"
+          role="radio"
+          aria-checked={value === o.id}
+          className={`${styles.segBtn} ${value === o.id ? styles.segBtnActive : ""}`}
+          onClick={() => onChange(o.id)}
+        >
+          {o.label}
+        </button>
+      ))}
+    </div>
   );
 }
 

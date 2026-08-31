@@ -66,7 +66,7 @@
   height: 26px;
   margin-top: 64px;
   border-radius: 50%;
-  border: 2px solid rgba(126, 155, 224, 0.18);
+  border: 2px solid var(--tint-strong);
   border-top-color: var(--accent);
   animation: spin 700ms linear infinite;
 }
