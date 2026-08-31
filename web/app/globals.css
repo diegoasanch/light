@@ -1,0 +1,42 @@
+:root {
+  --bg-0: #05070d;
+  --bg-1: #0e101a;
+  --panel: rgba(15, 19, 31, 0.78);
+  --panel-solid: #10141f;
+  --border: rgba(126, 155, 224, 0.14);
+  --border-strong: rgba(126, 155, 224, 0.28);
+  --text-0: #e9edf7;
+  --text-1: #97a0b6;
+  --text-2: #5c6478;
+  --accent: #4f8df9;
+  --accent-dim: rgba(79, 141, 249, 0.16);
+  --gold: #c9a648;
+  --mask-blue: #08489b;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  overscroll-behavior: none;
+}
+
+body {
+  background: var(--bg-0);
+  color: var(--text-0);
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+::selection {
+  background: var(--accent-dim);
+}
