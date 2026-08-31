@@ -15,7 +15,7 @@ import * as THREE from "three";
 
 const MAX_TEXTURE_DIM = 1024;
 /** Slope exaggeration — real 35µm ridges would be invisible at board scale. */
-const NORMAL_STRENGTH = 2.2;
+const NORMAL_STRENGTH = 1.1;
 
 const FULLSCREEN_VERT = /* glsl */ `
   varying vec2 vUv;
@@ -30,10 +30,12 @@ const BLUR_FRAG = /* glsl */ `
   uniform vec2 dir;
   varying vec2 vUv;
   void main() {
-    float w[5];
-    w[0] = 0.227027; w[1] = 0.1945946; w[2] = 0.1216216; w[3] = 0.054054; w[4] = 0.016216;
+    // Tight σ≈1 kernel: mask snaps over a trace edge in a short, sharp
+    // transition rather than a long ramp.
+    float w[3];
+    w[0] = 0.38774; w[1] = 0.24477; w[2] = 0.06136;
     vec3 c = texture2D(src, vUv).rgb * w[0];
-    for (int i = 1; i < 5; i++) {
+    for (int i = 1; i < 3; i++) {
       c += texture2D(src, vUv + dir * float(i)).rgb * w[i];
       c += texture2D(src, vUv - dir * float(i)).rgb * w[i];
     }
