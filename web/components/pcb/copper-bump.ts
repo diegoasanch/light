@@ -15,7 +15,7 @@ import * as THREE from "three";
 
 const MAX_TEXTURE_DIM = 1024;
 /** Slope exaggeration — real 35µm ridges would be invisible at board scale. */
-const NORMAL_STRENGTH = 1.1;
+const NORMAL_STRENGTH = 0.7;
 
 const FULLSCREEN_VERT = /* glsl */ `
   varying vec2 vUv;
@@ -30,12 +30,12 @@ const BLUR_FRAG = /* glsl */ `
   uniform vec2 dir;
   varying vec2 vUv;
   void main() {
-    // Tight σ≈1 kernel: mask snaps over a trace edge in a short, sharp
-    // transition rather than a long ramp.
-    float w[3];
-    w[0] = 0.38774; w[1] = 0.24477; w[2] = 0.06136;
+    // σ≈1.3 kernel: the mask follows the copper step closely but its own
+    // body rounds the transition a little.
+    float w[4];
+    w[0] = 0.3087; w[1] = 0.2296; w[2] = 0.0945; w[3] = 0.0215;
     vec3 c = texture2D(src, vUv).rgb * w[0];
-    for (int i = 1; i < 3; i++) {
+    for (int i = 1; i < 4; i++) {
       c += texture2D(src, vUv + dir * float(i)).rgb * w[i];
       c += texture2D(src, vUv - dir * float(i)).rgb * w[i];
     }
