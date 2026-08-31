@@ -7,18 +7,20 @@
  * independently, and each carries an explode slot for the exploded view.
  */
 import { useGLTF } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
-import { Component, Suspense, useMemo, useRef, type ReactNode } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
+import { Component, Suspense, useEffect, useMemo, useRef, type ReactNode } from "react";
 import * as THREE from "three";
 
 import {
   dielectricShapes,
   extrudeMultiPolygon,
   extrudeShapes,
+  remapUvsToBoardPlane,
   slotBarrelGeometry,
   viaBarrels,
 } from "@/lib/build-geometry";
 import { computeStack, type BoardData, type CopperLayerName } from "@/lib/pcb-types";
+import { bakeCopperNormalMap } from "./copper-bump";
 import { createMaterials } from "./materials";
 import type { LayerVisibility } from "./viewer-state";
 
@@ -56,12 +58,18 @@ export function PcbModel({ data, visibility, explode }: Props) {
             : null,
       };
     }
+    const mask = {
+      F: extrudeMultiPolygon(data.mask.F, stack.mask.F.y1 - stack.mask.F.y0, cx, cy),
+      B: extrudeMultiPolygon(data.mask.B, stack.mask.B.y1 - stack.mask.B.y0, cx, cy),
+    };
+    // Board-plane UVs so the baked copper normal maps line up (copper-bump.ts).
+    const w = data.bbox.maxX - data.bbox.minX;
+    const h = data.bbox.maxY - data.bbox.minY;
+    remapUvsToBoardPlane(mask.F, w, h);
+    remapUvsToBoardPlane(mask.B, w, h);
     return {
       copper,
-      mask: {
-        F: extrudeMultiPolygon(data.mask.F, stack.mask.F.y1 - stack.mask.F.y0, cx, cy),
-        B: extrudeMultiPolygon(data.mask.B, stack.mask.B.y1 - stack.mask.B.y0, cx, cy),
-      },
+      mask,
       silk: {
         F: extrudeMultiPolygon(data.silk.F, stack.silk.F.y1 - stack.silk.F.y0, cx, cy),
         B: extrudeMultiPolygon(data.silk.B, stack.silk.B.y1 - stack.silk.B.y0, cx, cy),
@@ -101,6 +109,36 @@ export function PcbModel({ data, visibility, explode }: Props) {
     map.set("comp-B", (map.get("silk-B") ?? 0) - 1.4);
     return map;
   }, [stack]);
+
+  // Bake each outer copper layer into its mask's normal map: the mask sheet
+  // then reads as draped over the traces (and keeps that shape when exploded,
+  // which is physically right — the slump is the mask's own geometry).
+  const gl = useThree((s) => s.gl);
+  useEffect(() => {
+    const w = data.bbox.maxX - data.bbox.minX;
+    const h = data.bbox.maxY - data.bbox.minY;
+    const geosFor = (layer: CopperLayerName) =>
+      [geo.copper[layer].covered, geo.copper[layer].exposed].filter(
+        (g): g is THREE.ExtrudeGeometry => g !== null,
+      );
+    const bakes = [
+      { mat: materials.maskF, bake: bakeCopperNormalMap(gl, geosFor("F.Cu"), w, h) },
+      { mat: materials.maskB, bake: bakeCopperNormalMap(gl, geosFor("B.Cu"), w, h) },
+    ];
+    for (const { mat, bake } of bakes) {
+      mat.normalMap = bake.texture;
+      mat.clearcoatNormalMap = bake.texture;
+      mat.needsUpdate = true;
+    }
+    return () => {
+      for (const { mat, bake } of bakes) {
+        mat.normalMap = null;
+        mat.clearcoatNormalMap = null;
+        mat.needsUpdate = true;
+        bake.dispose();
+      }
+    };
+  }, [gl, geo, data, materials]);
 
   const explodeRef = useRef(0);
   const parts = useRef<Map<string, { obj: THREE.Group; slot: number; baseY: number }>>(
@@ -168,10 +206,10 @@ export function PcbModel({ data, visibility, explode }: Props) {
       })}
 
       <group ref={register("mask-F", stack.mask.F.y0)} visible={visibility.maskF}>
-        <mesh geometry={geo.mask.F} material={materials.mask} renderOrder={2} />
+        <mesh geometry={geo.mask.F} material={materials.maskF} renderOrder={2} />
       </group>
       <group ref={register("mask-B", stack.mask.B.y0)} visible={visibility.maskB}>
-        <mesh geometry={geo.mask.B} material={materials.mask} renderOrder={2} />
+        <mesh geometry={geo.mask.B} material={materials.maskB} renderOrder={2} />
       </group>
 
       <group ref={register("silk-F", stack.silk.F.y0)} visible={visibility.silkF}>

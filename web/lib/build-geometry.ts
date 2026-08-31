@@ -55,6 +55,21 @@ export function extrudeMultiPolygon(
 }
 
 /**
+ * Replace extrusion UVs (raw shape coords) with board-plane UVs so a texture
+ * baked top-down over the full board bbox maps 1:1 onto the surface:
+ * u runs along +x, v along −z, matching the bake camera in copper-bump.ts.
+ */
+export function remapUvsToBoardPlane(geo: THREE.BufferGeometry, w: number, h: number) {
+  const pos = geo.getAttribute("position");
+  const uv = new Float32Array(pos.count * 2);
+  for (let i = 0; i < pos.count; i++) {
+    uv[2 * i] = pos.getX(i) / w + 0.5;
+    uv[2 * i + 1] = 0.5 - pos.getZ(i) / h;
+  }
+  geo.setAttribute("uv", new THREE.BufferAttribute(uv, 2));
+}
+
+/**
  * The dielectric cross-section: board outline with every through-hole drill
  * (vias, PTH, NPTH, slots) as a hole. Shared by all dielectric slabs.
  */

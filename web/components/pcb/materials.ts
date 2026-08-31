@@ -34,7 +34,9 @@ export function createMaterials() {
     roughness: 0.45,
     envMapIntensity: 1.0,
   });
-  const mask = new THREE.MeshPhysicalMaterial({
+  // One mask material per side: each gets its own copper normal map baked at
+  // load (see copper-bump.ts) so the sheet reads as draped over the traces.
+  const maskParams: THREE.MeshPhysicalMaterialParameters = {
     color: PALETTE.maskBlue,
     metalness: 0.05,
     roughness: 0.32,
@@ -43,7 +45,9 @@ export function createMaterials() {
     transparent: true,
     opacity: 0.9,
     envMapIntensity: 0.8,
-  });
+  };
+  const maskF = new THREE.MeshPhysicalMaterial(maskParams);
+  const maskB = new THREE.MeshPhysicalMaterial(maskParams);
   const silk = new THREE.MeshStandardMaterial({
     color: PALETTE.silk,
     metalness: 0,
@@ -69,7 +73,7 @@ export function createMaterials() {
     transparent: true,
     opacity: 1,
   });
-  return { goldExposed, copperCovered, copperInner, mask, silk, core, prepreg, barrel };
+  return { goldExposed, copperCovered, copperInner, maskF, maskB, silk, core, prepreg, barrel };
 }
 
 export type PcbMaterials = ReturnType<typeof createMaterials>;
