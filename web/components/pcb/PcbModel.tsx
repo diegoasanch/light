@@ -298,6 +298,29 @@ function Components({
       const centerY = box.isEmpty() ? mid : (box.min.y + box.max.y) / 2;
       (centerY < mid ? bottom : top).add(child.clone(true));
     }
+    // Tame the GLB materials' specular response: glossy connector plastics
+    // (UART/DEBUG shells) and the radio shield otherwise catch the large
+    // overhead lightformers as blown-out glare under the brighter rigs.
+    const seen = new Set<THREE.Material>();
+    for (const grp of [top, bottom]) {
+      grp.traverse((obj) => {
+        const mesh = obj as THREE.Mesh;
+        if (!mesh.isMesh) return;
+        const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+        for (const mat of mats) {
+          const std = mat as THREE.MeshStandardMaterial;
+          if (!std.isMeshStandardMaterial || seen.has(std)) continue;
+          seen.add(std);
+          if (std.metalness > 0.5) {
+            std.envMapIntensity = 0.8;
+            std.roughness = Math.max(std.roughness, 0.35);
+          } else {
+            std.envMapIntensity = 0.55;
+            std.roughness = Math.max(std.roughness, 0.5);
+          }
+        }
+      });
+    }
     return { top, bottom };
   }, [scene, boardTotal]);
 
