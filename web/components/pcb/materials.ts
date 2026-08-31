@@ -1,19 +1,8 @@
 import * as THREE from "three";
 
-/**
- * Fab-matched palette: JLC blue mask over ENIG gold, white silk — tuned
- * against photos of the assembled rev-1 boards (see kicad/README.md).
- */
-export const PALETTE = {
-  maskBlue: "#0a4494",
-  maskBlueDark: "#062f6b",
-  goldEnig: "#cfa94f",
-  copper: "#b06a36",
-  silk: "#eef1f4",
-  fr4Core: "#8e8163",
-  fr4Prepreg: "#a4966f",
-  barrel: "#b8933f",
-} as const;
+import { PALETTE } from "./palette";
+
+export { PALETTE };
 
 export function createMaterials() {
   const goldExposed = new THREE.MeshPhysicalMaterial({

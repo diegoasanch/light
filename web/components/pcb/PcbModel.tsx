@@ -8,7 +8,15 @@
  */
 import { useGLTF } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
-import { Component, Suspense, useEffect, useMemo, useRef, type ReactNode } from "react";
+import {
+  Component,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  type ReactNode,
+} from "react";
 import * as THREE from "three";
 
 import {
@@ -114,6 +122,7 @@ export function PcbModel({ data, visibility, explode }: Props) {
   // then reads as draped over the traces (and keeps that shape when exploded,
   // which is physically right — the slump is the mask's own geometry).
   const gl = useThree((s) => s.gl);
+  const invalidate = useThree((s) => s.invalidate);
   useEffect(() => {
     const w = data.bbox.maxX - data.bbox.minX;
     const h = data.bbox.maxY - data.bbox.minY;
@@ -130,6 +139,7 @@ export function PcbModel({ data, visibility, explode }: Props) {
       mat.clearcoatNormalMap = bake.texture;
       mat.needsUpdate = true;
     }
+    invalidate();
     return () => {
       for (const { mat, bake } of bakes) {
         mat.normalMap = null;
@@ -138,7 +148,7 @@ export function PcbModel({ data, visibility, explode }: Props) {
         bake.dispose();
       }
     };
-  }, [gl, geo, data, materials]);
+  }, [gl, geo, data, materials, invalidate]);
 
   const explodeRef = useRef(0);
   const parts = useRef<Map<string, { obj: THREE.Group; slot: number; baseY: number }>>(
@@ -146,13 +156,30 @@ export function PcbModel({ data, visibility, explode }: Props) {
   );
   const barrelGroup = useRef<THREE.Group>(null);
 
-  const register = (key: string, baseY: number) => (obj: THREE.Group | null) => {
-    if (obj) parts.current.set(key, { obj, slot: slots.get(key) ?? 0, baseY });
-    else parts.current.delete(key);
-  };
+  // Ref callbacks are cached per part so re-renders (slider drags, toggles)
+  // hand React the same function — a fresh closure each render would detach
+  // and re-attach every group's ref on every settings change.
+  const register = useMemo(() => {
+    const cache = new Map<string, (obj: THREE.Group | null) => void>();
+    return (key: string, baseY: number) => {
+      const cacheKey = `${key}:${baseY}`;
+      let cb = cache.get(cacheKey);
+      if (!cb) {
+        cb = (obj: THREE.Group | null) => {
+          if (obj) parts.current.set(key, { obj, slot: slots.get(key) ?? 0, baseY });
+          else parts.current.delete(key);
+        };
+        cache.set(cacheKey, cb);
+      }
+      return cb;
+    };
+  }, [slots]);
 
   useFrame((_, dt) => {
     explodeRef.current = THREE.MathUtils.damp(explodeRef.current, explode, 7, dt);
+    // Demand frameloop: keep frames coming while the explode animation is
+    // still converging (the React commit that changed `explode` seeds it).
+    if (Math.abs(explodeRef.current - explode) > 1e-3) invalidate();
     const e = explodeRef.current * EXPLODE_GAP;
     for (const { obj, slot, baseY } of parts.current.values()) {
       obj.position.y = baseY + slot * e;
@@ -272,16 +299,21 @@ function Barrels({
     g.translate(0, 0.5, 0); // base sits at y = 0, top at y = 1
     return g;
   }, []);
-  const setInstances = (mesh: THREE.InstancedMesh | null) => {
-    if (!mesh) return;
-    const m = new THREE.Matrix4();
-    barrels.forEach((b, i) => {
-      m.makeScale(b.radius, height, b.radius);
-      m.setPosition(b.x, 0, b.z);
-      mesh.setMatrixAt(i, m);
-    });
-    mesh.instanceMatrix.needsUpdate = true;
-  };
+  // Stable ref: an inline closure would rebuild + re-upload all instance
+  // matrices on every parent re-render.
+  const setInstances = useCallback(
+    (mesh: THREE.InstancedMesh | null) => {
+      if (!mesh) return;
+      const m = new THREE.Matrix4();
+      barrels.forEach((b, i) => {
+        m.makeScale(b.radius, height, b.radius);
+        m.setPosition(b.x, 0, b.z);
+        mesh.setMatrixAt(i, m);
+      });
+      mesh.instanceMatrix.needsUpdate = true;
+    },
+    [barrels, height],
+  );
   return (
     <instancedMesh
       ref={setInstances}

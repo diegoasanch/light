@@ -51,6 +51,10 @@ export function extrudeMultiPolygon(
   geo.rotateX(Math.PI / 2);
   geo.translate(0, depth, 0); // spans [0, depth] so position.y = slab bottom
   geo.computeVertexNormals();
+  // No board material samples a texture by default — dropping the generated
+  // UVs saves ~25% of the (large) extruded vertex data. Layers that do need
+  // UVs get purpose-built ones via remapUvsToBoardPlane.
+  geo.deleteAttribute("uv");
   return geo;
 }
 
@@ -116,6 +120,7 @@ export function extrudeShapes(
   geo.rotateX(Math.PI / 2);
   geo.translate(0, depth, 0);
   geo.computeVertexNormals();
+  geo.deleteAttribute("uv"); // see extrudeMultiPolygon
   return geo;
 }
 

@@ -29,6 +29,8 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { optimizeGlb } from "./optimize-glb";
+
 const webDir = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const repoDir = resolve(webDir, "..");
 const boardPath = join(repoDir, "kicad", "light.kicad_pcb");
@@ -69,7 +71,7 @@ const tmp = mkdtempSync(join(tmpdir(), "light-pcb-"));
 let failure: string | null = null;
 
 try {
-  sync();
+  await sync();
 } catch (e) {
   failure = e instanceof Error ? e.message : String(e);
 } finally {
@@ -80,7 +82,7 @@ if (failure) {
   process.exit(1);
 }
 
-function sync() {
+async function sync() {
   // -------------------------------------------------------------- board.json
   console.log("→ extracting board geometry (pcbnew)…");
   const tmpJson = join(tmp, "board.json");
@@ -170,6 +172,11 @@ function sync() {
       `${missing.length} components have no 3D model in the export:\n  ${missing.join("\n  ")}`,
     );
   }
+
+  // The raw export is one primitive per CAD face (~8k draw calls) — collapse
+  // it to per-material primitives split into top/bottom sides.
+  console.log("→ optimizing components.glb (gltf-transform)…");
+  await optimizeGlb(tmpGlb, board.meta.boardThickness / 2 / 1000);
 
   // ------------------------------------------- validated → move into place
   copyFileSync(tmpJson, join(outDir, "board.json"));

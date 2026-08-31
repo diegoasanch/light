@@ -20,6 +20,12 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Kick off the board data + model downloads in parallel with the JS
+            bundle instead of serially after hydration. */}
+        <link rel="preload" href="/pcb/board.json" as="fetch" />
+        <link rel="preload" href="/pcb/components.glb" as="fetch" />
+      </head>
       <body className={`${geist.variable} ${geistMono.variable}`}>
         {children}
       </body>

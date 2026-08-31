@@ -3,7 +3,7 @@
 import { useId } from "react";
 
 import styles from "./ControlPanel.module.css";
-import { PALETTE } from "./pcb/materials";
+import { PALETTE } from "./pcb/palette";
 import {
   applyTheme,
   BACKDROPS,
