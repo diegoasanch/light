@@ -27,13 +27,15 @@ export function createMaterials() {
   // load (see copper-bump.ts) so the sheet reads as draped over the traces.
   const maskParams: THREE.MeshPhysicalMaterialParameters = {
     color: PALETTE.maskBlue,
-    metalness: 0.05,
-    roughness: 0.32,
-    clearcoat: 0.65,
-    clearcoatRoughness: 0.25,
+    metalness: 0,
+    roughness: 0.34,
+    clearcoat: 0.55,
+    clearcoatRoughness: 0.3,
     transparent: true,
-    opacity: 0.9,
-    envMapIntensity: 0.8,
+    opacity: 0.92,
+    // Kept low: the studio env otherwise washes the deep fab blue out to
+    // periwinkle — gloss comes from the clearcoat lobe instead.
+    envMapIntensity: 0.35,
   };
   const maskF = new THREE.MeshPhysicalMaterial(maskParams);
   const maskB = new THREE.MeshPhysicalMaterial(maskParams);

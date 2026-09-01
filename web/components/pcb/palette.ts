@@ -7,7 +7,7 @@
  * whole 3D stack stays behind ViewerShell's dynamic() split.
  */
 export const PALETTE = {
-  maskBlue: "#0a4494",
+  maskBlue: "#0b53b0",
   maskBlueDark: "#062f6b",
   goldEnig: "#cfa94f",
   copper: "#b06a36",

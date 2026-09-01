@@ -371,9 +371,13 @@ function Components({
       const centerY = box.isEmpty() ? mid : (box.min.y + box.max.y) / 2;
       (centerY < mid ? bottom : top).add(child.clone(true));
     }
-    // Tame the GLB materials' specular response: glossy connector plastics
-    // (UART/DEBUG shells) and the radio shield otherwise catch the large
-    // overhead lightformers as blown-out glare under the brighter rigs.
+    // Tame the GLB materials: kicad-cli marks everything metallic=1, fine for
+    // pins and shields but a near-white "metal" (the UART/DEBUG JST shells,
+    // LED packages) mirrors the whole lightformer rig — blown straight past
+    // the bloom threshold. Those become matte dielectrics; real metals just
+    // get their specular response capped. Gold pins are the one colored metal
+    // to preserve. The userData flag keeps this from compounding across
+    // re-runs (materials are shared with drei's GLTF cache).
     const seen = new Set<THREE.Material>();
     for (const grp of [top, bottom]) {
       grp.traverse((obj) => {
@@ -382,9 +386,21 @@ function Components({
         const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
         for (const mat of mats) {
           const std = mat as THREE.MeshStandardMaterial;
-          if (!std.isMeshStandardMaterial || seen.has(std)) continue;
+          if (!std.isMeshStandardMaterial || seen.has(std) || std.userData.toned) continue;
           seen.add(std);
-          if (std.metalness > 0.5) {
+          std.userData.toned = true;
+          const c = std.color;
+          const lum = 0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b;
+          const goldLike = c.b < 0.3 && c.r > 0.5;
+          if (lum > 0.7 && !goldLike) {
+            c.lerp(new THREE.Color(lum, lum, lum), 0.4); // nylon ivory, not butter
+            // Real nylon/ceramic albedo tops out well below 1 — a purer white
+            // would still cross the bloom threshold under the overhead former.
+            if (lum > 0.78) c.multiplyScalar(0.78 / lum);
+            std.metalness = 0;
+            std.roughness = Math.max(std.roughness, 0.65);
+            std.envMapIntensity = 0.3;
+          } else if (std.metalness > 0.5) {
             std.envMapIntensity = 0.8;
             std.roughness = Math.max(std.roughness, 0.35);
           } else {

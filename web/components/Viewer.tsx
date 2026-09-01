@@ -123,7 +123,9 @@ export function Viewer({ data, settings }: Props) {
       />
 
       <EffectComposer multisampling={4}>
-        <Bloom mipmapBlur intensity={0.35} luminanceThreshold={1.05} luminanceSmoothing={0.2} />
+        {/* Threshold sits above what a lit diffuse white reaches so bodies
+            (connector shells, module can) never bloom — only specular glints. */}
+        <Bloom mipmapBlur intensity={0.35} luminanceThreshold={1.4} luminanceSmoothing={0.25} />
         <Vignette eskil={false} offset={0.18} darkness={backdrop.vignette} />
       </EffectComposer>
     </Canvas>
