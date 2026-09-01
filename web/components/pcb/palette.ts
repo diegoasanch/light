@@ -7,7 +7,11 @@
  * whole 3D stack stays behind ViewerShell's dynamic() split.
  */
 export const PALETTE = {
-  maskBlue: "#0b53b0",
+  // Calibrated 2026-09-01 against photos of the fabbed boards: rendered
+  // median under the Studio rig measures H215 S0.76 V0.84 vs the photo's
+  // H214 S0.84 V0.79 (hue pre-shifted ~9° cyan-ward to cancel the ACES
+  // blue→violet skew; the S gap is the scene's residual specular floor).
+  maskBlue: "#045ba6",
   maskBlueDark: "#062f6b",
   goldEnig: "#cfa94f",
   copper: "#b06a36",

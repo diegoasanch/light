@@ -49,6 +49,12 @@ export function PcbModel({ data, visibility, explode }: Props) {
   const stack = useMemo(() => computeStack(data), [data]);
   const materials = useMemo(() => createMaterials(), []);
 
+  // Dev-only: live material tweaking from the console (color calibration).
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production") return;
+    (window as unknown as Record<string, unknown>).__mats = materials;
+  }, [materials]);
+
   const geo = useMemo(() => {
     const dielShapes = dielectricShapes(data, cx, cy);
     const copper = {} as Record<

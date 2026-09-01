@@ -30,6 +30,7 @@ interface Props {
 function DevCameraHook() {
   const camera = useThree((s) => s.camera);
   const gl = useThree((s) => s.gl);
+  const scene = useThree((s) => s.scene);
   const invalidate = useThree((s) => s.invalidate);
   const controls = useThree((s) => s.controls) as { target?: THREE_Vec; update?: () => void } | null;
   useEffect(() => {
@@ -47,7 +48,11 @@ function DevCameraHook() {
       triangles: gl.info.render.triangles,
     });
     w.__gl = gl;
-  }, [camera, controls, gl, invalidate]);
+    // Synchronous frame for headless tooling: a hidden browser pane suspends
+    // rAF, which stalls the demand loop — this renders one raw (un-post-
+    // processed) frame straight into the preserved drawing buffer.
+    w.__renderOnce = () => gl.render(scene, camera);
+  }, [camera, controls, gl, scene, invalidate]);
   return null;
 }
 interface THREE_Vec { set: (x: number, y: number, z: number) => void }
@@ -90,7 +95,14 @@ export function Viewer({ data, settings }: Props) {
       camera={{ position: [-42, 52, 46], fov: 32, near: 0.5, far: 2000 }}
       // Canvas MSAA would be thrown away — every frame goes through the
       // EffectComposer, which multisamples its own buffers.
-      gl={{ antialias: false, stencil: false, powerPreference: "high-performance" }}
+      gl={{
+        antialias: false,
+        stencil: false,
+        powerPreference: "high-performance",
+        // Dev-only: keeps the composited frame readable via toDataURL /
+        // drawImage so tooling can measure rendered colors numerically.
+        preserveDrawingBuffer: process.env.NODE_ENV !== "production",
+      }}
       style={{ background: backdrop.css, transition: "background 400ms ease" }}
     >
       <DevCameraHook />

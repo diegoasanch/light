@@ -25,17 +25,20 @@ export function createMaterials() {
   });
   // One mask material per side: each gets its own copper normal map baked at
   // load (see copper-bump.ts) so the sheet reads as draped over the traces.
+  // Numerically calibrated against board photos (see palette.ts): every
+  // white-specular path is kept just strong enough to read as gloss —
+  // clearcoat, base specular and env each measurably desaturate the blue
+  // toward periwinkle, so raising any of them needs a re-calibration.
   const maskParams: THREE.MeshPhysicalMaterialParameters = {
     color: PALETTE.maskBlue,
     metalness: 0,
     roughness: 0.34,
-    clearcoat: 0.55,
+    clearcoat: 0.3,
     clearcoatRoughness: 0.3,
+    specularIntensity: 0.15,
     transparent: true,
-    opacity: 0.92,
-    // Kept low: the studio env otherwise washes the deep fab blue out to
-    // periwinkle — gloss comes from the clearcoat lobe instead.
-    envMapIntensity: 0.35,
+    opacity: 0.96,
+    envMapIntensity: 0.2,
   };
   const maskF = new THREE.MeshPhysicalMaterial(maskParams);
   const maskB = new THREE.MeshPhysicalMaterial(maskParams);
