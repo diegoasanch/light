@@ -317,6 +317,40 @@
   }
 }
 
+/* ---- solder mask color ---- */
+.maskSwatches {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.maskSwatch {
+  width: 22px;
+  height: 22px;
+}
+
+/* The custom-color well: a rainbow ring around the native picker. */
+.maskCustom {
+  position: relative;
+  display: block;
+  background: conic-gradient(
+    #f66 0deg,
+    #fc6 60deg,
+    #6d6 120deg,
+    #6cc 180deg,
+    #66f 240deg,
+    #c6f 300deg,
+    #f66 360deg
+  );
+}
+
+.maskColorInput {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
 /* ---- switch ---- */
 .switchRow {
   display: flex;

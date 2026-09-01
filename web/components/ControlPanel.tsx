@@ -9,6 +9,7 @@ import {
   BACKDROPS,
   LAYER_CONTROLS,
   LIGHTING,
+  MASK_COLORS,
   MASK_DEPTH_RANGES,
   PRESETS,
   type LayerVisibility,
@@ -137,7 +138,11 @@ export function ControlPanel({ settings, onChange }: Props) {
               <LayerRow
                 key={item.key}
                 label={item.label}
-                swatch={SWATCHES[item.key]}
+                swatch={
+                  item.key === "maskF" || item.key === "maskB"
+                    ? settings.maskColor
+                    : SWATCHES[item.key]
+                }
                 checked={settings.visibility[item.key]}
                 onToggle={(v) =>
                   onChange({
@@ -152,7 +157,40 @@ export function ControlPanel({ settings, onChange }: Props) {
       </section>
 
       <section className={styles.section}>
-        <div className={styles.sectionTitle}>Mask depth</div>
+        <div className={styles.sectionTitle}>Solder mask</div>
+        <div className={styles.groupLabel}>Color</div>
+        <div className={styles.maskSwatches}>
+          {MASK_COLORS.map((c) => (
+            <button
+              key={c.id}
+              type="button"
+              title={c.label}
+              aria-label={`${c.label} solder mask`}
+              aria-pressed={settings.maskColor === c.color}
+              className={`${styles.sceneSwatch} ${styles.maskSwatch} ${
+                settings.maskColor === c.color ? styles.sceneSwatchActive : ""
+              }`}
+              style={{ background: c.color }}
+              onClick={() => onChange({ ...settings, maskColor: c.color })}
+            />
+          ))}
+          <label
+            title="Custom color"
+            className={`${styles.sceneSwatch} ${styles.maskSwatch} ${styles.maskCustom} ${
+              MASK_COLORS.some((c) => c.color === settings.maskColor)
+                ? ""
+                : styles.sceneSwatchActive
+            }`}
+          >
+            <input
+              type="color"
+              className={styles.maskColorInput}
+              value={settings.maskColor}
+              onChange={(e) => onChange({ ...settings, maskColor: e.target.value })}
+              aria-label="Custom solder mask color"
+            />
+          </label>
+        </div>
         <MaskDepthSlider
           label="Depth"
           param="strength"

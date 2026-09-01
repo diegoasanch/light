@@ -40,11 +40,12 @@ interface Props {
   visibility: LayerVisibility;
   explode: number; // 0..1 target; animated internally
   maskDepth: MaskDepthSettings;
+  maskColor: string;
 }
 
 const COPPER_ORDER: CopperLayerName[] = ["F.Cu", "In1.Cu", "In2.Cu", "B.Cu"];
 
-export function PcbModel({ data, visibility, explode, maskDepth }: Props) {
+export function PcbModel({ data, visibility, explode, maskDepth, maskColor }: Props) {
   const cx = (data.bbox.minX + data.bbox.maxX) / 2;
   const cy = (data.bbox.minY + data.bbox.maxY) / 2;
 
@@ -174,6 +175,13 @@ export function PcbModel({ data, visibility, explode, maskDepth }: Props) {
       if (timer !== null) clearTimeout(timer);
     };
   }, [gl, geo, data, materials, invalidate, maskStrength, maskBlurSigma]);
+
+  // Mask color is user-tweakable; both sides always share it.
+  useEffect(() => {
+    materials.maskF.color.set(maskColor);
+    materials.maskB.color.set(maskColor);
+    invalidate();
+  }, [materials, maskColor, invalidate]);
 
   // Unmount teardown for whichever bake is live (the bake effect above only
   // swaps textures; it deliberately leaves the current one assigned).

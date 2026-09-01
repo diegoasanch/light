@@ -1,3 +1,5 @@
+import { PALETTE } from "./palette";
+
 export interface LayerVisibility {
   components: boolean;
   silkF: boolean;
@@ -31,10 +33,26 @@ export const MASK_DEPTH_RANGES = {
   blurSigma: { min: 0.4, max: 3, step: 0.05 },
 } as const;
 
+/**
+ * Fab-style solder mask colors. Base albedos, not screen colors — deep and
+ * saturated because the scene's specular paths add white on top (the blue is
+ * the photo-calibrated one from palette.ts; the rest are eyeballed to the
+ * same rule of thumb).
+ */
+export const MASK_COLORS: { id: string; label: string; color: string }[] = [
+  { id: "blue", label: "Fab blue", color: PALETTE.maskBlue },
+  { id: "green", label: "Classic green", color: "#0b5433" },
+  { id: "red", label: "Red", color: "#971b1e" },
+  { id: "purple", label: "Purple", color: "#46258f" },
+  { id: "black", label: "Black", color: "#1b1e24" },
+  { id: "white", label: "White", color: "#c9cdd4" },
+];
+
 export interface ViewerSettings {
   visibility: LayerVisibility;
   explode: number; // 0..1
   maskDepth: MaskDepthSettings;
+  maskColor: string; // hex; applied to both mask materials
   autoRotate: boolean;
   theme: ThemeId;
   backdrop: string; // BackdropDef id
@@ -58,8 +76,9 @@ export const ALL_VISIBLE: LayerVisibility = {
 export const DEFAULT_SETTINGS: ViewerSettings = {
   visibility: ALL_VISIBLE,
   explode: 0,
-  // Matches the previously hardcoded bake: strength 0.7, σ≈1.3 blur kernel.
-  maskDepth: { strength: 0.7, blurSigma: 1.3 },
+  // User-tuned against the physical boards (2026-09-01).
+  maskDepth: { strength: 0.4, blurSigma: 0.6 },
+  maskColor: PALETTE.maskBlue,
   autoRotate: false,
   theme: "dark",
   backdrop: "midnight",

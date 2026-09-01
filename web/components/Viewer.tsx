@@ -111,6 +111,7 @@ export function Viewer({ data, settings }: Props) {
         visibility={settings.visibility}
         explode={settings.explode}
         maskDepth={settings.maskDepth}
+        maskColor={settings.maskColor}
       />
 
       <EnvironmentRig rig={rig} />
