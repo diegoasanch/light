@@ -9,13 +9,35 @@ import * as THREE from "three";
  * would pay per pixel per frame. Instead the copper geometry is rendered
  * top-down into a heightfield once, blurred (mask slumps over edges rather
  * than stepping), and turned into a normal map the standard material samples.
- * Everything here runs once at load; the per-frame cost is only the mask
- * material's normal-map lookups.
+ * Everything here runs once per bake (at load, or when the mask-depth params
+ * change); the per-frame cost is only the mask material's normal-map lookups.
  */
 
 const MAX_TEXTURE_DIM = 1024;
-/** Slope exaggeration — real 35µm ridges would be invisible at board scale. */
-const NORMAL_STRENGTH = 0.7;
+
+export interface CopperBakeParams {
+  /**
+   * Slope exaggeration — real 35µm ridges would be invisible at board scale.
+   * 0 renders a flat mask.
+   */
+  strength: number;
+  /**
+   * Gaussian σ (in texels) of the 7-tap slump blur: how much the mask's own
+   * body rounds the copper step instead of following it exactly.
+   */
+  blurSigma: number;
+}
+
+/**
+ * One-sided weights of a normalized 7-tap Gaussian: w[i] ∝ exp(-i²/2σ²),
+ * scaled so w[0] + 2·(w[1] + w[2] + w[3]) = 1.
+ */
+function gaussianWeights(sigma: number): number[] {
+  const s = Math.max(sigma, 1e-3);
+  const raw = [0, 1, 2, 3].map((i) => Math.exp(-(i * i) / (2 * s * s)));
+  const norm = raw[0] + 2 * (raw[1] + raw[2] + raw[3]);
+  return raw.map((w) => w / norm);
+}
 
 const FULLSCREEN_VERT = /* glsl */ `
   varying vec2 vUv;
@@ -28,16 +50,13 @@ const FULLSCREEN_VERT = /* glsl */ `
 const BLUR_FRAG = /* glsl */ `
   uniform sampler2D src;
   uniform vec2 dir;
+  uniform float weights[4];
   varying vec2 vUv;
   void main() {
-    // σ≈1.3 kernel: the mask follows the copper step closely but its own
-    // body rounds the transition a little.
-    float w[4];
-    w[0] = 0.3087; w[1] = 0.2296; w[2] = 0.0945; w[3] = 0.0215;
-    vec3 c = texture2D(src, vUv).rgb * w[0];
+    vec3 c = texture2D(src, vUv).rgb * weights[0];
     for (int i = 1; i < 4; i++) {
-      c += texture2D(src, vUv + dir * float(i)).rgb * w[i];
-      c += texture2D(src, vUv - dir * float(i)).rgb * w[i];
+      c += texture2D(src, vUv + dir * float(i)).rgb * weights[i];
+      c += texture2D(src, vUv - dir * float(i)).rgb * weights[i];
     }
     gl_FragColor = vec4(c, 1.0);
   }
@@ -68,6 +87,7 @@ export function bakeCopperNormalMap(
   geometries: THREE.BufferGeometry[],
   boardW: number,
   boardH: number,
+  params: CopperBakeParams,
 ): CopperBake {
   const aspect = boardW / boardH;
   const texW = Math.round(aspect >= 1 ? MAX_TEXTURE_DIM : MAX_TEXTURE_DIM * aspect);
@@ -110,7 +130,11 @@ export function bakeCopperNormalMap(
   const blur = new THREE.ShaderMaterial({
     vertexShader: FULLSCREEN_VERT,
     fragmentShader: BLUR_FRAG,
-    uniforms: { src: { value: height.texture }, dir: { value: new THREE.Vector2(1 / texW, 0) } },
+    uniforms: {
+      src: { value: height.texture },
+      dir: { value: new THREE.Vector2(1 / texW, 0) },
+      weights: { value: gaussianWeights(params.blurSigma) },
+    },
   });
   pass(blur, pong);
   blur.uniforms.src.value = pong.texture;
@@ -122,7 +146,7 @@ export function bakeCopperNormalMap(
     uniforms: {
       src: { value: height.texture },
       texel: { value: new THREE.Vector2(1 / texW, 1 / texH) },
-      strength: { value: NORMAL_STRENGTH },
+      strength: { value: params.strength },
     },
   });
   pass(toNormal, normal);

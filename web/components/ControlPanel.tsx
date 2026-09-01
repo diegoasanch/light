@@ -9,8 +9,10 @@ import {
   BACKDROPS,
   LAYER_CONTROLS,
   LIGHTING,
+  MASK_DEPTH_RANGES,
   PRESETS,
   type LayerVisibility,
+  type MaskDepthSettings,
   type ViewerSettings,
 } from "./pcb/viewer-state";
 
@@ -150,6 +152,22 @@ export function ControlPanel({ settings, onChange }: Props) {
       </section>
 
       <section className={styles.section}>
+        <div className={styles.sectionTitle}>Mask depth</div>
+        <MaskDepthSlider
+          label="Depth"
+          param="strength"
+          settings={settings}
+          onChange={onChange}
+        />
+        <MaskDepthSlider
+          label="Softness"
+          param="blurSigma"
+          settings={settings}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className={styles.section}>
         <SwitchRow
           label="Auto-rotate"
           checked={settings.autoRotate}
@@ -157,6 +175,46 @@ export function ControlPanel({ settings, onChange }: Props) {
         />
       </section>
     </aside>
+  );
+}
+
+function MaskDepthSlider({
+  label,
+  param,
+  settings,
+  onChange,
+}: {
+  label: string;
+  param: keyof MaskDepthSettings;
+  settings: ViewerSettings;
+  onChange: (next: ViewerSettings) => void;
+}) {
+  const { min, max, step } = MASK_DEPTH_RANGES[param];
+  const value = settings.maskDepth[param];
+  const fill = ((value - min) / (max - min)) * 100;
+  return (
+    <>
+      <div className={styles.groupLabel}>{label}</div>
+      <div className={styles.sliderRow}>
+        <input
+          type="range"
+          className={styles.slider}
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          style={{ "--fill": `${fill}%` } as React.CSSProperties}
+          onChange={(e) =>
+            onChange({
+              ...settings,
+              maskDepth: { ...settings.maskDepth, [param]: Number(e.target.value) },
+            })
+          }
+          aria-label={`Solder mask ${label.toLowerCase()}`}
+        />
+        <span className={styles.sliderValue}>{value.toFixed(2)}</span>
+      </div>
+    </>
   );
 }
 

@@ -28,21 +28,23 @@ import {
   viaBarrels,
 } from "@/lib/build-geometry";
 import { computeStack, type BoardData, type CopperLayerName } from "@/lib/pcb-types";
-import { bakeCopperNormalMap } from "./copper-bump";
+import { bakeCopperNormalMap, type CopperBake } from "./copper-bump";
 import { createMaterials } from "./materials";
-import type { LayerVisibility } from "./viewer-state";
+import type { LayerVisibility, MaskDepthSettings } from "./viewer-state";
 
 const EXPLODE_GAP = 3.4; // mm of extra separation per slot at full explode
+const BAKE_DEBOUNCE_MS = 150; // coalesce slider-drag re-bakes
 
 interface Props {
   data: BoardData;
   visibility: LayerVisibility;
   explode: number; // 0..1 target; animated internally
+  maskDepth: MaskDepthSettings;
 }
 
 const COPPER_ORDER: CopperLayerName[] = ["F.Cu", "In1.Cu", "In2.Cu", "B.Cu"];
 
-export function PcbModel({ data, visibility, explode }: Props) {
+export function PcbModel({ data, visibility, explode, maskDepth }: Props) {
   const cx = (data.bbox.minX + data.bbox.maxX) / 2;
   const cy = (data.bbox.minY + data.bbox.maxY) / 2;
 
@@ -127,34 +129,65 @@ export function PcbModel({ data, visibility, explode }: Props) {
   // Bake each outer copper layer into its mask's normal map: the mask sheet
   // then reads as draped over the traces (and keeps that shape when exploded,
   // which is physically right — the slump is the mask's own geometry).
+  //
+  // The bake re-runs when the mask-depth params change, debounced so a slider
+  // drag coalesces into one bake ~150ms after the last input event. The
+  // previous bake stays assigned until its replacement is ready — the mask
+  // never flashes flat mid-drag — and is disposed right after the swap.
   const gl = useThree((s) => s.gl);
   const invalidate = useThree((s) => s.invalidate);
+  const liveBakes = useRef<CopperBake[]>([]);
+  const bakedOnce = useRef(false);
+  const { strength: maskStrength, blurSigma: maskBlurSigma } = maskDepth;
   useEffect(() => {
-    const w = data.bbox.maxX - data.bbox.minX;
-    const h = data.bbox.maxY - data.bbox.minY;
-    const geosFor = (layer: CopperLayerName) =>
-      [geo.copper[layer].covered, geo.copper[layer].exposed].filter(
-        (g): g is THREE.ExtrudeGeometry => g !== null,
-      );
-    const bakes = [
-      { mat: materials.maskF, bake: bakeCopperNormalMap(gl, geosFor("F.Cu"), w, h) },
-      { mat: materials.maskB, bake: bakeCopperNormalMap(gl, geosFor("B.Cu"), w, h) },
-    ];
-    for (const { mat, bake } of bakes) {
-      mat.normalMap = bake.texture;
-      mat.clearcoatNormalMap = bake.texture;
-      mat.needsUpdate = true;
-    }
-    invalidate();
-    return () => {
+    const run = () => {
+      const w = data.bbox.maxX - data.bbox.minX;
+      const h = data.bbox.maxY - data.bbox.minY;
+      const params = { strength: maskStrength, blurSigma: maskBlurSigma };
+      const geosFor = (layer: CopperLayerName) =>
+        [geo.copper[layer].covered, geo.copper[layer].exposed].filter(
+          (g): g is THREE.ExtrudeGeometry => g !== null,
+        );
+      const bakes = [
+        { mat: materials.maskF, bake: bakeCopperNormalMap(gl, geosFor("F.Cu"), w, h, params) },
+        { mat: materials.maskB, bake: bakeCopperNormalMap(gl, geosFor("B.Cu"), w, h, params) },
+      ];
       for (const { mat, bake } of bakes) {
+        mat.normalMap = bake.texture;
+        mat.clearcoatNormalMap = bake.texture;
+        mat.needsUpdate = true;
+      }
+      for (const old of liveBakes.current) old.dispose();
+      liveBakes.current = bakes.map((b) => b.bake);
+      invalidate(); // demand frameloop: nothing renders the new maps otherwise
+    };
+    // First bake runs synchronously so the initial load never shows the mask
+    // flat; later param/geometry changes go through the debounce timer.
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    if (bakedOnce.current) {
+      timer = setTimeout(run, BAKE_DEBOUNCE_MS);
+    } else {
+      bakedOnce.current = true;
+      run();
+    }
+    return () => {
+      if (timer !== null) clearTimeout(timer);
+    };
+  }, [gl, geo, data, materials, invalidate, maskStrength, maskBlurSigma]);
+
+  // Unmount teardown for whichever bake is live (the bake effect above only
+  // swaps textures; it deliberately leaves the current one assigned).
+  useEffect(() => {
+    return () => {
+      for (const mat of [materials.maskF, materials.maskB]) {
         mat.normalMap = null;
         mat.clearcoatNormalMap = null;
         mat.needsUpdate = true;
-        bake.dispose();
       }
+      for (const bake of liveBakes.current) bake.dispose();
+      liveBakes.current = [];
     };
-  }, [gl, geo, data, materials, invalidate]);
+  }, [materials]);
 
   const explodeRef = useRef(0);
   const parts = useRef<Map<string, { obj: THREE.Group; slot: number; baseY: number }>>(

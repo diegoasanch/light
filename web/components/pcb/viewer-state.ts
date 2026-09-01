@@ -14,9 +14,27 @@ export interface LayerVisibility {
 
 export type ThemeId = "dark" | "light";
 
+/**
+ * Parameters for the baked "conformal mask" normal map (copper-bump.ts).
+ * Plain numbers only — this file is imported by eagerly-loaded UI code and
+ * must stay three-free.
+ */
+export interface MaskDepthSettings {
+  /** Normal-map slope amplitude (0 = flat mask). */
+  strength: number;
+  /** Gaussian σ (in texels) of the slump blur — how softly mask rounds edges. */
+  blurSigma: number;
+}
+
+export const MASK_DEPTH_RANGES = {
+  strength: { min: 0, max: 3, step: 0.05 },
+  blurSigma: { min: 0.4, max: 3, step: 0.05 },
+} as const;
+
 export interface ViewerSettings {
   visibility: LayerVisibility;
   explode: number; // 0..1
+  maskDepth: MaskDepthSettings;
   autoRotate: boolean;
   theme: ThemeId;
   backdrop: string; // BackdropDef id
@@ -40,6 +58,8 @@ export const ALL_VISIBLE: LayerVisibility = {
 export const DEFAULT_SETTINGS: ViewerSettings = {
   visibility: ALL_VISIBLE,
   explode: 0,
+  // Matches the previously hardcoded bake: strength 0.7, σ≈1.3 blur kernel.
+  maskDepth: { strength: 0.7, blurSigma: 1.3 },
   autoRotate: false,
   theme: "dark",
   backdrop: "midnight",

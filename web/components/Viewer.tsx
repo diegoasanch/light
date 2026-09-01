@@ -106,7 +106,12 @@ export function Viewer({ data, settings }: Props) {
       style={{ background: backdrop.css, transition: "background 400ms ease" }}
     >
       <DevCameraHook />
-      <PcbModel data={data} visibility={settings.visibility} explode={settings.explode} />
+      <PcbModel
+        data={data}
+        visibility={settings.visibility}
+        explode={settings.explode}
+        maskDepth={settings.maskDepth}
+      />
 
       <EnvironmentRig rig={rig} />
 
