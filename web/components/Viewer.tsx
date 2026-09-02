@@ -8,7 +8,7 @@ import {
 } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Bloom, EffectComposer, N8AO, Vignette } from "@react-three/postprocessing";
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import type { DirectionalLight } from "three";
 
 import { PcbModel } from "./pcb/PcbModel";
@@ -117,6 +117,12 @@ function FrameStatsProbe() {
   return null;
 }
 
+/** The slice of postprocessing's EffectComposer the viewer touches. */
+interface ComposerBuffers {
+  inputBuffer: { dispose(): void };
+  outputBuffer: { dispose(): void };
+}
+
 /** The slice of n8ao's (untyped) N8AOPostPass the viewer configures. */
 interface AoPass {
   autoDetectTransparency: boolean;
@@ -176,6 +182,33 @@ export function Viewer({ data, settings }: Props) {
     if (process.env.NODE_ENV !== "production")
       (window as unknown as Record<string, unknown>).__ao = pass ?? undefined;
   }, []);
+
+  const composerImpl = useRef<ComposerBuffers | null>(null);
+  const composerRef = useCallback((composer: ComposerBuffers | null) => {
+    composerImpl.current = composer;
+    // Dev-only: `window.__composer` = the postprocessing EffectComposer, for
+    // inspecting passes / render targets from the console.
+    if (process.env.NODE_ENV !== "production")
+      (window as unknown as Record<string, unknown>).__composer = composer ?? undefined;
+  }, []);
+
+  // Workaround for postprocessing 6.39 + three r180: unmounting the last
+  // depth-needing pass (N8AO) makes the composer delete the depth texture
+  // from its multisampled buffers WITHOUT disposing them. three then hangs a
+  // default DEPTH24 renderbuffer on the resolve framebuffer while the MSAA
+  // framebuffer keeps its DEPTH32F one; every resolve blit fails with
+  // INVALID_OPERATION, the color never lands, and the screen freezes on the
+  // last good frame (frames still "render", so the fps readout keeps moving).
+  // Disposing the buffers makes three rebuild both framebuffers together, with
+  // matching depth formats. Runs after the composer's own layout effects have
+  // swapped the passes (parent passive effect), and is a harmless no-op when
+  // the pass is mounted (adding it already disposes them).
+  useEffect(() => {
+    const composer = composerImpl.current;
+    if (!composer) return;
+    composer.inputBuffer.dispose();
+    composer.outputBuffer.dispose();
+  }, [settings.ambientOcclusion]);
 
   return (
     <Canvas
@@ -248,7 +281,7 @@ export function Viewer({ data, settings }: Props) {
         autoRotateSpeed={0.9}
       />
 
-      <EffectComposer multisampling={4}>
+      <EffectComposer multisampling={4} ref={composerRef}>
         {/* Ambient occlusion pools soft shadow under component bodies, along
             pin rows and against connector shells. Radii are in board units
             (mm): 2.5mm reach with a tight falloff keeps it a contact effect
