@@ -12,6 +12,7 @@ import { memo, useCallback, useEffect, useState } from "react";
 import type { DirectionalLight } from "three";
 
 import { PcbModel } from "./pcb/PcbModel";
+import { recordFrame } from "@/lib/frame-stats";
 import type { BoardData } from "@/lib/pcb-types";
 import {
   BACKDROP_MAP,
@@ -107,6 +108,15 @@ function ShadowMapOncePerFrame() {
   return null;
 }
 
+/**
+ * Feeds the FPS readout. Runs after the composer (priority 2 > its 1) so a
+ * frame is stamped once it has actually been rendered.
+ */
+function FrameStatsProbe() {
+  useFrame(() => recordFrame(performance.now()), 2);
+  return null;
+}
+
 /** The slice of n8ao's (untyped) N8AOPostPass the viewer configures. */
 interface AoPass {
   autoDetectTransparency: boolean;
@@ -195,6 +205,7 @@ export function Viewer({ data, settings }: Props) {
     >
       <DevCameraHook />
       <ShadowMapOncePerFrame />
+      <FrameStatsProbe />
       <PcbModel
         data={data}
         visibility={settings.visibility}
