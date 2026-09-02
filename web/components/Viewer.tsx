@@ -7,7 +7,7 @@ import {
   OrbitControls,
 } from "@react-three/drei";
 import { Canvas, useThree } from "@react-three/fiber";
-import { Bloom, EffectComposer, Vignette } from "@react-three/postprocessing";
+import { Bloom, EffectComposer, N8AO, Vignette } from "@react-three/postprocessing";
 import { memo, useEffect } from "react";
 
 import { PcbModel } from "./pcb/PcbModel";
@@ -141,6 +141,25 @@ export function Viewer({ data, settings }: Props) {
       />
 
       <EffectComposer multisampling={4}>
+        {/* Ambient occlusion pools soft shadow under component bodies, along
+            pin rows and against connector shells. Radii are in board units
+            (mm): 2.5mm reach with a tight falloff keeps it a contact effect
+            rather than a scene-wide darkening. halfRes + depth-aware
+            upsampling for weak GPUs; the panel toggle is the escape hatch. */}
+        <N8AO
+          enabled={settings.ambientOcclusion}
+          aoRadius={2.5}
+          distanceFalloff={0.5}
+          intensity={3}
+          quality="medium"
+          halfRes
+          depthAwareUpsampling
+          ref={(pass) => {
+            // Dev-only: live AO tuning from the console (pass.configuration).
+            if (process.env.NODE_ENV !== "production" && pass)
+              (window as unknown as Record<string, unknown>).__ao = pass;
+          }}
+        />
         {/* Threshold sits above what a lit diffuse white reaches so bodies
             (connector shells, module can) never bloom — only specular glints. */}
         <Bloom mipmapBlur intensity={0.35} luminanceThreshold={1.4} luminanceSmoothing={0.25} />

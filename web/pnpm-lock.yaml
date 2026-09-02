@@ -17,6 +17,9 @@ importers:
       '@react-three/postprocessing':
         specifier: ^3.0.4
         version: 3.1.1(@react-three/fiber@9.7.0(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(three@0.180.0))(@types/three@0.180.0)(postprocessing@6.39.4(three@0.180.0))(react@19.2.8)(three@0.180.0)
+      n8ao:
+        specifier: ^2.0.1
+        version: 2.0.1(postprocessing@6.39.4(three@0.180.0))(three@0.180.0)
       next:
         specifier: ^15.5.4
         version: 15.5.24(react-dom@19.2.8(react@19.2.8))(react@19.2.8)

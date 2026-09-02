@@ -53,6 +53,7 @@ export interface ViewerSettings {
   explode: number; // 0..1
   maskDepth: MaskDepthSettings;
   maskColor: string; // hex; applied to both mask materials
+  ambientOcclusion: boolean; // SSAO pass (N8AO) — off is the weak-GPU escape hatch
   autoRotate: boolean;
   theme: ThemeId;
   backdrop: string; // BackdropDef id
@@ -79,6 +80,7 @@ export const DEFAULT_SETTINGS: ViewerSettings = {
   // User-tuned against the physical boards (2026-09-01).
   maskDepth: { strength: 0.4, blurSigma: 0.6 },
   maskColor: PALETTE.maskBlue,
+  ambientOcclusion: true,
   autoRotate: false,
   theme: "dark",
   backdrop: "midnight",
