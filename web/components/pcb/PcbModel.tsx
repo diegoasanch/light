@@ -101,8 +101,10 @@ export function PcbModel({ data, visibility, explode, maskDepth, maskColor }: Pr
 
   /**
    * Explode slots: stack elements sorted bottom→top, one slot step apart,
-   * with the core slab pinned at slot 0. Components ride one step beyond
-   * their side's silkscreen.
+   * with the core slab pinned at slot 0. The via barrels lift out as their
+   * own layer one step above the top silkscreen, keeping their real length
+   * (a 1.6mm forest of tubes reads as "the drilling"); the top components
+   * ride one step beyond that, bottom components one step below their silk.
    */
   const slots = useMemo(() => {
     const entries: { key: string; y: number; tie: number }[] = [
@@ -122,7 +124,10 @@ export function PcbModel({ data, visibility, explode, maskDepth, maskColor }: Pr
     );
     const map = new Map<string, number>();
     entries.forEach((e, i) => map.set(e.key, i - coreIdx));
-    map.set("comp-F", (map.get("silk-F") ?? 0) + 1.4);
+    const silkF = map.get("silk-F") ?? 0;
+    map.set("vias", silkF + 1);
+    // Extra headroom: through-hole pins hang ~3mm below the component bases.
+    map.set("comp-F", silkF + 2.4);
     map.set("comp-B", (map.get("silk-B") ?? 0) - 1.4);
     return map;
   }, [stack]);
@@ -248,16 +253,9 @@ export function PcbModel({ data, visibility, explode, maskDepth, maskColor }: Pr
     for (const { obj, slot, baseY } of parts.current.values()) {
       obj.position.y = baseY + slot * e;
     }
-    if (barrelGroup.current) {
-      // Barrels stretch to keep connecting the exploded B.Cu and F.Cu layers.
-      const sB = (slots.get("cu-B.Cu") ?? 0) * e;
-      const sF = (slots.get("cu-F.Cu") ?? 0) * e;
-      barrelGroup.current.position.y = sB;
-      barrelGroup.current.scale.y = (stack.total + (sF - sB)) / stack.total;
-    }
-    // Stretched barrels go slightly translucent so they don't read as solid
-    // rods obscuring the separated layers.
-    materials.barrel.opacity = 1 - explodeRef.current * 0.45;
+    // The barrels are an unstretched layer of their own: the whole forest
+    // lifts to its slot, each tube staying board-thickness tall.
+    if (barrelGroup.current) barrelGroup.current.position.y = (slots.get("vias") ?? 0) * e;
   });
 
   return (

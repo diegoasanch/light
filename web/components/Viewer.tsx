@@ -164,11 +164,11 @@ export function Viewer({ data, settings }: Props) {
 
   const aoRef = useCallback((pass: AoPass | null) => {
     if (pass) {
-      // The mask (opacity 0.96, depth-writing) and via barrels are
-      // `transparent` materials, which makes n8ao auto-enable its
-      // transparency-aware path: two extra full-resolution scene renders per
-      // frame, never halved by halfRes. It buys nothing here — the mask's
-      // depth write already puts AO on its top surface — so pin the cheap path.
+      // The mask (opacity 0.96, depth-writing) is a `transparent` material,
+      // which makes n8ao auto-enable its transparency-aware path: two extra
+      // full-resolution scene renders per frame, never halved by halfRes. It
+      // buys nothing here — the mask's depth write already puts AO on its
+      // top surface — so pin the cheap path.
       pass.autoDetectTransparency = false;
       pass.configuration.transparencyAware = false;
     }
