@@ -202,6 +202,12 @@ export function ControlPanel({ settings, onChange }: Props) {
           settings={settings}
           onChange={onChange}
         />
+        <MaskDepthSlider
+          label="Overlap (mm)"
+          param="overlap"
+          settings={settings}
+          onChange={onChange}
+        />
         <SwitchRow
           label="Invert height map"
           checked={settings.maskDepth.invert}

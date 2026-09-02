@@ -26,7 +26,14 @@ export interface CopperBakeParams {
    * body rounds the copper step instead of following it exactly.
    */
   blurSigma: number;
+  /**
+   * How far (mm) the raised plateau extends past the copper edge before the
+   * high→low transition starts — mask flows outward over the clearance gap.
+   */
+  overlap: number;
 }
+
+const MAX_DILATE_TEXELS = 8;
 
 /**
  * One-sided weights of a normalized 7-tap Gaussian: w[i] ∝ exp(-i²/2σ²),
@@ -44,6 +51,26 @@ const FULLSCREEN_VERT = /* glsl */ `
   void main() {
     vUv = uv;
     gl_Position = vec4(position.xy, 0.0, 1.0);
+  }
+`;
+
+// Separable max filter. The final tap lands at the fractional radius, where
+// the target's linear filtering interpolates — so the dilation edge moves
+// smoothly as the slider drags instead of stepping per texel.
+const DILATE_FRAG = /* glsl */ `
+  uniform sampler2D src;
+  uniform vec2 dir;
+  uniform float radius;
+  varying vec2 vUv;
+  void main() {
+    vec3 c = texture2D(src, vUv).rgb;
+    for (int i = 1; i <= ${MAX_DILATE_TEXELS}; i++) {
+      if (float(i) > radius) break;
+      float r = min(float(i), radius);
+      c = max(c, texture2D(src, vUv + dir * r).rgb);
+      c = max(c, texture2D(src, vUv - dir * r).rgb);
+    }
+    gl_FragColor = vec4(c, 1.0);
   }
 `;
 
@@ -118,7 +145,7 @@ export function bakeCopperNormalMap(
   gl.setRenderTarget(height);
   gl.render(bakeScene, camera);
 
-  // 2. Separable blur (the slump), then height → tangent-space normal.
+  // 2. Dilate (overlap), separable blur (the slump), then height → normal.
   const quadCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
   const quadGeo = new THREE.PlaneGeometry(2, 2);
   const pass = (mat: THREE.ShaderMaterial, target: THREE.WebGLRenderTarget) => {
@@ -127,6 +154,24 @@ export function bakeCopperNormalMap(
     gl.setRenderTarget(target);
     gl.render(scene, quadCam);
   };
+  // Texels are square to within rounding, so one radius serves both axes.
+  const radius = Math.min(MAX_DILATE_TEXELS, (params.overlap * texW) / boardW);
+  let dilate: THREE.ShaderMaterial | null = null;
+  if (radius > 0) {
+    dilate = new THREE.ShaderMaterial({
+      vertexShader: FULLSCREEN_VERT,
+      fragmentShader: DILATE_FRAG,
+      uniforms: {
+        src: { value: height.texture },
+        dir: { value: new THREE.Vector2(1 / texW, 0) },
+        radius: { value: radius },
+      },
+    });
+    pass(dilate, pong);
+    dilate.uniforms.src.value = pong.texture;
+    dilate.uniforms.dir.value = new THREE.Vector2(0, 1 / texH);
+    pass(dilate, height);
+  }
   const blur = new THREE.ShaderMaterial({
     vertexShader: FULLSCREEN_VERT,
     fragmentShader: BLUR_FRAG,
@@ -153,6 +198,7 @@ export function bakeCopperNormalMap(
   gl.setRenderTarget(prevTarget);
 
   white.dispose();
+  dilate?.dispose();
   blur.dispose();
   toNormal.dispose();
   quadGeo.dispose();

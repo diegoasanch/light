@@ -139,12 +139,17 @@ export function PcbModel({ data, visibility, explode, maskDepth, maskColor }: Pr
   const invalidate = useThree((s) => s.invalidate);
   const liveBakes = useRef<CopperBake[]>([]);
   const bakedOnce = useRef(false);
-  const { strength: maskStrength, blurSigma: maskBlurSigma, invert: maskInvert } = maskDepth;
+  const {
+    strength: maskStrength,
+    blurSigma: maskBlurSigma,
+    overlap: maskOverlap,
+    invert: maskInvert,
+  } = maskDepth;
   useEffect(() => {
     const run = () => {
       const w = data.bbox.maxX - data.bbox.minX;
       const h = data.bbox.maxY - data.bbox.minY;
-      const params = { strength: maskStrength, blurSigma: maskBlurSigma };
+      const params = { strength: maskStrength, blurSigma: maskBlurSigma, overlap: maskOverlap };
       const geosFor = (layer: CopperLayerName) =>
         [geo.copper[layer].covered, geo.copper[layer].exposed].filter(
           (g): g is THREE.ExtrudeGeometry => g !== null,
@@ -174,7 +179,7 @@ export function PcbModel({ data, visibility, explode, maskDepth, maskColor }: Pr
     return () => {
       if (timer !== null) clearTimeout(timer);
     };
-  }, [gl, geo, data, materials, invalidate, maskStrength, maskBlurSigma]);
+  }, [gl, geo, data, materials, invalidate, maskStrength, maskBlurSigma, maskOverlap]);
 
   // Inverting the height map is a sign flip of the tangent-space normal's xy
   // (h → 1−h negates the gradient), so it needs no re-bake: negating

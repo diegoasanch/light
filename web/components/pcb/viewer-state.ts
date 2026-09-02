@@ -26,6 +26,8 @@ export interface MaskDepthSettings {
   strength: number;
   /** Gaussian σ (in texels) of the slump blur — how softly mask rounds edges. */
   blurSigma: number;
+  /** mm the raised plateau extends past the copper edge before dropping. */
+  overlap: number;
   /** Flip the height map: copper reads as recessed into the mask instead of raised. */
   invert: boolean;
 }
@@ -33,6 +35,7 @@ export interface MaskDepthSettings {
 export const MASK_DEPTH_RANGES = {
   strength: { min: 0, max: 3, step: 0.05 },
   blurSigma: { min: 0.4, max: 3, step: 0.05 },
+  overlap: { min: 0, max: 0.3, step: 0.01 },
 } as const;
 
 /**
@@ -80,7 +83,7 @@ export const DEFAULT_SETTINGS: ViewerSettings = {
   visibility: ALL_VISIBLE,
   explode: 0,
   // User-tuned against the physical boards (2026-09-01).
-  maskDepth: { strength: 0.4, blurSigma: 0.6, invert: false },
+  maskDepth: { strength: 0.4, blurSigma: 0.6, overlap: 0.05, invert: false },
   maskColor: PALETTE.maskBlue,
   ambientOcclusion: true,
   autoRotate: false,
