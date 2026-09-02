@@ -13,7 +13,6 @@ import {
   MASK_DEPTH_RANGES,
   PRESETS,
   type LayerVisibility,
-  type MaskDepthSettings,
   type ViewerSettings,
 } from "./pcb/viewer-state";
 
@@ -203,6 +202,13 @@ export function ControlPanel({ settings, onChange }: Props) {
           settings={settings}
           onChange={onChange}
         />
+        <SwitchRow
+          label="Invert height map"
+          checked={settings.maskDepth.invert}
+          onToggle={(v) =>
+            onChange({ ...settings, maskDepth: { ...settings.maskDepth, invert: v } })
+          }
+        />
       </section>
 
       <section className={styles.section}>
@@ -228,7 +234,7 @@ function MaskDepthSlider({
   onChange,
 }: {
   label: string;
-  param: keyof MaskDepthSettings;
+  param: keyof typeof MASK_DEPTH_RANGES;
   settings: ViewerSettings;
   onChange: (next: ViewerSettings) => void;
 }) {

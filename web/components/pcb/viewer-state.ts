@@ -26,6 +26,8 @@ export interface MaskDepthSettings {
   strength: number;
   /** Gaussian σ (in texels) of the slump blur — how softly mask rounds edges. */
   blurSigma: number;
+  /** Flip the height map: copper reads as recessed into the mask instead of raised. */
+  invert: boolean;
 }
 
 export const MASK_DEPTH_RANGES = {
@@ -78,7 +80,7 @@ export const DEFAULT_SETTINGS: ViewerSettings = {
   visibility: ALL_VISIBLE,
   explode: 0,
   // User-tuned against the physical boards (2026-09-01).
-  maskDepth: { strength: 0.4, blurSigma: 0.6 },
+  maskDepth: { strength: 0.4, blurSigma: 0.6, invert: false },
   maskColor: PALETTE.maskBlue,
   ambientOcclusion: true,
   autoRotate: false,

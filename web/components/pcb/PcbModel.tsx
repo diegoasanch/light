@@ -139,7 +139,7 @@ export function PcbModel({ data, visibility, explode, maskDepth, maskColor }: Pr
   const invalidate = useThree((s) => s.invalidate);
   const liveBakes = useRef<CopperBake[]>([]);
   const bakedOnce = useRef(false);
-  const { strength: maskStrength, blurSigma: maskBlurSigma } = maskDepth;
+  const { strength: maskStrength, blurSigma: maskBlurSigma, invert: maskInvert } = maskDepth;
   useEffect(() => {
     const run = () => {
       const w = data.bbox.maxX - data.bbox.minX;
@@ -175,6 +175,18 @@ export function PcbModel({ data, visibility, explode, maskDepth, maskColor }: Pr
       if (timer !== null) clearTimeout(timer);
     };
   }, [gl, geo, data, materials, invalidate, maskStrength, maskBlurSigma]);
+
+  // Inverting the height map is a sign flip of the tangent-space normal's xy
+  // (h → 1−h negates the gradient), so it needs no re-bake: negating
+  // normalScale on the material is the exact same result, instantly.
+  useEffect(() => {
+    const s = maskInvert ? -1 : 1;
+    for (const mat of [materials.maskF, materials.maskB]) {
+      mat.normalScale.set(s, s);
+      mat.clearcoatNormalScale.set(s, s);
+    }
+    invalidate();
+  }, [materials, maskInvert, invalidate]);
 
   // Mask color is user-tweakable; both sides always share it.
   useEffect(() => {
