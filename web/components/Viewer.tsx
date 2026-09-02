@@ -6,9 +6,10 @@ import {
   Lightformer,
   OrbitControls,
 } from "@react-three/drei";
-import { Canvas, useThree } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Bloom, EffectComposer, N8AO, Vignette } from "@react-three/postprocessing";
 import { memo, useCallback, useEffect, useState } from "react";
+import type { DirectionalLight } from "three";
 
 import { PcbModel } from "./pcb/PcbModel";
 import type { BoardData } from "@/lib/pcb-types";
@@ -17,9 +18,36 @@ import {
   BACKDROPS,
   LIGHTING,
   LIGHTING_MAP,
+  sunPosition,
   type LightingDef,
   type ViewerSettings,
 } from "./pcb/viewer-state";
+
+/** Key-light distance from the board center (mm). Direction is what matters
+ * for a directional light; this only has to clear the shadow frustum. */
+const SUN_DISTANCE = 120;
+/** Half-extent (mm) of the shadow frustum: the 58×40 board plus the fully
+ * exploded stack and components, at any light angle. */
+const SHADOW_HALF = 50;
+
+/** One-time shadow-camera setup for the key light (a fresh light per mount). */
+function setupSunShadow(light: DirectionalLight | null) {
+  if (!light) return;
+  const cam = light.shadow.camera;
+  cam.left = -SHADOW_HALF;
+  cam.right = SHADOW_HALF;
+  cam.top = SHADOW_HALF;
+  cam.bottom = -SHADOW_HALF;
+  cam.near = SUN_DISTANCE - 70;
+  cam.far = SUN_DISTANCE + 70;
+  cam.updateProjectionMatrix();
+  // 100mm across 2048 texels ≈ 0.05mm/texel — resolves 0402 bodies. The
+  // board layers are only tens of µm thick, so the acne fix has to be a
+  // normal-offset rather than a depth bias large enough to detach contacts.
+  light.shadow.mapSize.set(2048, 2048);
+  light.shadow.bias = -0.0002;
+  light.shadow.normalBias = 0.04;
+}
 
 interface Props {
   data: BoardData;
@@ -48,6 +76,7 @@ function DevCameraHook() {
       triangles: gl.info.render.triangles,
     });
     w.__gl = gl;
+    w.__scene = scene;
     // Synchronous frame for headless tooling: a hidden browser pane suspends
     // rAF, which stalls the demand loop — this renders one raw (un-post-
     // processed) frame straight into the preserved drawing buffer.
@@ -56,6 +85,27 @@ function DevCameraHook() {
   return null;
 }
 interface THREE_Vec { set: (x: number, y: number, z: number) => void }
+
+/**
+ * Render the shadow map once per frame, not once per scene render. Every
+ * frame draws the scene twice — ContactShadows' top-down depth pass and the
+ * composer's beauty pass — and three would redraw all casters into the
+ * shadow map for each. Flagging it dirty at the top of the frame lets the
+ * first pass build it and the second reuse it.
+ */
+function ShadowMapOncePerFrame() {
+  const gl = useThree((s) => s.gl);
+  useEffect(() => {
+    gl.shadowMap.autoUpdate = false;
+    return () => {
+      gl.shadowMap.autoUpdate = true;
+    };
+  }, [gl]);
+  useFrame(() => {
+    gl.shadowMap.needsUpdate = true;
+  }, -1);
+  return null;
+}
 
 /** The slice of n8ao's (untyped) N8AOPostPass the viewer configures. */
 interface AoPass {
@@ -71,7 +121,12 @@ interface AoPass {
  */
 const EnvironmentRig = memo(function EnvironmentRig({ rig }: { rig: LightingDef }) {
   return (
-    <Environment key={rig.id} resolution={256} frames={1}>
+    <Environment
+      key={rig.id}
+      resolution={256}
+      frames={1}
+      environmentIntensity={rig.envIntensity}
+    >
       <color attach="background" args={[rig.envBackground]} />
       {rig.formers.map((f, i) => (
         <Lightformer
@@ -117,6 +172,9 @@ export function Viewer({ data, settings }: Props) {
       onCreated={({ gl }) => {
         setFloatTargets(gl.getContext().getExtension("EXT_color_buffer_float") !== null);
       }}
+      // PCF-soft shadow maps for the key light. The map itself only exists
+      // while `settings.shadows` keeps the light casting.
+      shadows="soft"
       dpr={[1, 2]}
       // Render only when something changed (interaction, explode animation,
       // settings) — an idle viewer costs zero GPU. Sources that need frames
@@ -136,6 +194,7 @@ export function Viewer({ data, settings }: Props) {
       style={{ background: backdrop.css, transition: "background 400ms ease" }}
     >
       <DevCameraHook />
+      <ShadowMapOncePerFrame />
       <PcbModel
         data={data}
         visibility={settings.visibility}
@@ -146,7 +205,15 @@ export function Viewer({ data, settings }: Props) {
 
       <EnvironmentRig rig={rig} />
 
-      <directionalLight position={rig.sun.position} intensity={rig.sun.intensity} color={rig.sun.color} />
+      {/* Key light: the one shadow caster. Aimed at the origin (the light's
+          default target), so the panel's azimuth/elevation fully describe it. */}
+      <directionalLight
+        ref={setupSunShadow}
+        position={sunPosition(settings.sun, SUN_DISTANCE)}
+        intensity={settings.sun.intensity}
+        color={rig.sun.color}
+        castShadow={settings.shadows}
+      />
       <ambientLight intensity={rig.ambient} />
 
       <ContactShadows

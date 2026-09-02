@@ -267,6 +267,8 @@ export function PcbModel({ data, visibility, explode, maskDepth, maskColor }: Pr
           <mesh
             geometry={geo.dielectric[i]}
             material={d.type === "core" ? materials.core : materials.prepreg}
+            castShadow
+            receiveShadow
           />
         </group>
       ))}
@@ -288,31 +290,43 @@ export function PcbModel({ data, visibility, explode, maskDepth, maskColor }: Pr
             <mesh
               geometry={geo.copper[layer].covered}
               material={outer ? materials.copperCovered : materials.copperInner}
+              castShadow
+              receiveShadow
             />
             {geo.copper[layer].exposed && (
-              <mesh geometry={geo.copper[layer].exposed!} material={materials.goldExposed} />
+              <mesh
+                geometry={geo.copper[layer].exposed!}
+                material={materials.goldExposed}
+                castShadow
+                receiveShadow
+              />
             )}
           </group>
         );
       })}
 
+      {/* Shadow casting is per mesh: everything with a body casts, everything
+          with a lit face receives. Silk (a 10µm glyph film) and the via
+          barrels only receive — their own shadows would be sub-texel. */}
       <group ref={register("mask-F", stack.mask.F.y0)} visible={visibility.maskF}>
-        <mesh geometry={geo.mask.F} material={materials.maskF} renderOrder={2} />
+        <mesh geometry={geo.mask.F} material={materials.maskF} renderOrder={2} castShadow receiveShadow />
       </group>
       <group ref={register("mask-B", stack.mask.B.y0)} visible={visibility.maskB}>
-        <mesh geometry={geo.mask.B} material={materials.maskB} renderOrder={2} />
+        <mesh geometry={geo.mask.B} material={materials.maskB} renderOrder={2} castShadow receiveShadow />
       </group>
 
       <group ref={register("silk-F", stack.silk.F.y0)} visible={visibility.silkF}>
-        <mesh geometry={geo.silk.F} material={materials.silk} />
+        <mesh geometry={geo.silk.F} material={materials.silk} receiveShadow />
       </group>
       <group ref={register("silk-B", stack.silk.B.y0)} visible={visibility.silkB}>
-        <mesh geometry={geo.silk.B} material={materials.silk} />
+        <mesh geometry={geo.silk.B} material={materials.silk} receiveShadow />
       </group>
 
       <group ref={barrelGroup} visible={visibility.vias}>
         <Barrels barrels={geo.barrels} height={stack.total} material={materials.barrel} />
-        {geo.slotBarrels && <mesh geometry={geo.slotBarrels} material={materials.barrel} />}
+        {geo.slotBarrels && (
+          <mesh geometry={geo.slotBarrels} material={materials.barrel} receiveShadow />
+        )}
       </group>
 
       <ComponentsErrorBoundary>
@@ -383,6 +397,7 @@ function Barrels({
       ref={setInstances}
       args={[geometry, material, barrels.length]}
       frustumCulled={false}
+      receiveShadow
     />
   );
 }
@@ -447,6 +462,10 @@ function Components({
       grp.traverse((obj) => {
         const mesh = obj as THREE.Mesh;
         if (!mesh.isMesh) return;
+        // Bodies shadow the board and each other (pin rows, the module can
+        // over neighbouring passives). Set on the clones, not the cache.
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
         const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
         for (const mat of mats) {
           const std = mat as THREE.MeshStandardMaterial;

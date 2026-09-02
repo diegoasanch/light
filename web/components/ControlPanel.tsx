@@ -12,6 +12,8 @@ import {
   MASK_COLORS,
   MASK_DEPTH_RANGES,
   PRESETS,
+  SUN_RANGES,
+  withLighting,
   type LayerVisibility,
   type ViewerSettings,
 } from "./pcb/viewer-state";
@@ -87,12 +89,33 @@ export function ControlPanel({ settings, onChange }: Props) {
               key={l.id}
               type="button"
               className={`${styles.presetBtn} ${settings.lighting === l.id ? styles.presetBtnActive : ""}`}
-              onClick={() => onChange({ ...settings, lighting: l.id })}
+              onClick={() => onChange(withLighting(settings, l.id))}
             >
               {l.label}
             </button>
           ))}
         </div>
+        <SliderRow
+          label="Key light azimuth"
+          {...SUN_RANGES.azimuth}
+          value={settings.sun.azimuth}
+          format={(v) => `${v}°`}
+          onChange={(v) => onChange({ ...settings, sun: { ...settings.sun, azimuth: v } })}
+        />
+        <SliderRow
+          label="Key light elevation"
+          {...SUN_RANGES.elevation}
+          value={settings.sun.elevation}
+          format={(v) => `${v}°`}
+          onChange={(v) => onChange({ ...settings, sun: { ...settings.sun, elevation: v } })}
+        />
+        <SliderRow
+          label="Key light intensity"
+          {...SUN_RANGES.intensity}
+          value={settings.sun.intensity}
+          format={(v) => v.toFixed(1)}
+          onChange={(v) => onChange({ ...settings, sun: { ...settings.sun, intensity: v } })}
+        />
         <div className={styles.groupLabel}>Backdrop</div>
         <div className={styles.sceneSwatches}>
           {BACKDROPS.map((b) => (
@@ -219,6 +242,11 @@ export function ControlPanel({ settings, onChange }: Props) {
 
       <section className={styles.section}>
         <SwitchRow
+          label="Cast shadows"
+          checked={settings.shadows}
+          onToggle={(v) => onChange({ ...settings, shadows: v })}
+        />
+        <SwitchRow
           label="Ambient occlusion"
           checked={settings.ambientOcclusion}
           onToggle={(v) => onChange({ ...settings, ambientOcclusion: v })}
@@ -244,8 +272,40 @@ function MaskDepthSlider({
   settings: ViewerSettings;
   onChange: (next: ViewerSettings) => void;
 }) {
-  const { min, max, step } = MASK_DEPTH_RANGES[param];
-  const value = settings.maskDepth[param];
+  return (
+    <SliderRow
+      label={label}
+      {...MASK_DEPTH_RANGES[param]}
+      value={settings.maskDepth[param]}
+      format={(v) => v.toFixed(2)}
+      ariaLabel={`Solder mask ${label.toLowerCase()}`}
+      onChange={(v) =>
+        onChange({ ...settings, maskDepth: { ...settings.maskDepth, [param]: v } })
+      }
+    />
+  );
+}
+
+/** Labeled range input with a fill track and a formatted readout. */
+function SliderRow({
+  label,
+  min,
+  max,
+  step,
+  value,
+  format,
+  ariaLabel,
+  onChange,
+}: {
+  label: string;
+  min: number;
+  max: number;
+  step: number;
+  value: number;
+  format: (v: number) => string;
+  ariaLabel?: string;
+  onChange: (v: number) => void;
+}) {
   const fill = ((value - min) / (max - min)) * 100;
   return (
     <>
@@ -259,15 +319,10 @@ function MaskDepthSlider({
           step={step}
           value={value}
           style={{ "--fill": `${fill}%` } as React.CSSProperties}
-          onChange={(e) =>
-            onChange({
-              ...settings,
-              maskDepth: { ...settings.maskDepth, [param]: Number(e.target.value) },
-            })
-          }
-          aria-label={`Solder mask ${label.toLowerCase()}`}
+          onChange={(e) => onChange(Number(e.target.value))}
+          aria-label={ariaLabel ?? label}
         />
-        <span className={styles.sliderValue}>{value.toFixed(2)}</span>
+        <span className={styles.sliderValue}>{format(value)}</span>
       </div>
     </>
   );
