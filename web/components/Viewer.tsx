@@ -8,7 +8,7 @@ import {
 } from "@react-three/drei";
 import { Canvas, useThree } from "@react-three/fiber";
 import { Bloom, EffectComposer, N8AO, Vignette } from "@react-three/postprocessing";
-import { memo, useEffect } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 
 import { PcbModel } from "./pcb/PcbModel";
 import type { BoardData } from "@/lib/pcb-types";
@@ -57,6 +57,12 @@ function DevCameraHook() {
 }
 interface THREE_Vec { set: (x: number, y: number, z: number) => void }
 
+/** The slice of n8ao's (untyped) N8AOPostPass the viewer configures. */
+interface AoPass {
+  autoDetectTransparency: boolean;
+  configuration: { transparencyAware: boolean };
+}
+
 /**
  * Procedural environment (no network fetches), keyed so a rig change rebuilds
  * the cubemap. Memoized: with unstable children, every settings update — each
@@ -85,8 +91,32 @@ export function Viewer({ data, settings }: Props) {
   const backdrop = BACKDROP_MAP[settings.backdrop] ?? BACKDROPS[0];
   const rig = LIGHTING_MAP[settings.lighting] ?? LIGHTING[0];
 
+  // n8ao's half-res path renders depth into an R32F color target, which
+  // WebGL2 only allows with this extension — n8ao has no check or fallback,
+  // so without it the AO would composite garbage. Full-res AO works on the
+  // half-float targets every WebGL2 stack supports.
+  const [floatTargets, setFloatTargets] = useState(true);
+
+  const aoRef = useCallback((pass: AoPass | null) => {
+    if (pass) {
+      // The mask (opacity 0.96, depth-writing) and via barrels are
+      // `transparent` materials, which makes n8ao auto-enable its
+      // transparency-aware path: two extra full-resolution scene renders per
+      // frame, never halved by halfRes. It buys nothing here — the mask's
+      // depth write already puts AO on its top surface — so pin the cheap path.
+      pass.autoDetectTransparency = false;
+      pass.configuration.transparencyAware = false;
+    }
+    // Dev-only: live AO tuning from the console (pass.configuration).
+    if (process.env.NODE_ENV !== "production")
+      (window as unknown as Record<string, unknown>).__ao = pass ?? undefined;
+  }, []);
+
   return (
     <Canvas
+      onCreated={({ gl }) => {
+        setFloatTargets(gl.getContext().getExtension("EXT_color_buffer_float") !== null);
+      }}
       dpr={[1, 2]}
       // Render only when something changed (interaction, explode animation,
       // settings) — an idle viewer costs zero GPU. Sources that need frames
@@ -144,22 +174,21 @@ export function Viewer({ data, settings }: Props) {
         {/* Ambient occlusion pools soft shadow under component bodies, along
             pin rows and against connector shells. Radii are in board units
             (mm): 2.5mm reach with a tight falloff keeps it a contact effect
-            rather than a scene-wide darkening. halfRes + depth-aware
-            upsampling for weak GPUs; the panel toggle is the escape hatch. */}
-        <N8AO
-          enabled={settings.ambientOcclusion}
-          aoRadius={2.5}
-          distanceFalloff={0.5}
-          intensity={3}
-          quality="medium"
-          halfRes
-          depthAwareUpsampling
-          ref={(pass) => {
-            // Dev-only: live AO tuning from the console (pass.configuration).
-            if (process.env.NODE_ENV !== "production" && pass)
-              (window as unknown as Record<string, unknown>).__ao = pass;
-          }}
-        />
+            rather than a scene-wide darkening. Mounted conditionally rather
+            than via `enabled`: a merely-present pass still costs a per-frame
+            full-res depth blit, a trailing copy pass and ~tens of MB of
+            targets, so only unmounting makes the toggle a real escape hatch. */}
+        {settings.ambientOcclusion && (
+          <N8AO
+            aoRadius={2.5}
+            distanceFalloff={0.5}
+            intensity={3}
+            quality="medium"
+            halfRes={floatTargets}
+            depthAwareUpsampling
+            ref={aoRef}
+          />
+        )}
         {/* Threshold sits above what a lit diffuse white reaches so bodies
             (connector shells, module can) never bloom — only specular glints. */}
         <Bloom mipmapBlur intensity={0.35} luminanceThreshold={1.4} luminanceSmoothing={0.25} />
