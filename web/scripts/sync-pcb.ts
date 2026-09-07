@@ -174,9 +174,11 @@ async function sync() {
   }
 
   // The raw export is one primitive per CAD face (~8k draw calls) — collapse
-  // it to per-material primitives split into top/bottom sides.
+  // it within each component, retaining reference designators for selection.
   console.log("→ optimizing components.glb (gltf-transform)…");
-  await optimizeGlb(tmpGlb, board.meta.boardThickness / 2 / 1000);
+  const refs = await optimizeGlb(tmpGlb, board.meta.boardThickness / 2 / 1000);
+  for (const part of board.connectivity.components) part.modelPresent = refs.has(part.ref);
+  writeFileSync(tmpJson, JSON.stringify(board));
 
   // ------------------------------------------- validated → move into place
   copyFileSync(tmpJson, join(outDir, "board.json"));

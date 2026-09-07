@@ -1,9 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
-const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
+const sans = localFont({
+  src: "./fonts/ibm-plex-sans-latin-400-normal.woff2",
+  variable: "--font-sans",
+});
+const mono = localFont({
+  src: "./fonts/ibm-plex-mono-latin-400-normal.woff2",
+  variable: "--font-mono",
+});
 
 export const metadata: Metadata = {
   title: "light — PCB",
@@ -26,9 +32,7 @@ export default function RootLayout({
         <link rel="preload" href="/pcb/board.json" as="fetch" />
         <link rel="preload" href="/pcb/components.glb" as="fetch" />
       </head>
-      <body className={`${geist.variable} ${geistMono.variable}`}>
-        {children}
-      </body>
+      <body className={`${sans.variable} ${mono.variable}`}>{children}</body>
     </html>
   );
 }

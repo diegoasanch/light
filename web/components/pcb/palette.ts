@@ -7,16 +7,14 @@
  * whole 3D stack stays behind ViewerShell's dynamic() split.
  */
 export const PALETTE = {
-  // Calibrated 2026-09-01 against photos of the fabbed boards (median mask
-  // HSV of the render matched to the photo's H214 S0.84 V0.79; base hue is
-  // pre-shifted cyan-ward to cancel the ACES blue→violet skew), then final
-  // shade hand-picked by Diego with the in-panel picker: HSL(211, 96%, 30%).
-  maskBlue: "#034a96",
-  maskBlueDark: "#062f6b",
-  goldEnig: "#cfa94f",
+  // Visual match to the assembled-board photo: muted cyan-blue mask and
+  // restrained brass contacts rather than saturated cobalt/yellow.
+  maskBlue: "#075399",
+  maskBlueDark: "#063566",
+  goldEnig: "#bba16a",
   copper: "#b06a36",
-  silk: "#eef1f4",
+  silk: "#e5e6df",
   fr4Core: "#8e8163",
   fr4Prepreg: "#a4966f",
-  barrel: "#b8933f",
+  barrel: "#a38a56",
 } as const;

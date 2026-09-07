@@ -1,0 +1,339 @@
+.panel {
+  position: absolute;
+  top: 88px;
+  left: 18px;
+  width: 272px;
+  max-height: calc(100dvh - 110px);
+  overflow: auto;
+  padding: 16px;
+  background: var(--panel);
+  backdrop-filter: blur(14px);
+  border-radius: 14px;
+  box-shadow:
+    inset 0 1px 0 #ffffff0f,
+    0 0 0 1px var(--border),
+    0 2px 3px -1px #0009,
+    0 12px 30px -12px #000b;
+  scrollbar-width: thin;
+}
+.heading {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-1);
+  font:
+    10px var(--font-mono),
+    monospace;
+  letter-spacing: 0.08em;
+  margin-bottom: 14px;
+}
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+.panel button {
+  cursor: pointer;
+  font: inherit;
+  color: var(--text-1);
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  min-height: 44px;
+  padding: 7px 9px;
+  text-align: left;
+  transition:
+    background-color 140ms var(--ease-out),
+    color 140ms var(--ease-out);
+}
+.tabs button {
+  flex: 1;
+  text-transform: capitalize;
+  text-align: center;
+  font-size: 12px;
+}
+.panel button:hover {
+  background: var(--tint);
+  color: var(--text-0);
+}
+.panel button[aria-pressed="true"] {
+  background: var(--accent-dim);
+  color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+}
+.panel input {
+  width: 100%;
+  background: var(--bg-0);
+  color: var(--text-0);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px;
+  font: inherit;
+  font-size: 12px;
+}
+.panel :is(button, input, a):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.list {
+  max-height: calc(100dvh - 285px);
+  overflow: auto;
+  margin: 10px -4px;
+  scrollbar-width: thin;
+}
+.list button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+  font-size: 12px;
+}
+.list button span {
+  overflow-wrap: anywhere;
+}
+.list small {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.65;
+}
+.detail {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+.detail h2 {
+  font-size: 16px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.detail p {
+  color: var(--text-1);
+  font-size: 11px;
+  line-height: 1.6;
+  margin: 10px 0;
+}
+.actions {
+  display: flex;
+  gap: 6px;
+  margin: 12px 0;
+}
+.actions button {
+  font-size: 11px;
+  background: var(--tint);
+}
+.detail dl {
+  font-size: 11px;
+  line-height: 1.6;
+  margin: 12px 0;
+}
+.detail dt {
+  color: var(--text-1);
+  margin-top: 8px;
+}
+.detail dd {
+  overflow-wrap: anywhere;
+}
+.detail a {
+  color: var(--accent);
+  font-size: 12px;
+  display: inline-block;
+  padding: 12px 0;
+}
+.connections {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  max-height: 140px;
+  overflow: auto;
+  margin-top: 10px;
+}
+.connections button {
+  font:
+    10px var(--font-mono),
+    monospace;
+  background: var(--tint);
+  overflow-wrap: anywhere;
+}
+@media (max-width: 800px) {
+  .panel {
+    top: auto;
+    bottom: 78px;
+    left: 12px;
+    width: 250px;
+    max-height: 42vh;
+  }
+  .list {
+    max-height: 16vh;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .panel button {
+    transition: none;
+  }
+}
+
+.rightPanel {
+  left: auto;
+  right: 18px;
+  width: 300px;
+}
+.rightPanel .heading {
+  align-items: center;
+  margin-bottom: 4px;
+}
+.rightPanel .heading button {
+  min-width: 44px;
+  text-align: center;
+  font-size: 22px;
+}
+.rightPanel .detail {
+  border-top: 0;
+  padding-top: 0;
+}
+@media (max-width: 800px) {
+  .rightPanel {
+    left: auto;
+    right: 12px;
+    width: min(300px, calc(100vw - 24px));
+    z-index: 2;
+  }
+}
+
+.netHeading {
+  margin-top: 18px;
+  color: var(--text-1);
+  font: 10px var(--font-mono), monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.netLegend {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+}
+.netLegend li + li {
+  border-top: 1px solid var(--border);
+}
+.netLegend button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  font: 11px var(--font-mono), monospace;
+  overflow-wrap: anywhere;
+}
+.netSwatch {
+  flex: 0 0 12px;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px #ffffff30;
+}
+
+.detailStack {
+  position: absolute;
+  top: 88px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: calc(100dvh - 110px);
+}
+.detailStack .panel {
+  position: static;
+  width: 100%;
+  max-height: none;
+  min-height: 0;
+}
+.detailStack .detailCard {
+  flex: 0 1 auto;
+  overflow-y: auto;
+}
+.detailStack .netsCard {
+  flex: 0 1 auto;
+  max-height: min(320px, 36dvh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.netsCard .netHeading {
+  margin-top: 0;
+}
+.identity dd {
+  color: var(--text-0);
+  font-size: 14px;
+}
+.moreDetails {
+  margin-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+}
+.moreDetails > summary {
+  cursor: pointer;
+  padding: 14px 0;
+  color: var(--text-1);
+}
+.moreDetails > summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+@media (max-width: 800px) {
+  .detailStack {
+    top: auto;
+    bottom: 78px;
+    max-height: 65dvh;
+  }
+  .detailStack .netsCard {
+    max-height: 24dvh;
+  }
+}
+
+.netsCard.panel {
+  padding: 12px;
+}
+.netsCard .netLegend {
+  margin-top: 6px;
+}
+.netsCard .netLegend li + li {
+  border-top: 0;
+}
+.netsCard .netLegend button {
+  min-height: 28px;
+  padding: 4px 2px;
+  gap: 7px;
+  font-size: 10px;
+  line-height: 1.4;
+}
+.netsCard .netSwatch {
+  flex-basis: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+@media (pointer: coarse) {
+  .netsCard .netLegend button {
+    min-height: 44px;
+  }
+}
+
+.componentId {
+  display: block;
+  color: var(--text-1);
+  opacity: 0.7;
+  font: 11px var(--font-mono), monospace;
+  margin-bottom: 6px;
+}
+.identity h2 {
+  font-size: 21px;
+  line-height: 1.25;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+.identity p {
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 10px 0 2px;
+}
+
+@media (min-width: 801px) {
+  .detailStack {
+    top: 160px;
+    max-height: calc(100dvh - 182px);
+  }
+}

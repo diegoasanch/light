@@ -1,15 +1,24 @@
 "use client";
 
 import {
-  ContactShadows,
+  GizmoHelper,
+  GizmoViewport,
   Environment,
   Lightformer,
   OrbitControls,
 } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Bloom, EffectComposer, N8AO, Vignette } from "@react-three/postprocessing";
-import { memo, useCallback, useEffect, useRef, useState } from "react";
-import type { DirectionalLight } from "three";
+import {
+  Bloom,
+  Outline,
+  EffectComposer,
+  Vignette,
+} from "@react-three/postprocessing";
+import { Box3, PerspectiveCamera, Vector3 } from "three";
+import { highlightedCopper } from "@/lib/net-colors";
+import { resolveSelection, type Selection } from "@/lib/selection";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { Object3D, DirectionalLight } from "three";
 
 import { PcbModel } from "./pcb/PcbModel";
 import { recordFrame } from "@/lib/frame-stats";
@@ -27,6 +36,8 @@ import {
 /** Key-light distance from the board center (mm). Direction is what matters
  * for a directional light; this only has to clear the shadow frustum. */
 const SUN_DISTANCE = 120;
+const DEFAULT_CAMERA_POSITION: [number, number, number] = [0, 76, 55];
+const DEFAULT_CAMERA_TARGET = new Vector3(0, 1, 0);
 /** Half-extent (mm) of the shadow frustum: the 58×40 board plus the fully
  * exploded stack and components, at any light angle. */
 const SHADOW_HALF = 50;
@@ -53,6 +64,10 @@ function setupSunShadow(light: DirectionalLight | null) {
 interface Props {
   data: BoardData;
   settings: ViewerSettings;
+  selection: Selection;
+  isolate: boolean;
+  onSelect: (s: Selection) => void;
+  cameraResetKey?: number;
 }
 
 /** Dev-only: `window.__cam(px, py, pz, tx, ty, tz)` for scripted camera moves. */
@@ -61,7 +76,10 @@ function DevCameraHook() {
   const gl = useThree((s) => s.gl);
   const scene = useThree((s) => s.scene);
   const invalidate = useThree((s) => s.invalidate);
-  const controls = useThree((s) => s.controls) as { target?: THREE_Vec; update?: () => void } | null;
+  const controls = useThree((s) => s.controls) as {
+    target?: THREE_Vec;
+    update?: () => void;
+  } | null;
   useEffect(() => {
     if (process.env.NODE_ENV === "production") return;
     const w = window as unknown as Record<string, unknown>;
@@ -85,26 +103,146 @@ function DevCameraHook() {
   }, [camera, controls, gl, scene, invalidate]);
   return null;
 }
-interface THREE_Vec { set: (x: number, y: number, z: number) => void }
+interface THREE_Vec {
+  set: (x: number, y: number, z: number) => void;
+}
 
-/**
- * Render the shadow map once per frame, not once per scene render. Every
- * frame draws the scene twice — ContactShadows' top-down depth pass and the
- * composer's beauty pass — and three would redraw all casters into the
- * shadow map for each. Flagging it dirty at the top of the frame lets the
- * first pass build it and the second reuse it.
- */
-function ShadowMapOncePerFrame() {
+/** Offscreen shadow passes run before the composer and must start clean.
+ * The composer owns autoClear during its own render (Outline needs false). */
+function ClearOffscreenFrames() {
   const gl = useThree((s) => s.gl);
+  useFrame(() => {
+    gl.autoClear = true;
+  }, -3);
+  return null;
+}
+
+/** Reuse the directional light's shadow map during camera-only movement. */
+function CachedLightShadow({ revision }: { revision: object }) {
+  const gl = useThree((s) => s.gl);
+  const invalidate = useThree((s) => s.invalidate);
+  const [live, setLive] = useState(true);
+  const dirty = useRef(true);
   useEffect(() => {
     gl.shadowMap.autoUpdate = false;
-    return () => {
-      gl.shadowMap.autoUpdate = true;
-    };
+    return () => { gl.shadowMap.autoUpdate = true; };
   }, [gl]);
+  useEffect(() => {
+    dirty.current = true;
+    setLive(true);
+    invalidate();
+    const timer = window.setTimeout(() => {
+      setLive(false);
+      invalidate();
+    }, 1600);
+    return () => window.clearTimeout(timer);
+  }, [revision, invalidate]);
   useFrame(() => {
-    gl.shadowMap.needsUpdate = true;
-  }, -1);
+    if (live || dirty.current) {
+      gl.shadowMap.needsUpdate = true;
+      dirty.current = false;
+    }
+  }, -2);
+  return null;
+}
+
+/** Frame-rate-independent orbit decay, with a hard stop after release. */
+function OrbitSettling() {
+  const controls = useThree((s) => s.controls) as unknown as {
+    target: Vector3; dampingFactor: number; enableDamping: boolean;
+    autoRotate: boolean; update: () => void;
+    addEventListener: (name: string, listener: () => void) => void;
+    removeEventListener: (name: string, listener: () => void) => void;
+  } | null;
+  const camera = useThree((s) => s.camera);
+  const invalidate = useThree((s) => s.invalidate);
+  useFrame((_, dt) => {
+    if (controls) controls.dampingFactor = 1 - Math.exp(-14 * Math.min(dt, 0.1));
+  }, -1.5);
+  useEffect(() => {
+    if (!controls) return;
+    let timer = 0;
+    const cancel = () => window.clearTimeout(timer);
+    const release = () => {
+      cancel();
+      timer = window.setTimeout(() => {
+        // Clear OrbitControls' private angular/pan velocity without applying
+        // the remaining motion as a visible jump.
+        const position = camera.position.clone();
+        const target = controls.target.clone();
+        const damping = controls.enableDamping;
+        const rotating = controls.autoRotate;
+        controls.autoRotate = false;
+        controls.enableDamping = false;
+        controls.update();
+        camera.position.copy(position);
+        controls.target.copy(target);
+        controls.update();
+        controls.enableDamping = damping;
+        controls.autoRotate = rotating;
+        invalidate();
+      }, 800);
+    };
+    controls.addEventListener("start", cancel);
+    controls.addEventListener("end", release);
+    return () => {
+      cancel();
+      controls.removeEventListener("start", cancel);
+      controls.removeEventListener("end", release);
+    };
+  }, [controls, camera, invalidate]);
+  return null;
+}
+
+/** Spend pixels on still frames; keep a measured 30 FPS budget while moving. */
+function MotionResolution() {
+  const camera = useThree((s) => s.camera);
+  const setDpr = useThree((s) => s.setDpr);
+  const invalidate = useThree((s) => s.invalidate);
+  const nativeDpr = useThree((s) => s.viewport.initialDpr);
+  const state = useRef({
+    position: new Vector3(), quaternion: camera.quaternion.clone(),
+    moving: false, resolution: 1, samples: 0, elapsed: 0,
+    timer: 0,
+  });
+  useEffect(() => () => window.clearTimeout(state.current.timer), []);
+  useFrame((_, dt) => {
+    const s = state.current;
+    const changed = camera.position.distanceToSquared(s.position) > 1e-8 ||
+      1 - Math.abs(camera.quaternion.dot(s.quaternion)) > 1e-10;
+    s.position.copy(camera.position);
+    s.quaternion.copy(camera.quaternion);
+    if (!changed) return;
+    window.clearTimeout(s.timer);
+    if (!s.moving) {
+      s.moving = true;
+      s.samples = 0;
+      s.elapsed = 0;
+      setDpr(Math.min(nativeDpr, s.resolution));
+    } else if (dt > 0 && dt < 0.2) {
+      s.samples++;
+      s.elapsed += dt;
+      // Change infrequently: render-target reallocations must not happen
+      // every frame. Keep the learned moving resolution for the next orbit.
+      if (s.samples >= 24) {
+        const average = s.elapsed / s.samples;
+        const next = average > 1 / 32
+          ? Math.max(0.6, s.resolution - 0.15)
+          : average < 1 / 50 ? Math.min(1, s.resolution + 0.1) : s.resolution;
+        if (next !== s.resolution) {
+          s.resolution = next;
+          setDpr(Math.min(nativeDpr, next));
+        }
+        s.samples = 0;
+        s.elapsed = 0;
+      }
+    }
+    s.timer = window.setTimeout(() => {
+      s.moving = false;
+      setDpr(nativeDpr);
+      invalidate();
+    }, 220);
+  });
   return null;
 }
 
@@ -113,7 +251,7 @@ function ShadowMapOncePerFrame() {
  * frame is stamped once it has actually been rendered.
  */
 function FrameStatsProbe() {
-  useFrame(() => recordFrame(performance.now()), 2);
+  useFrame(() => recordFrame(performance.now()), 4);
   return null;
 }
 
@@ -123,19 +261,17 @@ interface ComposerBuffers {
   outputBuffer: { dispose(): void };
 }
 
-/** The slice of n8ao's (untyped) N8AOPostPass the viewer configures. */
-interface AoPass {
-  autoDetectTransparency: boolean;
-  configuration: { transparencyAware: boolean };
-}
-
 /**
  * Procedural environment (no network fetches), keyed so a rig change rebuilds
  * the cubemap. Memoized: with unstable children, every settings update — each
  * explode-slider input event included — would re-render the env scene and
  * force a full PMREM rebuild despite frames={1}.
  */
-const EnvironmentRig = memo(function EnvironmentRig({ rig }: { rig: LightingDef }) {
+const EnvironmentRig = memo(function EnvironmentRig({
+  rig,
+}: {
+  rig: LightingDef;
+}) {
   return (
     <Environment
       key={rig.id}
@@ -158,30 +294,21 @@ const EnvironmentRig = memo(function EnvironmentRig({ rig }: { rig: LightingDef 
   );
 });
 
-export function Viewer({ data, settings }: Props) {
+export function Viewer({
+  data,
+  settings,
+  selection,
+  isolate,
+  onSelect,
+  cameraResetKey = 0,
+}: Props) {
+  const [outlined, setOutlined] = useState<Object3D[]>([]);
+  const [hovered, setHovered] = useState<Object3D[]>([]);
+  const glowMeshes = useMemo(() => [...new Set([...outlined, ...hovered])], [outlined, hovered]);
+  const glowActive = !!selection || hovered.length > 0;
+  const shadowRevision = useMemo(() => ({}), [data, settings, selection, isolate, outlined]);
   const backdrop = BACKDROP_MAP[settings.backdrop] ?? BACKDROPS[0];
   const rig = LIGHTING_MAP[settings.lighting] ?? LIGHTING[0];
-
-  // n8ao's half-res path renders depth into an R32F color target, which
-  // WebGL2 only allows with this extension — n8ao has no check or fallback,
-  // so without it the AO would composite garbage. Full-res AO works on the
-  // half-float targets every WebGL2 stack supports.
-  const [floatTargets, setFloatTargets] = useState(true);
-
-  const aoRef = useCallback((pass: AoPass | null) => {
-    if (pass) {
-      // The mask (opacity 0.96, depth-writing) is a `transparent` material,
-      // which makes n8ao auto-enable its transparency-aware path: two extra
-      // full-resolution scene renders per frame, never halved by halfRes. It
-      // buys nothing here — the mask's depth write already puts AO on its
-      // top surface — so pin the cheap path.
-      pass.autoDetectTransparency = false;
-      pass.configuration.transparencyAware = false;
-    }
-    // Dev-only: live AO tuning from the console (pass.configuration).
-    if (process.env.NODE_ENV !== "production")
-      (window as unknown as Record<string, unknown>).__ao = pass ?? undefined;
-  }, []);
 
   const composerImpl = useRef<ComposerBuffers | null>(null);
   const composerRef = useCallback((composer: ComposerBuffers | null) => {
@@ -189,31 +316,22 @@ export function Viewer({ data, settings }: Props) {
     // Dev-only: `window.__composer` = the postprocessing EffectComposer, for
     // inspecting passes / render targets from the console.
     if (process.env.NODE_ENV !== "production")
-      (window as unknown as Record<string, unknown>).__composer = composer ?? undefined;
+      (window as unknown as Record<string, unknown>).__composer =
+        composer ?? undefined;
   }, []);
 
-  // Workaround for postprocessing 6.39 + three r180: unmounting the last
-  // depth-needing pass (N8AO) makes the composer delete the depth texture
-  // from its multisampled buffers WITHOUT disposing them. three then hangs a
-  // default DEPTH24 renderbuffer on the resolve framebuffer while the MSAA
-  // framebuffer keeps its DEPTH32F one; every resolve blit fails with
-  // INVALID_OPERATION, the color never lands, and the screen freezes on the
-  // last good frame (frames still "render", so the fps readout keeps moving).
-  // Disposing the buffers makes three rebuild both framebuffers together, with
-  // matching depth formats. Runs after the composer's own layout effects have
-  // swapped the passes (parent passive effect), and is a harmless no-op when
-  // the pass is mounted (adding it already disposes them).
+  // Recreate matching depth attachments when the outline pass changes.
   useEffect(() => {
     const composer = composerImpl.current;
     if (!composer) return;
     composer.inputBuffer.dispose();
     composer.outputBuffer.dispose();
-  }, [settings.ambientOcclusion]);
+  }, [glowActive]);
 
   return (
     <Canvas
-      onCreated={({ gl }) => {
-        setFloatTargets(gl.getContext().getExtension("EXT_color_buffer_float") !== null);
+      onPointerMissed={(event) => {
+        if (event.type === "click" && event.button === 0) onSelect(null);
       }}
       // PCF-soft shadow maps for the key light. The map itself only exists
       // while `settings.shadows` keeps the light casting.
@@ -223,26 +341,32 @@ export function Viewer({ data, settings }: Props) {
       // settings) — an idle viewer costs zero GPU. Sources that need frames
       // call invalidate(); OrbitControls does so on its change events.
       frameloop="demand"
-      camera={{ position: [-42, 52, 46], fov: 32, near: 0.5, far: 2000 }}
+      camera={{ position: DEFAULT_CAMERA_POSITION, fov: 32, near: 1, far: 600 }}
       // Canvas MSAA would be thrown away — every frame goes through the
       // EffectComposer, which multisamples its own buffers.
       gl={{
         antialias: false,
         stencil: false,
         powerPreference: "high-performance",
-        // Dev-only: keeps the composited frame readable via toDataURL /
-        // drawImage so tooling can measure rendered colors numerically.
-        preserveDrawingBuffer: process.env.NODE_ENV !== "production",
+        preserveDrawingBuffer: false,
       }}
       style={{ background: backdrop.css, transition: "background 400ms ease" }}
     >
+      <ClearOffscreenFrames />
       <DevCameraHook />
-      <ShadowMapOncePerFrame />
+      <MotionResolution />
+      <OrbitSettling />
       <FrameStatsProbe />
+      <FocusCamera data={data} selection={selection} isolate={isolate} cameraResetKey={cameraResetKey} />
       <PcbModel
+        onOutline={setOutlined}
+        onHover={setHovered}
+        selection={selection}
+        isolate={isolate}
+        onSelect={onSelect}
         data={data}
         visibility={settings.visibility}
-        explode={settings.explode}
+        explode={selection ? 0 : settings.explode}
         maskDepth={settings.maskDepth}
         maskColor={settings.maskColor}
       />
@@ -260,51 +384,213 @@ export function Viewer({ data, settings }: Props) {
       />
       <ambientLight intensity={rig.ambient} />
 
-      <ContactShadows
-        position={[0, -14 - settings.explode * 18, 0]}
-        opacity={backdrop.shadowOpacity}
-        scale={150}
-        blur={2.4}
-        far={44 + settings.explode * 22}
-        resolution={512}
-        color={backdrop.shadowColor}
-        frames={Infinity}
-      />
+      <CachedLightShadow revision={shadowRevision} />
 
       <OrbitControls
         makeDefault
         enableDamping
-        dampingFactor={0.08}
+        dampingFactor={0.2}
         minDistance={12}
         maxDistance={280}
-        autoRotate={settings.autoRotate}
+        autoRotate={settings.autoRotate && !isolate}
         autoRotateSpeed={0.9}
       />
 
-      <EffectComposer multisampling={4} ref={composerRef}>
-        {/* Ambient occlusion pools soft shadow under component bodies, along
-            pin rows and against connector shells. Radii are in board units
-            (mm): 2.5mm reach with a tight falloff keeps it a contact effect
-            rather than a scene-wide darkening. Mounted conditionally rather
-            than via `enabled`: a merely-present pass still costs a per-frame
-            full-res depth blit, a trailing copy pass and ~tens of MB of
-            targets, so only unmounting makes the toggle a real escape hatch. */}
-        {settings.ambientOcclusion && (
-          <N8AO
-            aoRadius={2.5}
-            distanceFalloff={0.5}
-            intensity={3}
-            quality="medium"
-            halfRes={floatTargets}
-            depthAwareUpsampling
-            ref={aoRef}
-          />
-        )}
+      <EffectComposer autoClear={!glowActive} multisampling={2} ref={composerRef}>
         {/* Threshold sits above what a lit diffuse white reaches so bodies
             (connector shells, module can) never bloom — only specular glints. */}
-        <Bloom mipmapBlur intensity={0.35} luminanceThreshold={1.4} luminanceSmoothing={0.25} />
+        {glowActive && <Outline
+          selection={glowMeshes}
+          visibleEdgeColor="#75e5ef"
+          hiddenEdgeColor="#75e5ef"
+          edgeStrength={5}
+          blur
+          xRay
+        />}
+        <Bloom
+          mipmapBlur
+          intensity={0.22}
+          luminanceThreshold={1.4}
+          luminanceSmoothing={0.25}
+        />
         <Vignette eskil={false} offset={0.18} darkness={backdrop.vignette} />
       </EffectComposer>
+      <GizmoHelper alignment="top-right" margin={[68, 62]} renderPriority={3}>
+        <GizmoViewport
+          axisColors={["#e78487", "#99c68e", "#7baee4"]}
+          labelColor="#10161e"
+          font="600 17px sans-serif"
+          axisHeadScale={0.85}
+        />
+      </GizmoHelper>
     </Canvas>
   );
+}
+
+/** Recenter orbit on the selected electrical group, preserving viewing direction. */
+function FocusCamera({
+  data,
+  selection,
+  isolate,
+  cameraResetKey,
+}: {
+  data: BoardData;
+  selection: Selection;
+  isolate: boolean;
+  cameraResetKey: number;
+}) {
+  const controls = useThree((s) => s.controls) as unknown as {
+    target: Vector3;
+    autoRotate: boolean;
+    enableDamping: boolean;
+    update: () => void;
+    addEventListener: (n: string, f: () => void) => void;
+    removeEventListener: (n: string, f: () => void) => void;
+  } | null;
+  const camera = useThree((s) => s.camera);
+  const invalidate = useThree((s) => s.invalidate);
+  const scene = useThree((s) => s.scene);
+  const size = useThree((s) => s.size);
+  const goal = useRef<{
+    target: Vector3;
+    position: Vector3;
+    fromTarget: Vector3;
+    fromPosition: Vector3;
+    elapsed: number;
+    started: boolean;
+  } | null>(null);
+  const orbitAutoRotate = useRef<boolean | null>(null);
+  const restoreOrbit = useCallback(() => {
+    if (controls && orbitAutoRotate.current !== null) {
+      controls.autoRotate = orbitAutoRotate.current;
+      orbitAutoRotate.current = null;
+    }
+  }, [controls]);
+  useEffect(() => {
+    if (!controls) return;
+    // Drain residual orbit damping without moving the transition's start pose.
+    const startPosition = camera.position.clone();
+    const startTarget = controls.target.clone();
+    if (orbitAutoRotate.current === null)
+      orbitAutoRotate.current = controls.autoRotate;
+    controls.autoRotate = false;
+    const damping = controls.enableDamping;
+    controls.enableDamping = false;
+    controls.update();
+    controls.enableDamping = damping;
+    camera.position.copy(startPosition);
+    controls.target.copy(startTarget);
+    controls.update();
+    const graph = resolveSelection(data, selection);
+    const cx = (data.bbox.minX + data.bbox.maxX) / 2;
+    const cy = (data.bbox.minY + data.bbox.maxY) / 2;
+    const bounds = new Box3();
+    const include = (x: number, y: number, z: number) =>
+      bounds.expandByPoint(new Vector3(x - cx, y, z - cy));
+
+    // Use the same copper as the highlight, including all active pours
+    // and excluding shared ground. Include endpoints even when a part has no 3D model.
+    for (const net of data.connectivity.nets) {
+      if (!graph.nets.has(net.id)) continue;
+      for (const polygons of Object.values(highlightedCopper(net)))
+        for (const polygon of polygons)
+          for (const [x, z] of polygon[0]) {
+            include(x, 0, z);
+            include(x, data.meta.boardThickness, z);
+          }
+      for (const index of net.vias) {
+        const [x, z, diameter] = data.vias[index];
+        include(x - diameter / 2, 0, z - diameter / 2);
+        include(x + diameter / 2, data.meta.boardThickness, z + diameter / 2);
+      }
+    }
+    for (const part of data.connectivity.components) {
+      if (!graph.connected.has(part.ref)) continue;
+      include(part.position[0], 0, part.position[1]);
+      for (const pad of part.pads)
+        include(pad.position[0], data.meta.boardThickness, pad.position[1]);
+    }
+    scene.updateMatrixWorld(true);
+    scene.traverse((object) => {
+      if (graph.connected.has(object.userData.ref))
+        bounds.union(new Box3().setFromObject(object));
+    });
+    if (bounds.isEmpty()) {
+      include(data.bbox.minX, 0, data.bbox.minY);
+      include(data.bbox.maxX, data.meta.boardThickness, data.bbox.maxY);
+    }
+    const target = bounds.getCenter(new Vector3());
+    const direction = camera.position.clone().sub(controls.target).normalize();
+    const right = new Vector3().crossVectors(camera.up, direction).normalize();
+    const up = new Vector3().crossVectors(direction, right).normalize();
+    const tanY = camera instanceof PerspectiveCamera
+      ? Math.tan(camera.getEffectiveFOV() * Math.PI / 360)
+      : Math.tan(35 * Math.PI / 360);
+    const tanX = tanY * size.width / size.height;
+    let distance = 12;
+    // Fit every corner in camera space, including depth, with 12% breathing room.
+    for (const x of [bounds.min.x, bounds.max.x])
+      for (const y of [bounds.min.y, bounds.max.y])
+        for (const z of [bounds.min.z, bounds.max.z]) {
+          const corner = new Vector3(x, y, z).sub(target);
+          distance = Math.max(distance, corner.dot(direction) + 1.12 * Math.max(
+            Math.abs(corner.dot(right)) / tanX,
+            Math.abs(corner.dot(up)) / tanY,
+          ));
+        }
+    const position = selection
+      ? direction.multiplyScalar(distance).add(target)
+      : new Vector3(...DEFAULT_CAMERA_POSITION);
+    if (!selection) target.copy(DEFAULT_CAMERA_TARGET);
+    goal.current = {
+      target, position,
+      fromTarget: controls.target.clone(),
+      fromPosition: camera.position.clone(),
+      elapsed: 0,
+      started: false,
+    };
+    if (
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      controls.target.copy(target);
+      camera.position.copy(position);
+      controls.update();
+      goal.current = null;
+      restoreOrbit();
+    }
+    invalidate();
+  }, [data, selection, isolate, cameraResetKey, controls, camera, invalidate, scene, size.width, size.height, restoreOrbit]);
+  useEffect(() => {
+    if (!controls) return;
+    const stop = () => {
+      goal.current = null;
+      restoreOrbit();
+    };
+    controls.addEventListener("start", stop);
+    return () => {
+      controls.removeEventListener("start", stop);
+      restoreOrbit();
+    };
+  }, [controls, restoreOrbit]);
+  useFrame((_, dt) => {
+    if (!goal.current || !controls) return;
+    const motion = goal.current;
+    // Demand rendering reports idle time in the first frame's delta. Start
+    // at the current pose, and cap stalls so material/shader work cannot jump
+    // the camera ahead by a large fraction of the transition.
+    if (motion.started) motion.elapsed += Math.min(dt, 1 / 30);
+    motion.started = true;
+    controls.autoRotate = false;
+    const t = Math.min(1, motion.elapsed / 1.15);
+    const eased = t * t * (3 - 2 * t);
+    controls.target.lerpVectors(motion.fromTarget, motion.target, eased);
+    camera.position.lerpVectors(motion.fromPosition, motion.position, eased);
+    controls.update();
+    if (t === 1) {
+      goal.current = null;
+      restoreOrbit();
+    }
+    else invalidate();
+  });
+  return null;
 }

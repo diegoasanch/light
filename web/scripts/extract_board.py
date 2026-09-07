@@ -412,7 +412,7 @@ def main():
             plated = 0 if pad.GetAttribute() == pcbnew.PAD_ATTRIB_NPTH else 1
             pos = pad.GetPosition()
             if ds.x == ds.y:
-                holes_round.append([mm(pos.x), mm(pos.y), mm(ds.x), plated])
+                holes_round.append([mm(pos.x), mm(pos.y), mm(ds.x), plated, pad.GetNetCode()])
             else:
                 hole = pad.GetEffectiveHoleShape()
                 seg = hole.GetSeg()
@@ -421,6 +421,7 @@ def main():
                     "b": [mm(seg.B.x), mm(seg.B.y)],
                     "width": mm(hole.GetWidth()),
                     "plated": plated,
+                    "net": pad.GetNetCode(),
                 })
 
     stackup = read_stackup(board_path)
@@ -432,7 +433,11 @@ def main():
         entry["exposed"] = to_multipolygon(exposed[side]) if side else []
         copper_json[layer_name] = entry
 
+    from connectivity import extract
+    connectivity = extract(board, board_path, footprints, tracks, vias, outline, globals())
+
     data = {
+        "connectivity": connectivity,
         "meta": {
             "source": board_path.split("/")[-1],
             "generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),

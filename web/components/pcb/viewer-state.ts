@@ -125,8 +125,10 @@ export const ALL_VISIBLE: LayerVisibility = {
 
 // Hoisted so DEFAULT_SETTINGS can derive its key light from the studio rig
 // (declared further down with the rest of the scene definitions).
-const DEFAULT_SUN: [number, number, number] = [-35, 60, 25];
-const DEFAULT_SUN_INTENSITY = 5;
+const DEFAULT_SUN: [number, number, number] = sunPosition(
+  { azimuth: 133, elevation: 60, intensity: 4.5 }, 80,
+);
+const DEFAULT_SUN_INTENSITY = 4.5;
 
 export const DEFAULT_SETTINGS: ViewerSettings = {
   visibility: ALL_VISIBLE,
@@ -134,7 +136,7 @@ export const DEFAULT_SETTINGS: ViewerSettings = {
   // User-tuned against the physical boards (2026-09-01).
   maskDepth: { strength: 0.4, blurSigma: 0.6, overlap: 0.05, invert: false },
   maskColor: PALETTE.maskBlue,
-  ambientOcclusion: true,
+  ambientOcclusion: false,
   shadows: true,
   autoRotate: false,
   theme: "dark",
@@ -224,8 +226,8 @@ export const BACKDROPS: BackdropDef[] = [
     id: "midnight",
     label: "Midnight",
     theme: "dark",
-    css: "radial-gradient(120% 90% at 50% 20%, #0e101a 0%, #05070d 60%, #020307 100%)",
-    vignette: 0.72,
+    css: "radial-gradient(120% 90% at 50% 20%, #161b26 0%, #0a0c12 60%, #080a10 100%)",
+    vignette: 0.4,
     shadowColor: "#000208",
     shadowOpacity: 0.55,
   },
@@ -297,13 +299,13 @@ export const LIGHTING: LightingDef[] = [
     envBackground: "#06070c",
     envIntensity: 0.77,
     formers: [
-      { intensity: 2.4, position: [0, 60, 0], rotation: [Math.PI / 2, 0, 0], scale: [110, 110], color: "#e7ecff" },
-      { intensity: 1.6, position: [-60, 25, -35], rotation: [0, Math.PI / 2.6, 0], scale: [110, 14], color: "#ffe9c4" },
-      { intensity: 1.1, position: [62, 18, 30], rotation: [0, -Math.PI / 2.4, 0], scale: [100, 10], color: "#bcd2ff" },
-      { intensity: 1.4, position: [0, -55, 40], rotation: [-Math.PI / 2.4, 0, 0], scale: [110, 60], color: "#8fa8d8" },
-      { intensity: 1.0, position: [30, -45, -40], rotation: [Math.PI / 1.7, 0, 0], scale: [90, 40], color: "#ffe2b8" },
+      { intensity: 2.4, position: [0, 60, 0], rotation: [Math.PI / 2, 0, 0], scale: [110, 110], color: "#edf2ff" },
+      { intensity: 1.6, position: [-60, 25, -35], rotation: [0, Math.PI / 2.6, 0], scale: [110, 14], color: "#eaf0ff" },
+      { intensity: 1.1, position: [62, 18, 30], rotation: [0, -Math.PI / 2.4, 0], scale: [100, 10], color: "#dbe5e8" },
+      { intensity: 1.4, position: [0, -55, 40], rotation: [-Math.PI / 2.4, 0, 0], scale: [110, 60], color: "#b7c8ce" },
+      { intensity: 1.0, position: [30, -45, -40], rotation: [Math.PI / 1.7, 0, 0], scale: [90, 40], color: "#dce8fa" },
     ],
-    sun: { position: DEFAULT_SUN, intensity: DEFAULT_SUN_INTENSITY, color: "#fff3dd" },
+    sun: { position: DEFAULT_SUN, intensity: DEFAULT_SUN_INTENSITY, color: "#f2f6ff" },
     ambient: 0.12,
   },
   {

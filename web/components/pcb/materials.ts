@@ -8,8 +8,8 @@ export function createMaterials() {
   const goldExposed = new THREE.MeshPhysicalMaterial({
     color: PALETTE.goldEnig,
     metalness: 1,
-    roughness: 0.28,
-    envMapIntensity: 1.35,
+    roughness: 0.4,
+    envMapIntensity: 0.9,
   });
   const copperCovered = new THREE.MeshPhysicalMaterial({
     color: PALETTE.copper,
@@ -32,12 +32,12 @@ export function createMaterials() {
   const maskParams: THREE.MeshPhysicalMaterialParameters = {
     color: PALETTE.maskBlue,
     metalness: 0,
-    roughness: 0.34,
-    clearcoat: 0.3,
-    clearcoatRoughness: 0.3,
+    roughness: 0.46,
+    clearcoat: 0.18,
+    clearcoatRoughness: 0.42,
     specularIntensity: 0.15,
-    transparent: true,
-    opacity: 0.96,
+    transparent: false,
+    opacity: 1,
     envMapIntensity: 0.2,
   };
   const maskF = new THREE.MeshPhysicalMaterial(maskParams);

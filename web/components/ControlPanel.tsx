@@ -247,11 +247,6 @@ export function ControlPanel({ settings, onChange }: Props) {
           onToggle={(v) => onChange({ ...settings, shadows: v })}
         />
         <SwitchRow
-          label="Ambient occlusion"
-          checked={settings.ambientOcclusion}
-          onToggle={(v) => onChange({ ...settings, ambientOcclusion: v })}
-        />
-        <SwitchRow
           label="Auto-rotate"
           checked={settings.autoRotate}
           onToggle={(v) => onChange({ ...settings, autoRotate: v })}

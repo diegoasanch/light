@@ -64,3 +64,41 @@ The dielectric is modeled for real: two prepreg slabs and the core as
 separate solids with their true thicknesses from the board stackup, drilled
 through by every via/PTH/NPTH hole, with stretching via barrels connecting
 the copper layers in the exploded view.
+
+### Electrical exploration (POC)
+
+`Viewer` is controlled by `selection`, `isolate`, and `onSelect` props; it does
+not import the inspector. A portfolio story can drive `{kind: 'component',
+id: 'U1'}`, `{kind: 'area', id}`, `{kind: 'net', id}`, or `null` directly. The
+shell's Explore / Appearance controls are disposable development UI.
+
+`sync-pcb` exports connectivity from pcbnew before the layer union removes net
+identity. Copper includes tracks, arcs, pads, filled zones, net-assigned copper graphics
+and via annuli. A separate
+`routed` set excludes zone fills for routing-only analysis. Selection renders the
+full copper geometry, including pours, for every active net regardless of its
+name. Unselected nets (including shared GND) remain dark glass; via barrels
+retain their net membership. Schematic enclosure rectangles determine
+areas, with the largest label as the area title. Component references survive
+GLB optimization (CAD faces merge inside a component, never across references).
+`modelPresent` distinguishes real exported models from unmodeled/excluded parts.
+
+Isolation is a **one-hop electrical neighborhood**: all nets on the seed part,
+then every part on those nets. Shared GND is excluded for component and area
+selection; power remains included. Selecting GND directly still shows its full
+network. It does not
+recursively include new nets from neighboring components. Selection assembles
+the stack; moving the explode control clears selection. Escape clears focus.
+Mask films sit entirely outside the copper volumes; mask relief remains a
+normal map. Inspection temporarily fades the board so buried nets are visible.
+
+Manufacturer references supplement empty schematic datasheets in
+`lib/component-specs.ts`; remaining metadata is extracted from KiCad. Do not
+infer ratings from a generic footprint or invent models for missing parts.
+
+Validation: `bun test lib/selection.test.ts`, `pnpm lint`, `pnpm build`.
+Use `PCB_BUILD_DIR=.next-build pnpm build` while the dev server is running to
+keep production output separate. Fonts are the portfolio's local IBM Plex files.
+
+Component and area focus keep supply copper active, but neighbors connected only
+through power nets remain glass. Explicit net selection shows all its components.

@@ -16,6 +16,7 @@ export interface StackupLayer {
 }
 
 export interface BoardData {
+  connectivity: Connectivity;
   meta: {
     source: string;
     generated: string;
@@ -25,15 +26,18 @@ export interface BoardData {
   bbox: { minX: number; minY: number; maxX: number; maxY: number };
   stackup: StackupLayer[] | null;
   outline: MultiPolygon;
-  copper: Record<CopperLayerName, { covered: MultiPolygon; exposed: MultiPolygon }>;
+  copper: Record<
+    CopperLayerName,
+    { covered: MultiPolygon; exposed: MultiPolygon }
+  >;
   mask: Record<Side, MultiPolygon>;
   silk: Record<Side, MultiPolygon>;
   /** [x, y, size, drill] mm */
   vias: [number, number, number, number][];
   holes: {
-    /** [x, y, diameter, plated] */
-    round: [number, number, number, 0 | 1][];
-    slots: { a: Pair; b: Pair; width: number; plated: 0 | 1 }[];
+    /** [x, y, diameter, plated, net code] */
+    round: [number, number, number, 0 | 1, number][];
+    slots: { a: Pair; b: Pair; width: number; plated: 0 | 1; net: number }[];
   };
   counts: { tracks: number; vias: number; footprints: number; zones: number };
 }
@@ -73,8 +77,7 @@ const SILK_THICKNESS = 0.012;
  * y = 0 is the outer face of the bottom solder mask; the top mask's outer
  * face lands at the physical board thickness.
  *
- * Mask slabs envelope their copper layer (mask thickness + copper thickness)
- * so pads sit recessed inside real mask openings, like on the fab.
+ * Solder mask is a distinct film outside the copper, with real pad openings.
  */
 export function computeStack(data: BoardData): BoardStack {
   const src = (data.stackup ?? FALLBACK_STACKUP).filter(
@@ -97,20 +100,41 @@ export function computeStack(data: BoardData): BoardStack {
     } else if (l.type === "prepreg" || l.type === "core") {
       dielectric.push({ name: l.name, type: l.type, slot });
     } else if (l.name.startsWith("B.")) {
-      mask.B = slot; // grows upward to envelope B.Cu, adjusted below
+      mask.B = slot;
     } else {
       mask.F = slot;
     }
     y = slot.y1;
   }
   const total = y;
-  // Envelope the copper: B mask spans [0, top of B.Cu], F mask spans
-  // [bottom of F.Cu, total].
-  mask.B = { y0: 0, y1: copper["B.Cu"].y1 };
-  mask.F = { y0: copper["F.Cu"].y0, y1: total };
   const silk: BoardStack["silk"] = {
     B: { y0: -SILK_THICKNESS, y1: 0 },
     F: { y0: total, y1: total + SILK_THICKNESS },
   };
   return { copper, dielectric, mask, silk, total };
+}
+
+export interface BoardComponent {
+  modelPresent?: boolean;
+  ref: string;
+  value: string;
+  footprint: string;
+  side: Side;
+  position: Pair;
+  area: string;
+  properties: Record<string, string>;
+  datasheet: string;
+  models: string[];
+  pads: { number: string; net: number; name: string; position: Pair }[];
+}
+export interface Connectivity {
+  areas: { id: string; name: string; bounds: number[] }[];
+  components: BoardComponent[];
+  nets: {
+    id: number;
+    name: string;
+    copper: Record<CopperLayerName, MultiPolygon>;
+    routed: Record<CopperLayerName, MultiPolygon>;
+    vias: number[];
+  }[];
 }

@@ -6,6 +6,8 @@
  * barrels, components) is its own group so visibility can be toggled
  * independently, and each carries an explode slot for the exploded view.
  */
+import { NetHighlight } from "./NetHighlight";
+import { resolveSelection, type Selection } from "@/lib/selection";
 import { useGLTF } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import {
@@ -27,7 +29,11 @@ import {
   slotBarrelGeometry,
   viaBarrels,
 } from "@/lib/build-geometry";
-import { computeStack, type BoardData, type CopperLayerName } from "@/lib/pcb-types";
+import {
+  computeStack,
+  type BoardData,
+  type CopperLayerName,
+} from "@/lib/pcb-types";
 import { bakeCopperNormalMap, type CopperBake } from "./copper-bump";
 import { createMaterials } from "./materials";
 import type { LayerVisibility, MaskDepthSettings } from "./viewer-state";
@@ -36,6 +42,11 @@ const EXPLODE_GAP = 3.4; // mm of extra separation per slot at full explode
 const BAKE_DEBOUNCE_MS = 150; // coalesce slider-drag re-bakes
 
 interface Props {
+  selection: Selection;
+  isolate: boolean;
+  onOutline: (meshes: THREE.Object3D[]) => void;
+  onHover: (meshes: THREE.Object3D[]) => void;
+  onSelect: (s: Selection) => void;
   data: BoardData;
   visibility: LayerVisibility;
   explode: number; // 0..1 target; animated internally
@@ -45,12 +56,41 @@ interface Props {
 
 const COPPER_ORDER: CopperLayerName[] = ["F.Cu", "In1.Cu", "In2.Cu", "B.Cu"];
 
-export function PcbModel({ data, visibility, explode, maskDepth, maskColor }: Props) {
+export function PcbModel({
+  data,
+  visibility,
+  explode,
+  maskDepth,
+  maskColor,
+  selection,
+  isolate,
+  onSelect,
+  onOutline,
+  onHover,
+}: Props) {
   const cx = (data.bbox.minX + data.bbox.maxX) / 2;
   const cy = (data.bbox.minY + data.bbox.maxY) / 2;
 
   const stack = useMemo(() => computeStack(data), [data]);
   const materials = useMemo(() => createMaterials(), []);
+  const graph = useMemo(
+    () => resolveSelection(data, selection),
+    [data, selection],
+  );
+  const focused = !!selection;
+  useEffect(() => {
+    for (const mat of Object.values(materials)) {
+      if (!mat.userData.restColor) mat.userData.restColor = mat.color.clone();
+      mat.color.copy(
+        focused ? new THREE.Color("#17212b") : mat.userData.restColor,
+      );
+      const transparencyChanged = mat.transparent !== focused;
+      mat.transparent = focused;
+      mat.opacity = focused ? (isolate ? 0.025 : 0.045) : 1;
+      mat.depthWrite = !focused;
+      if (transparencyChanged) mat.needsUpdate = true;
+    }
+  }, [materials, focused, isolate]);
 
   // Dev-only: live material tweaking from the console (color calibration).
   useEffect(() => {
@@ -76,8 +116,18 @@ export function PcbModel({ data, visibility, explode, maskDepth, maskColor }: Pr
       };
     }
     const mask = {
-      F: extrudeMultiPolygon(data.mask.F, stack.mask.F.y1 - stack.mask.F.y0, cx, cy),
-      B: extrudeMultiPolygon(data.mask.B, stack.mask.B.y1 - stack.mask.B.y0, cx, cy),
+      F: extrudeMultiPolygon(
+        data.mask.F,
+        stack.mask.F.y1 - stack.mask.F.y0,
+        cx,
+        cy,
+      ),
+      B: extrudeMultiPolygon(
+        data.mask.B,
+        stack.mask.B.y1 - stack.mask.B.y0,
+        cx,
+        cy,
+      ),
     };
     // Board-plane UVs so the baked copper normal maps line up (copper-bump.ts).
     const w = data.bbox.maxX - data.bbox.minX;
@@ -88,8 +138,18 @@ export function PcbModel({ data, visibility, explode, maskDepth, maskColor }: Pr
       copper,
       mask,
       silk: {
-        F: extrudeMultiPolygon(data.silk.F, stack.silk.F.y1 - stack.silk.F.y0, cx, cy),
-        B: extrudeMultiPolygon(data.silk.B, stack.silk.B.y1 - stack.silk.B.y0, cx, cy),
+        F: extrudeMultiPolygon(
+          data.silk.F,
+          stack.silk.F.y1 - stack.silk.F.y0,
+          cx,
+          cy,
+        ),
+        B: extrudeMultiPolygon(
+          data.silk.B,
+          stack.silk.B.y1 - stack.silk.B.y0,
+          cx,
+          cy,
+        ),
       },
       dielectric: stack.dielectric.map((d) =>
         extrudeShapes(dielShapes, d.slot.y1 - d.slot.y0),
@@ -116,11 +176,17 @@ export function PcbModel({ data, visibility, explode, maskDepth, maskColor }: Pr
       { key: "cu-F.Cu", y: stack.copper["F.Cu"].y0, tie: 0 },
       { key: "mask-F", y: stack.mask.F.y0, tie: 1 }, // above F.Cu
       { key: "silk-F", y: stack.silk.F.y0, tie: 0 },
-      ...stack.dielectric.map((d, i) => ({ key: `diel-${i}`, y: d.slot.y0, tie: 0 })),
+      ...stack.dielectric.map((d, i) => ({
+        key: `diel-${i}`,
+        y: d.slot.y0,
+        tie: 0,
+      })),
     ];
     entries.sort((a, b) => a.y - b.y || a.tie - b.tie);
     const coreIdx = entries.findIndex(
-      (e) => e.key === `diel-${stack.dielectric.findIndex((d) => d.type === "core")}`,
+      (e) =>
+        e.key ===
+        `diel-${stack.dielectric.findIndex((d) => d.type === "core")}`,
     );
     const map = new Map<string, number>();
     entries.forEach((e, i) => map.set(e.key, i - coreIdx));
@@ -154,14 +220,24 @@ export function PcbModel({ data, visibility, explode, maskDepth, maskColor }: Pr
     const run = () => {
       const w = data.bbox.maxX - data.bbox.minX;
       const h = data.bbox.maxY - data.bbox.minY;
-      const params = { strength: maskStrength, blurSigma: maskBlurSigma, overlap: maskOverlap };
+      const params = {
+        strength: maskStrength,
+        blurSigma: maskBlurSigma,
+        overlap: maskOverlap,
+      };
       const geosFor = (layer: CopperLayerName) =>
         [geo.copper[layer].covered, geo.copper[layer].exposed].filter(
           (g): g is THREE.ExtrudeGeometry => g !== null,
         );
       const bakes = [
-        { mat: materials.maskF, bake: bakeCopperNormalMap(gl, geosFor("F.Cu"), w, h, params) },
-        { mat: materials.maskB, bake: bakeCopperNormalMap(gl, geosFor("B.Cu"), w, h, params) },
+        {
+          mat: materials.maskF,
+          bake: bakeCopperNormalMap(gl, geosFor("F.Cu"), w, h, params),
+        },
+        {
+          mat: materials.maskB,
+          bake: bakeCopperNormalMap(gl, geosFor("B.Cu"), w, h, params),
+        },
       ];
       for (const { mat, bake } of bakes) {
         mat.normalMap = bake.texture;
@@ -184,7 +260,16 @@ export function PcbModel({ data, visibility, explode, maskDepth, maskColor }: Pr
     return () => {
       if (timer !== null) clearTimeout(timer);
     };
-  }, [gl, geo, data, materials, invalidate, maskStrength, maskBlurSigma, maskOverlap]);
+  }, [
+    gl,
+    geo,
+    data,
+    materials,
+    invalidate,
+    maskStrength,
+    maskBlurSigma,
+    maskOverlap,
+  ]);
 
   // Inverting the height map is a sign flip of the tangent-space normal's xy
   // (h → 1−h negates the gradient), so it needs no re-bake: negating
@@ -200,10 +285,14 @@ export function PcbModel({ data, visibility, explode, maskDepth, maskColor }: Pr
 
   // Mask color is user-tweakable; both sides always share it.
   useEffect(() => {
-    materials.maskF.color.set(maskColor);
-    materials.maskB.color.set(maskColor);
+    materials.maskF.userData.restColor = new THREE.Color(maskColor);
+    materials.maskB.userData.restColor = new THREE.Color(maskColor);
+    if (!focused) {
+      materials.maskF.color.set(maskColor);
+      materials.maskB.color.set(maskColor);
+    }
     invalidate();
-  }, [materials, maskColor, invalidate]);
+  }, [materials, maskColor, focused, invalidate]);
 
   // Unmount teardown for whichever bake is live (the bake effect above only
   // swaps textures; it deliberately leaves the current one assigned).
@@ -220,9 +309,9 @@ export function PcbModel({ data, visibility, explode, maskDepth, maskColor }: Pr
   }, [materials]);
 
   const explodeRef = useRef(0);
-  const parts = useRef<Map<string, { obj: THREE.Group; slot: number; baseY: number }>>(
-    new Map(),
-  );
+  const parts = useRef<
+    Map<string, { obj: THREE.Group; slot: number; baseY: number }>
+  >(new Map());
   const barrelGroup = useRef<THREE.Group>(null);
 
   // Ref callbacks are cached per part so re-renders (slider drags, toggles)
@@ -235,7 +324,8 @@ export function PcbModel({ data, visibility, explode, maskDepth, maskColor }: Pr
       let cb = cache.get(cacheKey);
       if (!cb) {
         cb = (obj: THREE.Group | null) => {
-          if (obj) parts.current.set(key, { obj, slot: slots.get(key) ?? 0, baseY });
+          if (obj)
+            parts.current.set(key, { obj, slot: slots.get(key) ?? 0, baseY });
           else parts.current.delete(key);
         };
         cache.set(cacheKey, cb);
@@ -245,7 +335,12 @@ export function PcbModel({ data, visibility, explode, maskDepth, maskColor }: Pr
   }, [slots]);
 
   useFrame((_, dt) => {
-    explodeRef.current = THREE.MathUtils.damp(explodeRef.current, explode, 7, dt);
+    explodeRef.current = THREE.MathUtils.damp(
+      explodeRef.current,
+      explode,
+      7,
+      dt,
+    );
     // Demand frameloop: keep frames coming while the explode animation is
     // still converging (the React commit that changed `explode` seeds it).
     if (Math.abs(explodeRef.current - explode) > 1e-3) invalidate();
@@ -255,13 +350,19 @@ export function PcbModel({ data, visibility, explode, maskDepth, maskColor }: Pr
     }
     // The barrels are an unstretched layer of their own: the whole forest
     // lifts to its slot, each tube staying board-thickness tall.
-    if (barrelGroup.current) barrelGroup.current.position.y = (slots.get("vias") ?? 0) * e;
+    if (barrelGroup.current)
+      barrelGroup.current.position.y = (slots.get("vias") ?? 0) * e;
   });
 
   return (
-    <group>
+    <group onClick={(event) => event.stopPropagation()}>
+      <NetHighlight data={data} nets={graph.nets} onSelect={onSelect} />
       {stack.dielectric.map((d, i) => (
-        <group key={d.name} ref={register(`diel-${i}`, d.slot.y0)} visible={visibility.dielectric}>
+        <group
+          key={d.name}
+          ref={register(`diel-${i}`, d.slot.y0)}
+          visible={visibility.dielectric}
+        >
           <mesh
             geometry={geo.dielectric[i]}
             material={d.type === "core" ? materials.core : materials.prepreg}
@@ -306,30 +407,69 @@ export function PcbModel({ data, visibility, explode, maskDepth, maskColor }: Pr
       {/* Shadow casting is per mesh: everything with a body casts, everything
           with a lit face receives. Silk (a 10µm glyph film) and the via
           barrels only receive — their own shadows would be sub-texel. */}
-      <group ref={register("mask-F", stack.mask.F.y0)} visible={visibility.maskF}>
-        <mesh geometry={geo.mask.F} material={materials.maskF} renderOrder={2} castShadow receiveShadow />
+      <group
+        ref={register("mask-F", stack.mask.F.y0)}
+        visible={visibility.maskF}
+      >
+        <mesh
+          geometry={geo.mask.F}
+          material={materials.maskF}
+          renderOrder={2}
+          castShadow
+          receiveShadow
+        />
       </group>
-      <group ref={register("mask-B", stack.mask.B.y0)} visible={visibility.maskB}>
-        <mesh geometry={geo.mask.B} material={materials.maskB} renderOrder={2} castShadow receiveShadow />
+      <group
+        ref={register("mask-B", stack.mask.B.y0)}
+        visible={visibility.maskB}
+      >
+        <mesh
+          geometry={geo.mask.B}
+          material={materials.maskB}
+          renderOrder={2}
+          castShadow
+          receiveShadow
+        />
       </group>
 
-      <group ref={register("silk-F", stack.silk.F.y0)} visible={visibility.silkF}>
+      <group
+        ref={register("silk-F", stack.silk.F.y0)}
+        visible={visibility.silkF}
+      >
         <mesh geometry={geo.silk.F} material={materials.silk} receiveShadow />
       </group>
-      <group ref={register("silk-B", stack.silk.B.y0)} visible={visibility.silkB}>
+      <group
+        ref={register("silk-B", stack.silk.B.y0)}
+        visible={visibility.silkB}
+      >
         <mesh geometry={geo.silk.B} material={materials.silk} receiveShadow />
       </group>
 
-      <group ref={barrelGroup} visible={visibility.vias}>
-        <Barrels barrels={geo.barrels} height={stack.total} material={materials.barrel} />
+      <group ref={barrelGroup} visible={visibility.vias && !focused}>
+        <Barrels
+          barrels={geo.barrels}
+          height={stack.total}
+          material={materials.barrel}
+        />
         {geo.slotBarrels && (
-          <mesh geometry={geo.slotBarrels} material={materials.barrel} receiveShadow />
+          <mesh
+            geometry={geo.slotBarrels}
+            material={materials.barrel}
+            receiveShadow
+          />
         )}
       </group>
 
       <ComponentsErrorBoundary>
         <Suspense fallback={null}>
           <Components
+            data={data}
+            onOutline={onOutline}
+            onHover={onHover}
+            graph={graph}
+            selection={selection}
+            isolate={isolate}
+            onSelect={onSelect}
             cx={cx}
             cy={cy}
             boardTotal={stack.total}
@@ -348,13 +488,19 @@ export function PcbModel({ data, visibility, explode, maskDepth, maskColor }: Pr
  * take down the whole canvas (Suspense only covers the pending state — load
  * errors propagate as render errors).
  */
-class ComponentsErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+class ComponentsErrorBoundary extends Component<
+  { children: ReactNode },
+  { failed: boolean }
+> {
   state = { failed: false };
   static getDerivedStateFromError() {
     return { failed: true };
   }
   componentDidCatch(error: unknown) {
-    console.error("components.glb failed to load — rendering bare board", error);
+    console.error(
+      "components.glb failed to load — rendering bare board",
+      error,
+    );
   }
   render() {
     return this.state.failed ? null : this.props.children;
@@ -408,6 +554,13 @@ function Barrels({
  * away from the board in its own direction.
  */
 function Components({
+  data,
+  graph,
+  selection,
+  isolate,
+  onSelect,
+  onOutline,
+  onHover,
   cx,
   cy,
   boardTotal,
@@ -415,6 +568,13 @@ function Components({
   registerTop,
   registerBottom,
 }: {
+  data: BoardData;
+  graph: ReturnType<typeof resolveSelection>;
+  selection: Selection;
+  isolate: boolean;
+  onOutline: (meshes: THREE.Object3D[]) => void;
+  onHover: (meshes: THREE.Object3D[]) => void;
+  onSelect: (s: Selection) => void;
   cx: number;
   cy: number;
   boardTotal: number;
@@ -423,6 +583,23 @@ function Components({
   registerBottom: (obj: THREE.Group | null) => void;
 }) {
   const { scene } = useGLTF("/pcb/components.glb");
+  const glass = useMemo(
+    () =>
+      new THREE.MeshPhysicalMaterial({
+        color: "#141d27",
+        transparent: true,
+        opacity: 0.18,
+        depthWrite: false,
+        roughness: 0.16,
+        metalness: 0.05,
+        clearcoat: 1,
+        clearcoatRoughness: 0.12,
+        envMapIntensity: 0.55,
+        side: THREE.FrontSide,
+      }),
+    [],
+  );
+  useEffect(() => () => glass.dispose(), [glass]);
   const { top, bottom } = useMemo(() => {
     const top = new THREE.Group();
     const bottom = new THREE.Group();
@@ -446,7 +623,22 @@ function Components({
     for (const child of level) {
       box.setFromObject(child);
       const centerY = box.isEmpty() ? mid : (box.min.y + box.max.y) / 2;
-      (centerY < mid ? bottom : top).add(child.clone(true));
+      const copy = child.clone(true);
+      const ref = data.connectivity.components.find(
+        (p) =>
+          child.name === p.ref ||
+          child.name.startsWith(p.ref + "_") ||
+          child.name.startsWith(p.ref + " "),
+      )?.ref;
+      copy.traverse((obj) => {
+        obj.userData.ref = ref;
+        const mesh = obj as THREE.Mesh;
+        if (mesh.isMesh)
+          mesh.material = Array.isArray(mesh.material)
+            ? mesh.material.map((m) => m.clone())
+            : mesh.material.clone();
+      });
+      (centerY < mid ? bottom : top).add(copy);
     }
     // Tame the GLB materials: kicad-cli marks everything metallic=1, fine for
     // pins and shields but a near-white "metal" (the UART/DEBUG JST shells,
@@ -464,38 +656,137 @@ function Components({
         // over neighbouring passives). Set on the clones, not the cache.
         mesh.castShadow = true;
         mesh.receiveShadow = true;
-        const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+        const mats = Array.isArray(mesh.material)
+          ? mesh.material
+          : [mesh.material];
         for (const mat of mats) {
           const std = mat as THREE.MeshStandardMaterial;
-          if (!std.isMeshStandardMaterial || seen.has(std) || std.userData.toned) continue;
+          if (
+            !std.isMeshStandardMaterial ||
+            seen.has(std) ||
+            std.userData.toned
+          )
+            continue;
           seen.add(std);
           std.userData.toned = true;
           const c = std.color;
           const lum = 0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b;
           const goldLike = c.b < 0.3 && c.r > 0.5;
-          if (lum > 0.7 && !goldLike) {
-            c.lerp(new THREE.Color(lum, lum, lum), 0.4); // nylon ivory, not butter
-            // Real nylon/ceramic albedo tops out well below 1 — a purer white
-            // would still cross the bloom threshold under the overhead former.
-            if (lum > 0.78) c.multiplyScalar(0.78 / lum);
+          const ref = mesh.userData.ref as string;
+          if (lum < 0.08 && !goldLike) {
+            // Molded IC bodies and connector housings are charcoal plastic.
+            c.set("#252727");
             std.metalness = 0;
-            std.roughness = Math.max(std.roughness, 0.65);
+            std.roughness = 0.76;
             std.envMapIntensity = 0.3;
+          } else if (lum > 0.7 && !goldLike) {
+            const nylon = ["J5", "J6", "D1", "D4"].includes(ref);
+            c.set(nylon ? "#bfbba9" : "#a6aaa9");
+            std.metalness = nylon ? 0 : 0.85;
+            std.roughness = nylon ? 0.88 : 0.58;
+            std.envMapIntensity = nylon ? 0.12 : 0.4;
+          } else if (goldLike) {
+            c.lerp(new THREE.Color("#bba16a"), 0.45);
+            std.metalness = 0.85;
+            std.roughness = 0.4;
+            std.envMapIntensity = 0.7;
           } else if (std.metalness > 0.5) {
-            std.envMapIntensity = 0.8;
-            std.roughness = Math.max(std.roughness, 0.35);
+            std.envMapIntensity = 0.65;
+            std.roughness = Math.max(std.roughness, 0.42);
           } else {
-            std.envMapIntensity = 0.55;
-            std.roughness = Math.max(std.roughness, 0.5);
+            std.envMapIntensity = 0.45;
+            std.roughness = Math.max(std.roughness, 0.6);
+          }
+          // The radio can and antenna metal should read as satin silver,
+          // not mirrors of the studio's large white panels.
+          if (["U4", "AE1"].includes(ref) && lum >= 0.08 && !goldLike) {
+            c.set("#9da4a6");
+            std.metalness = 0.8;
+            std.roughness = 0.68;
+            std.envMapIntensity = 0.3;
           }
         }
       });
     }
     return { top, bottom };
-  }, [scene, boardTotal]);
+  }, [scene, boardTotal, data]);
+  useEffect(() => {
+    glass.opacity = isolate ? 0.08 : 0.12;
+    const outlined: THREE.Object3D[] = [];
+    for (const grp of [top, bottom])
+      grp.traverse((obj) => {
+        const mesh = obj as THREE.Mesh;
+        if (!mesh.isMesh) return;
+        const ref = obj.userData.ref;
+        const active =
+          graph.seeds.has(ref) ||
+          graph.connected.has(ref);
+        if (!mesh.userData.originalMaterial)
+          mesh.userData.originalMaterial = mesh.material;
+        const originals = mesh.userData.originalMaterial as
+          | THREE.Material
+          | THREE.Material[];
+        mesh.material = selection && !active ? glass : originals;
+        for (const mat of (Array.isArray(originals)
+          ? originals
+          : [originals]) as THREE.MeshStandardMaterial[]) {
+          mat.emissive?.set("#000000");
+          mat.emissiveIntensity = 0;
+          const connectedOnly = !!selection && active && !graph.seeds.has(ref);
+          mat.opacity = connectedOnly ? 0.8 : 1;
+          const transparencyChanged = mat.transparent !== connectedOnly;
+          mat.transparent = connectedOnly;
+          mat.depthWrite = !connectedOnly;
+          if (transparencyChanged) mat.needsUpdate = true;
+        }
+        if (selection && active && visible) outlined.push(mesh);
+        mesh.castShadow = !selection || active;
+      });
+    onOutline(outlined);
+    return () => onOutline([]);
+  }, [top, bottom, graph, selection, isolate, glass, visible, onOutline]);
+  useEffect(
+    () => () => {
+      for (const grp of [top, bottom])
+        grp.traverse((obj) => {
+          const m = obj as THREE.Mesh;
+          if (m.isMesh)
+            (Array.isArray(m.userData.originalMaterial ?? m.material)
+              ? (m.userData.originalMaterial ?? m.material)
+              : [m.userData.originalMaterial ?? m.material]
+            ).forEach((x: THREE.Material) => x.dispose());
+        });
+    },
+    [top, bottom],
+  );
 
   return (
-    <group visible={visible}>
+    <group
+      visible={visible}
+      onClick={(e) => {
+        const ref = e.object.userData.ref;
+        if (ref) {
+          e.stopPropagation();
+          onSelect({ kind: "component", id: ref });
+        }
+      }}
+      onPointerOver={(e) => {
+        if (e.object.userData.ref) {
+          e.stopPropagation();
+          document.body.style.cursor = "pointer";
+          const hovered: THREE.Object3D[] = [];
+          for (const group of [top, bottom]) group.traverse((object) => {
+            if ((object as THREE.Mesh).isMesh && object.userData.ref === e.object.userData.ref)
+              hovered.push(object);
+          });
+          onHover(hovered);
+        }
+      }}
+      onPointerOut={() => {
+        document.body.style.cursor = "";
+        onHover([]);
+      }}
+    >
       <group ref={registerTop}>
         <group scale={1000} position={[-cx, 0, -cy]}>
           <primitive object={top} />
