@@ -15,6 +15,7 @@ You can view the [PCB and schematics online here](https://kicanvas.org/?github=h
 | --------------------------------------------- | -----------   |
 | KiCad design files for the schematics and PCB | ✅             |
 | Firmware source code                          | 🏗️ in progress |
+| Interactive 3D PCB viewer (`web/`)            | ✅             |
 | Frontend source code                          | -             |
 | 3D models for the enclosure                   | -             |
 
@@ -40,3 +41,10 @@ KiCad project, located in `./kicad/` contains all of the designs and BOM
 ## Firmware
 
 Cargo project using embassy-rs `./firmware/`
+
+## Web viewer
+
+Interactive three.js render of the board built from the real KiCad data —
+every copper layer, dielectric slab, mask, silkscreen and via as separate
+toggleable 3D elements, with an exploded view. Lives in `./web/`
+(`pnpm dev`); regenerate its data from the board file with `pnpm sync-pcb`.

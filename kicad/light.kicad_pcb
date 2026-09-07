@@ -26562,6 +26562,7 @@
 		(path "/fa0d128a-ce2c-4c09-886b-1428cb4e25b6")
 		(sheetname "/")
 		(sheetfile "light.kicad_sch")
+		(attr smd)
 		(fp_circle
 			(center 1.5 0.2399)
 			(end 1.625 0.2399)
