@@ -54,7 +54,7 @@ export function ControlPanel({ settings, onChange }: Props) {
   };
 
   return (
-    <aside className={styles.panel} aria-label="Viewer controls">
+    <aside id="appearance-panel" className={styles.panel} aria-label="Viewer controls">
       <section className={styles.section}>
         <div className={styles.sectionTitle}>View</div>
         <div className={styles.presets}>

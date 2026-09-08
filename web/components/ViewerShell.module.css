@@ -190,3 +190,41 @@
 }
 .cameraHome:hover { color: var(--accent); }
 .cameraHome:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.fpsCorner {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  color: var(--text-1);
+  font: 10px var(--font-mono), monospace;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.appearanceToggle {
+  position: absolute;
+  top: 116px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 8px 10px;
+  color: var(--text-1);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  font: 11px var(--font-mono), monospace;
+}
+.appearanceToggle:hover, .appearanceToggle[aria-expanded=true] {
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+.appearanceToggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.gestureHint { bottom: 22px; }
+@media (max-width: 640px) {
+  .appearanceToggle { top: auto; bottom: 12px; right: 12px; min-height: 44px; }
+  .gestureHint { left: 12px; transform: none; bottom: 26px; font-size: 9px; gap: 5px; }
+  .fpsCorner { bottom: 66px; }
+}

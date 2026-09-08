@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Html,
   GizmoHelper,
   GizmoViewport,
   Environment,
@@ -304,7 +305,9 @@ export function Viewer({
 }: Props) {
   const [outlined, setOutlined] = useState<Object3D[]>([]);
   const [hovered, setHovered] = useState<Object3D[]>([]);
-  const glowMeshes = useMemo(() => [...new Set([...outlined, ...hovered])], [outlined, hovered]);
+  const hoverGlow = useMemo(() => hovered.filter(object =>
+    !(selection?.kind === "component" && object.userData.ref === selection.id)), [hovered, selection]);
+  const selectedGlow = useMemo(() => outlined.filter(object => !hoverGlow.includes(object)), [outlined, hoverGlow]);
   const glowActive = !!selection || hovered.length > 0;
   const shadowRevision = useMemo(() => ({}), [data, settings, selection, isolate, outlined]);
   const backdrop = BACKDROP_MAP[settings.backdrop] ?? BACKDROPS[0];
@@ -399,11 +402,21 @@ export function Viewer({
       <EffectComposer autoClear={!glowActive} multisampling={2} ref={composerRef}>
         {/* Threshold sits above what a lit diffuse white reaches so bodies
             (connector shells, module can) never bloom — only specular glints. */}
-        {glowActive && <Outline
-          selection={glowMeshes}
+        {selection && <Outline
+          selection={selectedGlow}
+          selectionLayer={10}
           visibleEdgeColor="#75e5ef"
           hiddenEdgeColor="#75e5ef"
           edgeStrength={5}
+          blur
+          xRay
+        />}
+        {hoverGlow.length > 0 && <Outline
+          selection={hoverGlow}
+          selectionLayer={11}
+          visibleEdgeColor="#ffc781"
+          hiddenEdgeColor="#ffc781"
+          edgeStrength={4}
           blur
           xRay
         />}
@@ -415,6 +428,7 @@ export function Viewer({
         />
         <Vignette eskil={false} offset={0.18} darkness={backdrop.vignette} />
       </EffectComposer>
+      <ComponentHoverLabel data={data} objects={hovered} />
       <GizmoHelper alignment="top-right" margin={[68, 62]} renderPriority={3}>
         <GizmoViewport
           axisColors={["#e78487", "#99c68e", "#7baee4"]}
@@ -593,4 +607,34 @@ function FocusCamera({
     else invalidate();
   });
   return null;
+}
+
+
+function ComponentHoverLabel({ data, objects }: { data: BoardData; objects: Object3D[] }) {
+  const label = useMemo(() => {
+    if (!objects.length) return null;
+    const part = data.connectivity.components.find(p => p.ref === objects[0].userData.ref);
+    if (!part) return null;
+    const bounds = new Box3();
+    for (const object of objects) {
+      object.updateWorldMatrix(true, false);
+      bounds.expandByObject(object);
+    }
+    if (bounds.isEmpty()) return null;
+    const position = bounds.getCenter(new Vector3());
+    position.y = bounds.max.y + 1.5;
+    return { part, position };
+  }, [data, objects]);
+  if (!label) return null;
+  return <Html position={label.position} center zIndexRange={[20, 0]} style={{ pointerEvents: "none" }}>
+    <div role="tooltip" style={{
+      transform: "translateY(-100%)", display: "flex", gap: 8, alignItems: "center",
+      padding: "7px 10px", borderRadius: 7, background: "var(--panel)",
+      border: "1px solid var(--border)", color: "var(--text-0)", whiteSpace: "nowrap",
+      boxShadow: "0 4px 16px #0005", font: "11px var(--font-mono), monospace",
+    }}>
+      <span style={{ color: "#ffc781" }}>{label.part.ref}</span>
+      <span>{label.part.value === "~" ? label.part.footprint : label.part.value}</span>
+    </div>
+  </Html>;
 }

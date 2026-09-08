@@ -1,9 +1,9 @@
 .panel {
   position: absolute;
-  top: 88px;
-  left: 18px;
+  top: 162px;
+  right: 18px;
   width: 248px;
-  max-height: calc(100dvh - 110px);
+  max-height: calc(100dvh - 190px);
   overflow-y: auto;
   background: var(--panel);
   backdrop-filter: blur(18px) saturate(1.3);
@@ -421,10 +421,10 @@
 @media (max-width: 640px) {
   .panel {
     top: auto;
-    bottom: 78px;
-    right: auto;
-    left: 12px;
+    bottom: 38px;
+    right: 12px;
+    left: auto;
     width: min(272px, calc(100vw - 24px));
-    max-height: 42dvh;
+    max-height: 38dvh;
   }
 }

@@ -61,7 +61,6 @@ const Viewer = dynamic(() => import("./Viewer").then((m) => m.Viewer), {
 
 export function ViewerShell() {
   const [cameraResetKey, setCameraResetKey] = useState(0);
-  const [explore, setExplore] = useState(false);
   const [appearance, setAppearance] = useState(false);
   const [keyboard, setKeyboard] = useState(false);
   const [selection, setSelection] = useState<Selection>(null);
@@ -78,7 +77,6 @@ export function ViewerShell() {
     if (!next) exitSelection();
     else {
       setSelection(next);
-      setExplore(true);
     }
   }, [exitSelection]);
 
@@ -86,7 +84,6 @@ export function ViewerShell() {
     const escape = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
       exitSelection();
-      setExplore(false);
       setAppearance(false);
     };
     window.addEventListener("keydown", escape);
@@ -162,47 +159,18 @@ export function ViewerShell() {
         <div className={styles.title}>
           light<span className={styles.period}>.</span> <span>Board study</span>
         </div>
-        {data && (
-          <div className={styles.stats}>
-            <span>
-              {(data.bbox.maxX - data.bbox.minX).toFixed(0)}×
-              {(data.bbox.maxY - data.bbox.minY).toFixed(0)} mm
-            </span>
-            <span>4 layers</span>
-            <span>{data.counts.footprints} parts</span>
-            <span>{data.counts.vias} vias</span>
-            <FpsReadout />
-          </div>
-        )}
       </header>
+      {data && <div className={styles.fpsCorner}><FpsReadout /></div>}
 
-      <nav className={styles.toolbar} aria-label="Viewer tools">
-        <button
-          aria-expanded={explore}
-          onClick={() => {
-            setExplore(!explore);
-            setAppearance(false);
-          }}
-        >
-          Explore
-        </button>
-        <button
-          aria-expanded={appearance}
-          onClick={() => {
-            setAppearance(!appearance);
-            setExplore(false);
-          }}
-        >
-          Appearance
-        </button>
-        {selection && (
-          <button
-            onClick={exitSelection}
-          >
-            Exit
-          </button>
-        )}
-      </nav>
+      <button className={styles.appearanceToggle}
+        aria-label={appearance ? "Close appearance settings" : "Open appearance settings"}
+        aria-expanded={appearance} aria-controls="appearance-panel"
+        onClick={() => setAppearance(!appearance)}>
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+          <path d="M4 6h16M4 12h16M4 18h16"/><path d="M8 3v6m8 0v6m-6 0v6"/>
+        </svg>
+        Appearance
+      </button>
       <div className={styles.gestureHint} aria-label="Left-drag to orbit · Right-drag to pan · Scroll to zoom">
         <span title="Left-drag to orbit">
           <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -232,7 +200,7 @@ export function ViewerShell() {
       </div>
       <MotionConfig reducedMotion="user">
         <AnimatePresence initial={false}>
-          {data?.connectivity && explore && (
+          {data?.connectivity && (
             <motion.div
               key="explorer"
               initial={{ opacity: keyboard ? 1 : 0 }}
@@ -241,27 +209,6 @@ export function ViewerShell() {
               transition={{ duration: keyboard ? 0 : 0.14 }}
             >
               <Inspector
-                data={data}
-                selection={selection}
-                onSelect={select}
-                isolate={isolate}
-                onIsolate={(active) => {
-                  if (active) setIsolate(true);
-                  else exitSelection();
-                }}
-              />
-            </motion.div>
-          )}
-          {data && selection && (
-            <motion.div
-              key="selection-details"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: keyboard ? 0 : 0.16 }}
-            >
-              <Inspector
-                view="details"
                 data={data}
                 selection={selection}
                 onSelect={select}

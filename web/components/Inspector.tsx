@@ -7,271 +7,94 @@ import { netColor } from "@/lib/net-colors";
 import { componentDescription } from "@/lib/component-description";
 import { COMPONENT_SPECS } from "@/lib/component-specs";
 import styles from "./Inspector.module.css";
-export function Inspector({
-  data,
-  selection,
-  onSelect,
-  isolate,
-  onIsolate,
-  view = "explorer",
-}: {
-  view?: "explorer" | "details";
-  data: BoardData;
-  selection: Selection;
-  onSelect: (s: Selection) => void;
-  isolate: boolean;
-  onIsolate: (v: boolean) => void;
+
+type Filter = "all" | "area" | "component" | "net";
+export function Inspector({ data, selection, onSelect, isolate, onIsolate }: {
+  data: BoardData; selection: Selection; onSelect: (s: Selection) => void;
+  isolate: boolean; onIsolate: (v: boolean) => void;
 }) {
   const [query, setQuery] = useState("");
-  const [tab, setTab] = useState<"areas" | "parts" | "nets">("areas");
-  const [keyboard, setKeyboard] = useState(false);
+  const [filter, setFilter] = useState<Filter>("all");
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [browse, setBrowse] = useState(false);
   const { components, areas, nets } = data.connectivity;
-  const graph = useMemo(
-    () => resolveSelection(data, selection),
-    [data, selection],
-  );
-  const part =
-    selection?.kind === "component"
-      ? components.find((p) => p.ref === selection.id)
-      : undefined;
+  const graph = useMemo(() => resolveSelection(data, selection), [data, selection]);
+  const part = selection?.kind === "component" ? components.find(p => p.ref === selection.id) : undefined;
   const spec = part ? COMPONENT_SPECS[part.value] : undefined;
   const datasheet = part?.datasheet || spec?.datasheet || "";
-  const title = part
-    ? `${part.ref} · ${part.value}`
-    : selection?.kind === "area"
-      ? areas.find((a) => a.id === selection.id)?.name
-      : selection?.kind === "net"
-        ? nets.find((n) => n.id === selection.id)?.name
-        : "Explore the board";
-  const matches = (s: string) => s.toLowerCase().includes(query.toLowerCase());
-  return (
-    <MotionConfig
-      reducedMotion="user"
-      transition={{ type: "spring", duration: 0.22, bounce: 0 }}
-    >
-      <aside
-        className={view === "details" ? `${styles.rightPanel} ${styles.detailStack}` : styles.panel}
-        aria-label={view === "details" ? "Selection details" : "Board explorer"}
-        onKeyDown={() => setKeyboard(true)}
-        onPointerDown={() => setKeyboard(false)}
-      >
-        {view === "explorer" && <>
-        <div className={styles.heading}>
-          <span>BOARD EXPLORER</span>
-          <span>{nets.length} nets</span>
-        </div>
-        <div className={styles.tabs}>
-          {(["areas", "parts", "nets"] as const).map((t) => (
-            <button key={t} aria-pressed={tab === t} onClick={() => setTab(t)}>
-              {t}
-            </button>
-          ))}
-        </div>
-        <input
-          aria-label="Search areas, parts or nets"
-          placeholder={`Find ${tab}…`}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <div className={styles.list}>
-          {tab === "areas" &&
-            areas
-              .filter(
-                (a) =>
-                  matches(a.name) && components.some((p) => p.area === a.id),
-              )
-              .map((a) => (
-                <button
-                  key={a.id}
-                  aria-pressed={
-                    selection?.kind === "area" && selection.id === a.id
-                  }
-                  onClick={() => onSelect({ kind: "area", id: a.id })}
-                >
-                  <span>{a.name}</span>
-                  <small>
-                    {components.filter((p) => p.area === a.id).length}
-                  </small>
-                </button>
-              ))}
-          {tab === "parts" &&
-            components
-              .filter((p) => matches(`${p.ref} ${p.value} ${p.footprint}`))
-              .sort((a, b) =>
-                a.ref.localeCompare(b.ref, undefined, { numeric: true }),
-              )
-              .map((p) => (
-                <button
-                  key={p.ref}
-                  aria-pressed={part?.ref === p.ref}
-                  onClick={() => onSelect({ kind: "component", id: p.ref })}
-                >
-                  <b>{p.ref}</b>
-                  <span>{p.value}</span>
-                </button>
-              ))}
-          {tab === "nets" &&
-            nets
-              .filter((n) => matches(n.name))
-              .map((n) => (
-                <button
-                  key={n.id}
-                  style={{ borderLeft: `3px solid ${netColor(n.name)}` }}
-                  aria-pressed={
-                    selection?.kind === "net" && selection.id === n.id
-                  }
-                  onClick={() => onSelect({ kind: "net", id: n.id })}
-                >
-                  <span>{n.name}</span>
-                </button>
-              ))}
-        </div>
-        </>}
-        {view === "details" && <>
-        <div className={`${styles.panel} ${styles.detailCard}`}>
-        <div className={styles.heading}>
-          <span>SELECTION DETAILS</span>
-          <button aria-label="Close selection details" onClick={() => { onSelect(null); onIsolate(false); }}>×</button>
-        </div>
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.section
-            key={`${selection?.kind}:${selection?.id}`}
-            initial={{ opacity: keyboard ? 1 : 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: keyboard ? 1 : 0 }}
-            transition={{ duration: keyboard ? 0 : 0.12 }}
-            className={styles.detail}
-          >
-            <div className={styles.identity}>
-              <span className={styles.componentId}>{selection?.id ?? "—"}</span>
-              <h2>{part?.value && part.value !== "~" ? part.value : part ? part.footprint : title}</h2>
-              {part && <p>{componentDescription(part, data)}</p>}
-            </div>
-            {part && (/^https?:\/\//.test(datasheet) ? (
-              <a href={datasheet} target="_blank" rel="noreferrer">Datasheet ↗</a>
-            ) : <p>Datasheet unavailable</p>)}
-            {!selection ? (
-              <p>
-                Select a component on the board, a schematic area, or a net to
-                follow its connections.
-              </p>
-            ) : (
-              <>
-                <details className={styles.moreDetails}>
-                  <summary>More details</summary>
-                <p>
-                  {graph.connected.size} connected parts · {graph.nets.size}{" "}
-                  nets
-                </p>
-                <div className={styles.actions}>
-                  <motion.button
-                    whileTap={{ scale: keyboard ? 1 : 0.97 }}
-                    aria-pressed={isolate}
-                    onClick={() => onIsolate(!isolate)}
-                  >
-                    {isolate ? "Exit isolation" : "Isolate connections"}
-                  </motion.button>
-                  <button
-                    onClick={() => {
-                      onSelect(null);
-                      onIsolate(false);
-                    }}
-                  >
-                    Exit
-                  </button>
-                </div>
-                {part && (
-                  <>
-                    {spec && <p>{spec.specs}</p>}
-                    <dl>
-                      <dt>Area</dt>
-                      <dd>{areas.find((a) => a.id === part.area)?.name}</dd>
-                      <dt>Package</dt>
-                      <dd>{part.footprint}</dd>
-                      <dt>Side</dt>
-                      <dd>{part.side === "F" ? "Front" : "Back"}</dd>
-                      <dt>Pads</dt>
-                      <dd>{part.pads.length}</dd>
-                      <dt>3D model</dt>
-                      <dd>
-                        {part.modelPresent
-                          ? "Mapped to " + part.ref
-                          : part.models.length
-                            ? "Not exported (DNP / excluded)"
-                            : "No model assigned"}
-                      </dd>
-                      {Object.entries(part.properties)
-                        .filter(
-                          ([k, v]) =>
-                            ![
-                              "Reference",
-                              "Value",
-                              "Footprint",
-                              "Datasheet",
-                            ].includes(k) &&
-                            v &&
-                            v !== "~",
-                        )
-                        .map(([k, v]) => (
-                          <div key={k}>
-                            <dt>{k}</dt>
-                            <dd>{v}</dd>
-                          </div>
-                        ))}
-                    </dl>
-                  </>
-                )}
-                {part && (
-                  <details>
-                    <summary>Pin connections</summary>
-                    <div className={styles.connections}>
-                      {part.pads.map((pad, i) => (
-                        <button
-                          key={i}
-                          disabled={pad.net <= 0}
-                          onClick={() => onSelect({ kind: "net", id: pad.net })}
-                        >
-                          {pad.number || "—"} · {pad.name || "Unconnected"}
-                        </button>
-                      ))}
-                    </div>
-                  </details>
-                )}
-                {isolate && (
-                  <p>
-                    {selection.kind === "net"
-                      ? "Showing this net’s connections."
-                      : "Shared ground is excluded. Power connections remain included."}
-                    Drag to orbit this connected group.
-                  </p>
-                )}
-                </details>
-              </>
-            )}
-          </motion.section>
-        </AnimatePresence>
-        </div>
-        <section className={`${styles.panel} ${styles.netsCard}`} aria-label="Selected nets">
-                <h3 className={styles.netHeading}>Nets · {graph.nets.size}</h3>
-                <ul className={styles.netLegend} aria-label="Active net colors">
-                  {nets
-                    .filter((n) => graph.nets.has(n.id))
-                    .map((n) => (
-                      <li key={n.id}>
-                        <button onClick={() => onSelect({ kind: "net", id: n.id })}>
-                          <span
-                            className={styles.netSwatch}
-                            style={{ backgroundColor: netColor(n.name) }}
-                            aria-hidden="true"
-                          />
-                          <span>{n.name}</span>
-                        </button>
-                      </li>
-                    ))}
-                </ul>
-        </section>
-        </>}
-      </aside>
-    </MotionConfig>
-  );
+  const title = part ? (part.value === "~" ? part.footprint : part.value)
+    : selection?.kind === "area" ? areas.find(a => a.id === selection.id)?.name
+    : nets.find(n => n.id === selection?.id)?.name;
+  const entries = useMemo(() => [
+    ...areas.filter(a => components.some(p => p.area === a.id)).map(a => ({ kind: "area" as const, id: a.id, name: a.name, extra: "Area" })),
+    ...components.map(p => ({ kind: "component" as const, id: p.ref, name: p.value, extra: `${p.ref} ${p.footprint}` })),
+    ...nets.map(n => ({ kind: "net" as const, id: n.id, name: n.name, extra: "Net" })),
+  ], [areas, components, nets]);
+  const needle = query.trim().toLowerCase();
+  const results = entries.filter(e => (filter === "all" || e.kind === filter) &&
+    (needle ? `${e.name} ${e.extra}`.toLowerCase().includes(needle) : browse ? e.kind === "area" : filter !== "all"))
+    .sort((a, b) => Number(String(b.id).toLowerCase() === needle) - Number(String(a.id).toLowerCase() === needle));
+  const showResults = !!needle || browse || filter !== "all";
+  const choose = (next: Selection) => { onSelect(next); setQuery(""); setBrowse(false); setFilter("all"); setFiltersOpen(false); };
+  const close = () => { onSelect(null); onIsolate(false); };
+  return <MotionConfig reducedMotion="user">
+    <aside className={styles.panel} aria-label="Board explorer">
+      <div className={styles.searchCard}>
+      <div className={styles.searchRow}>
+        <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>
+        <input aria-label="Search areas, parts and nets" placeholder="Search the board…" value={query}
+          onChange={e => { setQuery(e.target.value); setBrowse(false); }}
+          onKeyDown={e => { if (e.key === "Enter" && results.length) { e.preventDefault(); choose(results[0]); } }} />
+        {query && <button aria-label="Clear search" onClick={() => setQuery("")}>×</button>}
+        <button aria-label="Search filters" aria-expanded={filtersOpen} aria-pressed={filter !== "all"} onClick={() => setFiltersOpen(!filtersOpen)}>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M7 12h10M10 17h4"/></svg>
+        </button>
+      </div>
+      {filtersOpen && <div className={styles.filters} aria-label="Search categories">
+        {([['all','All'],['area','Areas'],['component','Parts'],['net','Nets']] as const).map(([value,label]) =>
+          <button key={value} aria-pressed={filter === value} onClick={() => { setFilter(value); setBrowse(false); }}>{label}</button>)}
+      </div>}
+      {!needle && filter === "all" && <button className={styles.browse} aria-expanded={browse} onClick={() => setBrowse(!browse)}>
+        {browse ? "Hide areas −" : "Browse areas +"}
+      </button>}
+      {showResults && <div className={styles.results} aria-label="Search results">
+        {!results.length && <p className={styles.empty}>No matches. Try a part ID, signal, or area.</p>}
+        {results.map(e => <button key={`${e.kind}:${e.id}`} onClick={() => choose(e)} aria-pressed={selection?.kind === e.kind && selection.id === e.id}>
+          {e.kind === "net" && <i className={styles.swatch} style={{background: netColor(e.name)}}/>}
+          <span>{e.kind === "component" && <b>{e.id} </b>}{e.name === "~" ? "Connector" : e.name}</span>
+          <small>{e.kind === "component" ? "Part" : e.kind === "area" ? "Area" : "Net"}</small>
+        </button>)}
+      </div>}
+      </div>
+      <AnimatePresence mode="wait" initial={false}>
+        {selection && <motion.section className={styles.selection} key={`${selection.kind}:${selection.id}`}
+          initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} transition={{duration: 0.12}} aria-label="Selection details">
+          <div className={styles.identity}><span>{selection.kind === "area" ? "AREA" : selection.kind === "net" ? `NET ${selection.id}` : selection.id}</span>
+            <button aria-label="Close selection details" onClick={close}>×</button></div>
+          <h2>{title}</h2>
+          {part && <p>{componentDescription(part, data)}</p>}
+          {part && (/^https?:\/\//.test(datasheet) ? <a href={datasheet} target="_blank" rel="noreferrer">Datasheet ↗</a> : <p className={styles.muted}>Datasheet unavailable</p>)}
+          <details className={styles.disclosure}>
+            <summary>Nets <span>{graph.nets.size}</span></summary>
+            <ul className={styles.netList}>{nets.filter(n => graph.nets.has(n.id)).map(n => <li key={n.id}>
+              <button onClick={() => choose({kind: "net", id: n.id})}><i className={styles.swatch} style={{background: netColor(n.name)}}/>{n.name}</button>
+            </li>)}</ul>
+          </details>
+          <details className={styles.disclosure}>
+            <summary>More details</summary>
+            <p>{graph.connected.size} connected parts · {graph.nets.size} nets</p>
+            <button className={styles.isolate} onClick={() => onIsolate(!isolate)}>{isolate ? "Exit isolation" : "Isolate connections"}</button>
+            {part && <>
+              {spec && <p>{spec.specs}</p>}
+              <dl><dt>Area</dt><dd>{areas.find(a => a.id === part.area)?.name}</dd><dt>Package</dt><dd>{part.footprint}</dd>
+                <dt>Side</dt><dd>{part.side === "F" ? "Front" : "Back"}</dd><dt>3D model</dt><dd>{part.modelPresent ? `Mapped to ${part.ref}` : "Not exported"}</dd>
+                {Object.entries(part.properties).filter(([k,v]) => !["Reference","Value","Footprint","Datasheet"].includes(k) && v && v !== "~").map(([k,v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}
+              </dl>
+              <details><summary>Pin connections · {part.pads.length}</summary><ul className={styles.netList}>{part.pads.map((p,i) => <li key={i}><button disabled={p.net <= 0} onClick={() => choose({kind:"net",id:p.net})}>{p.number || "—"} · {p.name || "Unconnected"}</button></li>)}</ul></details>
+            </>}
+          </details>
+        </motion.section>}
+      </AnimatePresence>
+    </aside>
+  </MotionConfig>;
 }
