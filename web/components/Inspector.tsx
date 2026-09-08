@@ -76,8 +76,9 @@ export function Inspector({ data, selection, onSelect, isolate, onIsolate }: {
           {part && (/^https?:\/\//.test(datasheet) ? <a href={datasheet} target="_blank" rel="noreferrer">Datasheet ↗</a> : <p className={styles.muted}>Datasheet unavailable</p>)}
           <details className={styles.disclosure}>
             <summary>Nets <span>{graph.nets.size}</span></summary>
+            <p className={styles.muted}>Solid · direct{graph.viaResistor.size > 0 ? " / dashed · past resistor" : ""}. Motion is illustrative.</p>
             <ul className={styles.netList}>{nets.filter(n => graph.nets.has(n.id)).map(n => <li key={n.id}>
-              <button onClick={() => choose({kind: "net", id: n.id})}><i className={styles.swatch} style={{background: netColor(n.name)}}/>{n.name}</button>
+              <button onClick={() => choose({kind: "net", id: n.id})}><i className={styles.swatch} style={{background: netColor(n.name)}}/>{n.name}{graph.viaResistor.has(n.id) && <small> via {graph.viaResistor.get(n.id)}</small>}</button>
             </li>)}</ul>
           </details>
           <details className={styles.disclosure}>

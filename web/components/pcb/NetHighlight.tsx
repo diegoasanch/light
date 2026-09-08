@@ -1,5 +1,7 @@
 "use client";
 import { useMemo, useEffect, useCallback } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
+import { useReducedMotion } from "framer-motion";
 import * as THREE from "three";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { highlightedCopper, netColor } from "@/lib/net-colors";
@@ -27,9 +29,13 @@ export function NetHighlight({
   data,
   nets,
   onSelect,
+  extendedNets,
+  selection,
 }: {
   data: BoardData;
   nets: Set<number>;
+  extendedNets: Map<number, string>;
+  selection: Selection;
   onSelect: (s: Selection) => void;
 }) {
   const colors = useMemo(
@@ -65,7 +71,7 @@ export function NetHighlight({
         for (const net of selected) {
           const routed = highlightedCopper(net)?.[layer] ?? [];
           if (!routed.length) continue;
-          const key = `${net.id}:${layer}`;
+          const key = `${net.id}:${layer}:${extendedNets.has(net.id)}`;
           let g = geometryCache.get(key);
           if (!g) {
             g = extrudeMultiPolygon(
@@ -74,6 +80,8 @@ export function NetHighlight({
               cx, cy,
             );
             colorGeometry(g, colors.get(net.id)!);
+            g.setAttribute("section", new THREE.Float32BufferAttribute(
+              new Float32Array(g.attributes.position.count).fill(extendedNets.has(net.id) ? 1 : 0), 1));
           }
           geometryCache.delete(key);
           geometryCache.set(key, g);
@@ -90,7 +98,7 @@ export function NetHighlight({
         const geometry = mergeGeometries(sources)!;
         return [{ layer, geometry, ranges }];
       }),
-    [selected, stack, cx, cy, colors, geometryCache],
+    [selected, stack, cx, cy, colors, geometryCache, extendedNets],
   );
   useEffect(() => () => layers.forEach((x) => x.geometry.dispose()), [layers]);
   const plating = useMemo(() => selectedPlating(data, nets), [data, nets]);
@@ -121,6 +129,20 @@ export function NetHighlight({
     colorGeometry(g, new THREE.Color(1, 1, 1));
     return g;
   }, []);
+  const reducedMotion = useReducedMotion();
+  const invalidate = useThree(s => s.invalidate);
+  const uniforms = useMemo(() => ({ time: { value: 0 }, motionAmount: { value: 0 }, origin: { value: new THREE.Vector2() } }), []);
+  useEffect(() => {
+    const part = selection?.kind === "component" ? data.connectivity.components.find(p => p.ref === selection.id) : undefined;
+    uniforms.origin.value.set(part ? part.position[0] - cx : 0, part ? part.position[1] - cy : 0);
+    uniforms.motionAmount.value = reducedMotion ? 0 : 1;
+    invalidate();
+    if (reducedMotion || !nets.size) return;
+    // Cap ambient redraws at 30 Hz; camera interaction still renders normally.
+    const timer = window.setInterval(() => { if (!document.hidden) invalidate(); }, 1000 / 30);
+    return () => window.clearInterval(timer);
+  }, [selection, data, cx, cy, reducedMotion, nets, uniforms, invalidate]);
+  useFrame(({ clock }) => { uniforms.time.value = clock.elapsedTime; });
   const material = useMemo(
     () =>
       new THREE.MeshBasicMaterial({
@@ -145,6 +167,26 @@ export function NetHighlight({
     },
     [barrel, material],
   );
+  // Keep the sheen in the existing copper draw calls: no particles, extra
+  // geometry, additive overlays, or depth overrides over component packages.
+  const copperMaterial = useMemo(() => {
+    const m = material.clone();
+    m.onBeforeCompile = shader => {
+      Object.assign(shader.uniforms, uniforms);
+      shader.vertexShader = "attribute float section; varying float vSection; varying vec2 vBoard;\n" + shader.vertexShader;
+      shader.vertexShader = shader.vertexShader.replace("#include <begin_vertex>", "#include <begin_vertex>\nvSection = section; vBoard = position.xz;");
+      shader.fragmentShader = "uniform float time; uniform float motionAmount; uniform vec2 origin; varying float vSection; varying vec2 vBoard;\n" + shader.fragmentShader;
+      shader.fragmentShader = shader.fragmentShader.replace("#include <color_fragment>", `#include <color_fragment>
+        float distanceFromFocus = length(vBoard - origin);
+        float dash = smoothstep(0.42, 0.58, fract(distanceFromFocus / 1.25));
+        diffuseColor.rgb *= mix(1.0, mix(0.48, 0.76, dash), vSection);
+        float wave = pow(0.5 + 0.5 * cos(distanceFromFocus * 0.65 - time * 1.8), 18.0);
+        diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.95), wave * 0.19 * motionAmount * step(0.01, length(diffuseColor.rgb)));
+      `);
+    };
+    return m;
+  }, [material, uniforms]);
+  useEffect(() => () => copperMaterial.dispose(), [copperMaterial]);
   const instances = useCallback(
     (mesh: THREE.InstancedMesh | null) => {
       if (!mesh) return;
@@ -166,7 +208,7 @@ export function NetHighlight({
         <mesh
           key={x.layer}
           geometry={x.geometry}
-          material={material}
+          material={copperMaterial}
           position={[0, stack.copper[x.layer].y0, 0]}
           renderOrder={5}
           onClick={(e) => {

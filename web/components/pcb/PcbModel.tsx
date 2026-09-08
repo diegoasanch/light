@@ -356,7 +356,7 @@ export function PcbModel({
 
   return (
     <group onClick={(event) => event.stopPropagation()}>
-      <NetHighlight data={data} nets={graph.nets} onSelect={onSelect} />
+      <NetHighlight data={data} nets={graph.nets} extendedNets={graph.viaResistor} selection={selection} onSelect={onSelect} />
       {stack.dielectric.map((d, i) => (
         <group
           key={d.name}

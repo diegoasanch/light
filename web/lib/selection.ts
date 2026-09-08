@@ -25,6 +25,28 @@ export function resolveSelection(data: BoardData, selection: Selection) {
       if (net.name === "GND") nets.delete(net.id);
     }
   }
+  const directNets = new Set(nets);
+  const viaResistor = new Map<number, string>();
+  const kinds = new Map(data.connectivity.nets.map(n => [n.id, netKind(n.name)]));
+  // Only two-terminal resistor footprints bridge sections. Never traverse a
+  // supply/ground branch, encoder, IC, or transistor as if it were a wire.
+  if (selection?.kind === "component" || selection?.kind === "net") {
+    let changed = true;
+    while (changed) {
+      changed = false;
+      for (const part of parts) {
+        if (!/^R_/.test(part.footprint)) continue;
+        const terminals = [...new Set(part.pads.map(p => p.net).filter(n => n > 0))];
+        if (terminals.length !== 2 || terminals.some(n => kinds.get(n) !== "signal")) continue;
+        const [a, b] = terminals;
+        if (nets.has(a) === nets.has(b)) continue;
+        const next = nets.has(a) ? b : a;
+        nets.add(next);
+        viaResistor.set(next, part.ref);
+        changed = true;
+      }
+    }
+  }
   // Supply copper remains active, but sharing a supply alone does not make
   // a component part of the highlighted neighborhood. Explicit net inspection
   // still shows every component on that net.
@@ -40,6 +62,8 @@ export function resolveSelection(data: BoardData, selection: Selection) {
   );
   return {
     nets,
+    directNets,
+    viaResistor,
     seeds: new Set(seeds.map((p) => p.ref)),
     connected: new Set(connected.map((p) => p.ref)),
   };

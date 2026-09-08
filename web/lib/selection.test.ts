@@ -26,7 +26,7 @@ test("CPU isolation excludes shared ground and retains other direct nets", () =>
     !graph.nets.has(board.connectivity.nets.find((n) => n.name === "GND")!.id),
   );
   assert.deepEqual(
-    [...graph.nets].sort(),
+    [...graph.directNets].sort(),
     [
       ...new Set(
         cpu.pads
@@ -172,4 +172,21 @@ test("rotary encoder belongs to UI and is not highlighted by the RP2350 area", (
   assert.equal(board.connectivity.components.find((p) => p.ref === "R6")!.area, ui.id);
   assert.ok(resolveSelection(board, { kind: "area", id: ui.id }).connected.has("R6"));
   assert.ok(!resolveSelection(board, { kind: "area", id: cpu.id }).connected.has("R6"));
+});
+
+
+test("series resistors extend USB, WiFi and RGB without traversing supplies", () => {
+  const graph = resolveSelection(board, { kind: "component", id: "U1" });
+  for (const name of ["/USB_D+", "/USB_D-", "/ARGB-DATA", "Net-(U4-SDIO_CLK)"]) {
+    const net = board.connectivity.nets.find(n => n.name === name)!;
+    assert.ok(graph.viaResistor.has(net.id), name);
+    assert.ok(graph.nets.has(net.id));
+  }
+  assert.ok(graph.connected.has("J2"));
+  for (const id of graph.viaResistor.keys()) {
+    assert.equal(netKind(board.connectivity.nets.find(n => n.id === id)!.name), "signal");
+    assert.ok(!graph.directNets.has(id));
+  }
+  const ground = board.connectivity.nets.find(n => n.name === "GND")!;
+  assert.equal(resolveSelection(board, { kind: "net", id: ground.id }).nets.size, 1);
 });
