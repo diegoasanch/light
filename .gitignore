@@ -45,3 +45,6 @@ firmware/*.log
 # Claude Code local state (keep only the dev-server launch config)
 .claude/*
 !.claude/launch.json
+
+# pnpm cache
+.pnpm-store/

@@ -1,11 +1,16 @@
 # light — RGB light controller
 
 Custom-PCB RGB light controller. Full-stack hobby hardware project: KiCad board
-design + embedded Rust firmware. 4 boards were fabbed and assembled (2025);
-ALL peripherals validated on hardware, including WiFi (broken 2025, fixed and
+design + embedded Rust firmware. 4 boards were fabbed and assembled (2025).
+Validated on hardware: boot/defmt, onboard + external ARGB, rotary encoder
+(with pulse smoothing), VRGB power switch, and WiFi (broken 2025, fixed and
 bench-validated 2026-08-23: join/DHCP/HTTP confirmed — see `firmware/WIFI.md`).
-Next firmware milestone: `test-wifi-leds` (cyw43 + Argb coexistence), then a
-unified main.
+NOT yet tested (no firmware coverage): buttons (GPIO 18/19 + encoder push
+GPIO 9), HDC1080 over I2C, DRGB PWM outputs, flash persistence. Next firmware
+milestone: `test-wifi-leds` (cyw43 + Argb coexistence), then a unified main.
+Project tracking: Linear "RP2350 prototype" (team key LI) in the lighght
+workspace; hardware errata live in the Obsidian vault
+(`~/obsidian-local/notes/Projects/light/light.canvas`).
 
 ## Layout
 
