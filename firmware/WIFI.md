@@ -10,7 +10,9 @@ playbook further down is retained for regressions and for boards #2–#4.
 
 ## Bench validation results (2026-08-23, board #1)
 
-From the first real `test-wifi` run (`firmware/test-wifi.log`):
+From the first real `test-wifi` run (`firmware/test-wifi.log` — local-only:
+`firmware/*.log` is gitignored because bench logs can contain SSIDs/network
+details, so this file only exists on the bench machine):
 
 | Milestone | Result |
 |---|---|
@@ -78,8 +80,12 @@ supported. Recommend using SDIO."). Residual hardware risk is small
 - `test-wifi.rs`: rewritten on the official webrequest example; correct pin
   order (`dio=PIN_24`, `clk=PIN_11`), `RM2_CLOCK_DIVIDER` (25 MHz),
   credentials via compile-time env vars.
-- `.cargo/config.toml` bakes `DEFMT_LOG=debug,cyw43=trace,cyw43_pio=trace` so
-  the detection-stage logs are always compiled in during bring-up.
+- `.cargo/config.toml` sets `DEFMT_LOG = "debug"` by default; the bring-up
+  filter `DEFMT_LOG=debug,cyw43=trace,cyw43_pio=trace` is present on the
+  commented-out line below it. Before any bring-up/regression session,
+  uncomment that line (and comment the plain-debug one), then run
+  `cargo clean -p cyw43 -p cyw43-pio` — defmt filtering is compile-time, and
+  without the trace filter the FEEDBEAD detection stage is totally silent.
 - Placeholder bins `test-wifi-{minimal,setup,template}.rs` deleted
   (recoverable from git).
 - `src/argb.rs` migrated to embassy-rp 0.10; interrupt bindings moved into the

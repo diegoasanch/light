@@ -4,9 +4,12 @@ version = "0.1.0"
 edition = "2024"
 
 # Dependency set matched to the embassy `cyw43-v0.7.0` release tag (examples/rp235x).
-# These versions are a coherent, mutually-compatible group — bump them together,
-# using the embassy repo's examples/rp235x/Cargo.toml at the matching cyw43 tag
-# as the reference (NOT embassy main, which tracks unreleased APIs).
+# The embassy-family crates (embassy-*, cyw43, cyw43-pio) are a coherent,
+# mutually-compatible group — bump them together, using the embassy repo's
+# examples/rp235x/Cargo.toml at the matching cyw43 tag as the reference (NOT
+# embassy main, which tracks unreleased APIs). The non-embassy crates below may
+# ride semver-compatible bumps past the tag's exact numbers.
+# Last audited 2026-08-23: cyw43-v0.7.0 was still the newest tag.
 
 [dependencies]
 # Embassy HAL + async runtime
@@ -46,19 +49,20 @@ embassy-net = { version = "0.9.1", features = [
 # default-features off: drops embedded-tls (unused here, and currently broken
 # against der 0.8.x); we only do plain-HTTP requests from the firmware
 reqwless = { version = "0.14.0", default-features = false, features = ["defmt"] }
-serde = { version = "1.0", default-features = false, features = ["derive"] }
-serde-json-core = "0.5.1"
 
 # Runtime / debugging
-defmt = "1.0.1"
-defmt-rtt = "1.0.0"
+defmt = "1.1.1"
+defmt-rtt = "1.3.0"
 panic-probe = { version = "1.0.0", features = ["print-defmt"] }
-cortex-m = { version = "0.7.6", features = ["inline-asm"] }
-cortex-m-rt = "0.7.0"
-static_cell = "2.1"
+cortex-m = { version = "0.7.9", features = ["inline-asm"] }
+cortex-m-rt = "0.7.6"
+static_cell = "2.1.1"
 
 # Peripherals
-smart-leds = "0.3.0"
+# 0.4 matches the smart-leds version embassy-rp 0.10 itself depends on
+# (single RGB8 type in the tree; 0.3 alongside it built only because both
+# re-export the same `rgb` crate structs)
+smart-leds = "0.4.0"
 
 [profile.release]
 debug = true
