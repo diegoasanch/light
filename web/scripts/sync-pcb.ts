@@ -33,7 +33,7 @@ import { optimizeGlb } from "./optimize-glb";
 
 const webDir = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const repoDir = resolve(webDir, "..");
-const boardPath = join(repoDir, "kicad", "light.kicad_pcb");
+const boardPath = join(repoDir, "v1", "kicad", "light.kicad_pcb");
 const outDir = join(webDir, "public", "pcb");
 
 const KICAD_APP = "/Applications/KiCad/KiCad.app/Contents";
@@ -115,7 +115,7 @@ async function sync() {
   // and export from that.
   console.log("→ exporting components.glb (kicad-cli)…");
   const vars: Record<string, string> = {
-    KIPRJMOD: join(repoDir, "kicad"),
+    KIPRJMOD: join(repoDir, "v1", "kicad"),
   };
   for (const legacy of ["KICAD6", "KICAD7", "KICAD8", "KICAD9", "KICAD10"]) {
     vars[`${legacy}_3DMODEL_DIR`] = stockModelDir;

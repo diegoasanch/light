@@ -26,7 +26,7 @@
 //! - Panic "timeout while waiting for alp clock!" → chip detected but sick bus/clock.
 //! - STAGE 3 + scan results → WiFi hardware fully vindicated.
 //!
-//! Board pin map (netlist-verified against kicad/light.kicad_sch rev 5):
+//! Board pin map (netlist-verified against v1/kicad/light.kicad_sch rev 5):
 //!   WL_ON  (module WL_REG_ON) = GPIO23,  WL_CS (SDIO_DATA_3) = GPIO25
 //!   WL_D   (SDIO_CMD+DATA_2, the gSPI DIO) = GPIO24
 //!   WL_CLK (SDIO_CLK, via 27R)             = GPIO11   <- NOT GPIO29 like the Pico 2W!

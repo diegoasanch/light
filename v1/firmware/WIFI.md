@@ -10,8 +10,8 @@ playbook further down is retained for regressions and for boards #2–#4.
 
 ## Bench validation results (2026-08-23, board #1)
 
-From the first real `test-wifi` run (`firmware/test-wifi.log` — local-only:
-`firmware/*.log` is gitignored because bench logs can contain SSIDs/network
+From the first real `test-wifi` run (`v1/firmware/test-wifi.log` — local-only:
+`v1/firmware/*.log` is gitignored because bench logs can contain SSIDs/network
 details, so this file only exists on the bench machine):
 
 | Milestone | Result |
@@ -250,7 +250,7 @@ history was rewritten before the first push (`git reset --soft` onto the last
 clean commit; a full-history `git grep` across `git rev-list --all` confirms
 zero hits). The old commit survives only in the local reflog. The wifi bins
 take credentials via compile-time env vars (`WIFI_NETWORK`, `WIFI_PASSWORD`)
-so secrets never enter the tree; bench logs are gitignored (`firmware/*.log`).
+so secrets never enter the tree; bench logs are gitignored (`v1/firmware/*.log`).
 Compiled artifacts under untracked `target/` may still contain the old strings;
 `cargo clean` if that bothers you. Treat the old password as burned and rotate
 it — it's cheap.
