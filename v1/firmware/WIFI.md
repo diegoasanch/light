@@ -94,7 +94,7 @@ supported. Recommend using SDIO."). Residual hardware risk is small
 ## First bench session (do these in order)
 
 ```bash
-cd firmware
+cd v1/firmware
 
 # 0a. Prove probe-rs attach + flash + defmt-RTT (~1 min, eliminates a whole
 #     class of misattribution before any WiFi conclusions)
