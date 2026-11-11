@@ -70,17 +70,18 @@ mkdirSync(outDir, { recursive: true });
 const tmp = mkdtempSync(join(tmpdir(), "light-pcb-"));
 let failure: string | null = null;
 
-try {
-  await sync();
-} catch (e) {
-  failure = e instanceof Error ? e.message : String(e);
-} finally {
-  rmSync(tmp, { recursive: true, force: true });
-}
-if (failure) {
-  console.error(`✗ ${failure}`);
-  process.exit(1);
-}
+// No top-level await: tsx compiles this file as CJS (package has no "type": "module").
+void sync()
+  .catch((e: unknown) => {
+    failure = e instanceof Error ? e.message : String(e);
+  })
+  .finally(() => {
+    rmSync(tmp, { recursive: true, force: true });
+    if (failure) {
+      console.error(`✗ ${failure}`);
+      process.exit(1);
+    }
+  });
 
 async function sync() {
   // -------------------------------------------------------------- board.json
