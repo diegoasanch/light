@@ -1,7 +1,7 @@
 # Configuring KiCad
 
 No configuration needed: all project symbols, footprints and 3D models live in
-`kicad/libs/` and are referenced via the built-in `${KIPRJMOD}` variable
+`v1/kicad/libs/` and are referenced via the built-in `${KIPRJMOD}` variable
 (the directory containing the project file), so a fresh clone renders the full
 3D board out of the box.
 
@@ -52,7 +52,7 @@ two places:
 Render like the fab:
 
 ```bash
-kicad-cli pcb render --preset "fab blue" --quality high -w 1920 -h 1440 --side top --background opaque --output render.png kicad/light.kicad_pcb
+kicad-cli pcb render --preset "fab blue" --quality high -w 1920 -h 1440 --side top --background opaque --output render.png v1/kicad/light.kicad_pcb
 ```
 
 (The old manual note — board color #0A244A @ 95% — predates the fabbed boards

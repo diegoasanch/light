@@ -2,7 +2,7 @@
   "name": "light-web",
   "version": "0.1.0",
   "private": true,
-  "description": "Interactive three.js viewer for the light PCB, fed by data extracted from kicad/light.kicad_pcb",
+  "description": "Interactive three.js viewer for the light PCB, fed by data extracted from v1/kicad/light.kicad_pcb",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

@@ -1,6 +1,6 @@
 /**
  * Fab-matched palette: JLC blue mask over ENIG gold, white silk — tuned
- * against photos of the assembled rev-1 boards (see kicad/README.md).
+ * against photos of the assembled rev-1 boards (see v1/kicad/README.md).
  *
  * Lives apart from materials.ts so UI code (ControlPanel swatches) can import
  * colors without dragging three.js into the eager first-load bundle — the

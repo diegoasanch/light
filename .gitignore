@@ -17,7 +17,7 @@ _autosave-*
 *-save.kicad_pcb
 fp-info-cache
 ~*.lck
-kicad/.history/
+v1/kicad/.history/
 \#auto_saved_files#
 
 # Netlist files (exported from Eeschema)
@@ -30,8 +30,8 @@ kicad/.history/
 # Exported BOM files
 *.xml
 *.csv
-kicad/production/
-kicad/fab/
+v1/kicad/production/
+v1/kicad/fab/
 
 .DS_Store
 how-to-import.htm
@@ -40,7 +40,7 @@ how-to-import.htm
 target/
 
 # Bench-session defmt log captures (may contain SSIDs / network details)
-firmware/*.log
+v1/firmware/*.log
 
 # Claude Code local state (keep only the dev-server launch config)
 .claude/*

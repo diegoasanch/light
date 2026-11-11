@@ -1,5 +1,5 @@
 ---
-globs: firmware/**
+globs: v1/firmware/**
 alwaysApply: false
 ---
 

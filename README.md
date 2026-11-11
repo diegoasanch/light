@@ -2,7 +2,7 @@
 
 A WiFi-enabled LED light controller, based on the [RP2350](https://www.raspberrypi.com/products/rp2350/).
 
-You can view the [PCB and schematics online here](https://kicanvas.org/?github=https://github.com/diegoasanch/light/blob/main/kicad/light.kicad_pro).
+You can view the [PCB and schematics online here](https://kicanvas.org/?github=https://github.com/diegoasanch/light/blob/main/v1/kicad/light.kicad_pro).
 
 <div align="center">
   <img src="./assets/light-v1-3d.png" width="75%">
@@ -36,11 +36,11 @@ I'm currently leveling up my electronics skills and learning about PCB design; I
 
 ## PCB
 
-KiCad project, located in `./kicad/` contains all of the designs and BOM
+KiCad project, located in `./v1/kicad/` contains all of the designs and BOM
 
 ## Firmware
 
-Cargo project using embassy-rs `./firmware/`
+Cargo project using embassy-rs `./v1/firmware/`
 
 ## Web viewer
 

@@ -7,7 +7,7 @@
             "type": "probe-rs-debug",
             "request": "launch",
             "name": "test current file",
-            "cwd": "${workspaceFolder}/firmware",
+            "cwd": "${workspaceFolder}/v1/firmware",
             "chip": "RP2350",
             "runtimeExecutable": "probe-rs",
             "runtimeArgs": [

@@ -7,7 +7,7 @@ portfolio page.
 ```bash
 pnpm install
 pnpm dev        # http://localhost:3000
-pnpm sync-pcb   # re-extract geometry after editing kicad/light.kicad_pcb
+pnpm sync-pcb   # re-extract geometry after editing v1/kicad/light.kicad_pcb
 ```
 
 ## Data pipeline (`pnpm sync-pcb`)
